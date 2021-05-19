@@ -1,0 +1,42 @@
+apps:
+  - name: Indexes
+    id: indexes
+    version: 1.1.0
+    indexes: true
+
+  - name: Lookups
+    id: lookups
+    version: 1.0.0
+    lookups:
+      - index_frequency
+
+lookups:
+  - name: index_frequency
+    fields:
+      - name: index
+        required: true
+      - name: frequency
+        required: true
+
+indexes:
+  - name: proxy
+    frozenTimePeriod:
+      days: 365
+    lookup_rows:
+      - lookup_name: index_frequency
+        values:
+          frequency: 30
+  - name: web
+    frozenTimePeriod:
+      days: 365
+    lookup_rows:
+      - lookup_name: index_frequency
+        values:
+          frequency: 300
+  - name: os
+    frozenTimePeriod:
+      days: 365
+    lookup_rows:
+      - lookup_name: index_frequency
+        values:
+          frequency: 60

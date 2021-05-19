@@ -1,4 +1,4 @@
-image: golang:latest
+image: repo.splunk.com/splunk_at_splunk/sas-golang:1.16.2
 
 stages:
   - test
