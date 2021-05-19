@@ -1,7 +1,7 @@
 package provider
 
 import (
-	"cd.splunkdev.com/sas/libraries/go/splunk/config/pkg/config"
+	"cd.splunkdev.com/sas/go/libraries/splunkconfig/pkg/config"
 	"context"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"

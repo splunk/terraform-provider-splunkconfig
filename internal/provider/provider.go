@@ -1,7 +1,7 @@
 package provider
 
 import (
-	"cd.splunkdev.com/sas/libraries/go/splunk/config/pkg/config"
+	"cd.splunkdev.com/sas/go/libraries/splunkconfig/pkg/config"
 	"context"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -13,6 +13,7 @@ const (
 	suiteConfigFileKey         = "configuration_file"
 	roleNamesResourceName      = "splunkconfig_role_names"
 	roleAttributesResourceName = "splunkconfig_role_attributes"
+	appPackageResourceName     = "splunkconfig_app_package"
 )
 
 func configure(version string, p *schema.Provider) func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
@@ -68,6 +69,11 @@ func New(version string) func() *schema.Provider {
 			DataSourcesMap: map[string]*schema.Resource{
 				roleNamesResourceName:      resourceRoleNames(),
 				roleAttributesResourceName: resourceRoleAttributes(),
+			},
+
+			// resources schema
+			ResourcesMap: map[string]*schema.Resource{
+				appPackageResourceName: resourceAppFile(),
 			},
 		}
 
