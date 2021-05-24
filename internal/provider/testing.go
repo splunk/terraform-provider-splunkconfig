@@ -6,7 +6,7 @@ import (
 )
 
 // helper test function to return a list of tests for list values
-func testCheckResourceAttrList(name string, key string, values []string) []resource.TestCheckFunc {
+func testCheckResourceAttrList(name string, key string, values []string) resource.TestCheckFunc {
 	// testCheckFuncs is 1 longer than values.  we add a "next index is missing" test
 	testCheckFuncs := make([]resource.TestCheckFunc, len(values)+1)
 
@@ -19,5 +19,5 @@ func testCheckResourceAttrList(name string, key string, values []string) []resou
 	keyWithIndex := fmt.Sprintf("%s.%d", key, len(values))
 	testCheckFuncs[len(values)] = resource.TestCheckNoResourceAttr(name, keyWithIndex)
 
-	return testCheckFuncs
+	return resource.ComposeTestCheckFunc(testCheckFuncs...)
 }
