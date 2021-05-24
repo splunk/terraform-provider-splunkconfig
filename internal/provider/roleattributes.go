@@ -10,6 +10,9 @@ import (
 const (
 	roleNameKey             = "role_name"
 	searchIndexesAllowedKey = "search_indexes_allowed"
+	importRolesKey          = "imported_roles"
+	capabilitiesKey         = "capabilities"
+	searchFilterKey         = "search_filter"
 )
 
 func resourceRoleAttributes() *schema.Resource {
@@ -28,6 +31,23 @@ func resourceRoleAttributes() *schema.Resource {
 				Computed:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
+			importRolesKey: {
+				Description: "List of roles imported by the role",
+				Type:        schema.TypeList,
+				Computed:    true,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+			},
+			capabilitiesKey: {
+				Description: "List of capabilities assigned to the role",
+				Type:        schema.TypeList,
+				Computed:    true,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+			},
+			searchFilterKey: {
+				Description: "Search filter applied to the role",
+				Type:        schema.TypeString,
+				Computed:    true,
+			},
 		},
 	}
 }
@@ -44,7 +64,21 @@ func resourceRoleAttributesRead(ctx context.Context, d *schema.ResourceData, met
 		return diag.Errorf("Unable to find role with name %q", roleName)
 	}
 
-	d.Set(searchIndexesAllowedKey, role.SearchIndexesAllowed)
+	if len(role.SearchIndexesAllowed) > 0 {
+		d.Set(searchIndexesAllowedKey, role.SearchIndexesAllowed)
+	}
+
+	if len(role.ImportRoles) > 0 {
+		d.Set(importRolesKey, role.ImportRoles)
+	}
+
+	if len(role.EnabledCapabilityNames()) > 0 {
+		d.Set(capabilitiesKey, role.EnabledCapabilityNames())
+	}
+
+	if role.SearchFilter != "" {
+		d.Set(searchFilterKey, role.SearchFilter)
+	}
 
 	return diag.Diagnostics{}
 }

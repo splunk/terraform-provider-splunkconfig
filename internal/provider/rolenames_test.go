@@ -11,12 +11,10 @@ func TestAccResourceRoleNames(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceRoleNamesConfig,
-				Check: resource.ComposeTestCheckFunc(
-					testCheckResourceAttrList("data.splunkconfig_role_names.foo", "role_names", []string{
-						"role_a",
-						"role_b",
-					})...,
-				),
+				Check: testCheckResourceAttrList("data.splunkconfig_role_names.foo", "role_names", []string{
+					"role_a",
+					"role_b",
+				}),
 			},
 		},
 	})
