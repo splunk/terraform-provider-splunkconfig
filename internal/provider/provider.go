@@ -9,11 +9,13 @@ import (
 )
 
 const (
-	suiteConfigYMLKey          = "configuration"
-	suiteConfigFileKey         = "configuration_file"
-	roleNamesResourceName      = "splunkconfig_role_names"
-	roleAttributesResourceName = "splunkconfig_role_attributes"
-	appPackageResourceName     = "splunkconfig_app_package"
+	suiteConfigYMLKey               = "configuration"
+	suiteConfigFileKey              = "configuration_file"
+	roleNamesResourceName           = "splunkconfig_role_names"
+	roleAttributesResourceName      = "splunkconfig_role_attributes"
+	samlGroupNamesResourceName      = "splunkconfig_saml_group_names"
+	samlGroupAttributesResourceName = "splunkconfig_saml_group_attributes"
+	appPackageResourceName          = "splunkconfig_app_package"
 )
 
 func configure(version string, p *schema.Provider) func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
@@ -67,8 +69,10 @@ func New(version string) func() *schema.Provider {
 
 			// data sources schema
 			DataSourcesMap: map[string]*schema.Resource{
-				roleNamesResourceName:      resourceRoleNames(),
-				roleAttributesResourceName: resourceRoleAttributes(),
+				roleNamesResourceName:           resourceRoleNames(),
+				roleAttributesResourceName:      resourceRoleAttributes(),
+				samlGroupNamesResourceName:      resourceSAMLGroupNames(),
+				samlGroupAttributesResourceName: resourceSAMLGroupAttributes(),
 			},
 
 			// resources schema
