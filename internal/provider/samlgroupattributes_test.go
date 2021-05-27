@@ -38,6 +38,6 @@ EOT
 }
 
 data "splunkconfig_saml_group_attributes" "saml_group_a" {
-  role_name = "saml_group_a"
+  saml_group_name = "saml_group_a"
 }
 `
