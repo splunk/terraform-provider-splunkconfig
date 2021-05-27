@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	samlGroupNameKey = "role_name"
+	samlGroupNameKey = "saml_group_name"
 	rolesKey         = "roles"
 )
 
@@ -37,7 +37,7 @@ func resourceSAMLGroupAttributes() *schema.Resource {
 func resourceSAMLGroupAttributesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	suite := meta.(config.Suite)
 
-	samlGroupName := d.Get(roleNameKey).(string)
+	samlGroupName := d.Get(samlGroupNameKey).(string)
 
 	d.SetId(samlGroupName)
 
