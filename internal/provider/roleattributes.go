@@ -8,11 +8,17 @@ import (
 )
 
 const (
-	roleNameKey             = "role_name"
-	searchIndexesAllowedKey = "search_indexes_allowed"
-	importRolesKey          = "imported_roles"
-	capabilitiesKey         = "capabilities"
-	searchFilterKey         = "search_filter"
+	roleNameKey                    = "role_name"
+	searchIndexesAllowedKey        = "search_indexes_allowed"
+	importRolesKey                 = "imported_roles"
+	capabilitiesKey                = "capabilities"
+	searchFilterKey                = "search_filter"
+	cumulativeRTSearchJobsQuotaKey = "cumulative_realtime_search_jobs_quota"
+	cumulativeSearchJobsQuotaKey   = "cumulative_search_jobs_quota"
+	rtSearchJobsQuotaKey           = "realtime_search_jobs_quota"
+	searchDiskQuotaKey             = "search_disk_quota"
+	searchJobsQuotaKey             = "search_jobs_quota"
+	searchTimeWinKey               = "search_time_win"
 )
 
 func resourceRoleAttributes() *schema.Resource {
@@ -48,6 +54,36 @@ func resourceRoleAttributes() *schema.Resource {
 				Type:        schema.TypeString,
 				Computed:    true,
 			},
+			cumulativeRTSearchJobsQuotaKey: {
+				Description: "Cumulative real-time search jobs quota applied to the role",
+				Type:        schema.TypeInt,
+				Computed:    true,
+			},
+			cumulativeSearchJobsQuotaKey: {
+				Description: "Cumulative search jobs quota applied to the role",
+				Type:        schema.TypeInt,
+				Computed:    true,
+			},
+			rtSearchJobsQuotaKey: {
+				Description: "Real-time search jobs quota applied to the role",
+				Type:        schema.TypeInt,
+				Computed:    true,
+			},
+			searchDiskQuotaKey: {
+				Description: "Search disk quota applied to the role",
+				Type:        schema.TypeInt,
+				Computed:    true,
+			},
+			searchJobsQuotaKey: {
+				Description: "Search jobs quota applied to the role",
+				Type:        schema.TypeInt,
+				Computed:    true,
+			},
+			searchTimeWinKey: {
+				Description: "Search time window applied to the role",
+				Type:        schema.TypeInt,
+				Computed:    true,
+			},
 		},
 	}
 }
@@ -78,6 +114,30 @@ func resourceRoleAttributesRead(ctx context.Context, d *schema.ResourceData, met
 
 	if role.SearchFilter != "" {
 		d.Set(searchFilterKey, role.SearchFilter)
+	}
+
+	if role.CumulativeRTSearchJobsQuota.Explicit {
+		d.Set(cumulativeRTSearchJobsQuotaKey, role.CumulativeRTSearchJobsQuota.Value)
+	}
+
+	if role.CumulativeSearchJobsQuota.Explicit {
+		d.Set(cumulativeSearchJobsQuotaKey, role.CumulativeSearchJobsQuota.Value)
+	}
+
+	if role.RTSearchJobsQuota.Explicit {
+		d.Set(rtSearchJobsQuotaKey, role.RTSearchJobsQuota.Value)
+	}
+
+	if role.SearchDiskQuota.Explicit {
+		d.Set(searchDiskQuotaKey, role.SearchDiskQuota.Value)
+	}
+
+	if role.SearchJobsQuota.Explicit {
+		d.Set(searchJobsQuotaKey, role.SearchJobsQuota.Value)
+	}
+
+	if role.SearchTimeWin.Explicit {
+		d.Set(searchTimeWinKey, role.SearchTimeWin.Value)
 	}
 
 	return diag.Diagnostics{}
