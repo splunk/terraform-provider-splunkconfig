@@ -1,5 +1,5 @@
-cd.splunkdev.com/sas/go/libraries/splunkconfig v1.0.1 h1:OLttAvEDtl3fytzA8zYXBwVWEl5WQ1kZsRVLqZ6PsVI=
-cd.splunkdev.com/sas/go/libraries/splunkconfig v1.0.1/go.mod h1:IXyr+CsIPH+kd4r/sFlzrAw2se4eEjlhWIX/NbPH8SI=
+cd.splunkdev.com/sas/go/libraries/splunkconfig v1.1.1 h1:IICPRFDEdNyqsQIV5/9Vnynebis6GN6BeQ8a7ffZK+0=
+cd.splunkdev.com/sas/go/libraries/splunkconfig v1.1.1/go.mod h1:IXyr+CsIPH+kd4r/sFlzrAw2se4eEjlhWIX/NbPH8SI=
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.38.0/go.mod h1:990N+gfupTy94rShfmMCWGDn0LpTmnzTp2qbd1dvSRU=
