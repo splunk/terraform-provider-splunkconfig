@@ -16,6 +16,8 @@ const (
 	samlGroupNamesResourceName      = "splunkconfig_saml_group_names"
 	samlGroupAttributesResourceName = "splunkconfig_saml_group_attributes"
 	appPackageResourceName          = "splunkconfig_app_package"
+	userNamesResourceName           = "splunkconfig_user_names"
+	userAttributesResourceName      = "splunkconfig_user_attributes"
 )
 
 func configure(version string, p *schema.Provider) func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
@@ -73,6 +75,8 @@ func New(version string) func() *schema.Provider {
 				roleAttributesResourceName:      resourceRoleAttributes(),
 				samlGroupNamesResourceName:      resourceSAMLGroupNames(),
 				samlGroupAttributesResourceName: resourceSAMLGroupAttributes(),
+				userNamesResourceName:           resourceUserNames(),
+				userAttributesResourceName:      resourceUserAttributes(),
 			},
 
 			// resources schema
