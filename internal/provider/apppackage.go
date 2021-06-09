@@ -27,8 +27,8 @@ func resourceAppFile() *schema.Resource {
 		Description:   "Create a tarball for an app",
 		CustomizeDiff: resourceAppPackageCustomDiff,
 		CreateContext: resourceAppPackageCreate,
-		ReadContext:   resourceAppPackageRead,
-		// create/update end up doing the same work, so they use the same function
+		// create/read/update end up doing the same work, so they use the same function
+		ReadContext:   resourceAppPackageCreate,
 		UpdateContext: resourceAppPackageCreate,
 		DeleteContext: resourceAppPackageDelete,
 		Schema: map[string]*schema.Schema{
@@ -100,8 +100,9 @@ func resourceAppPackageGetApp(appID string, meta interface{}) (config.App, error
 	return app, nil
 }
 
-// resourceAppPackageCreate writes the package tarball at the specified location. It is called for both the "create"
-// and "update" contexts, because there is no difference between the two for this resource type.
+// resourceAppPackageCreate writes the package tarball at the specified location. It is also called for the "read"
+// and "update" contexts, because we want to always write the tarball for the app to be used by other downstream
+// resources.
 func resourceAppPackageCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	appID := d.Get(appPackageIDKey).(string)
 	d.SetId(appID)
@@ -126,11 +127,6 @@ func resourceAppPackageCreate(ctx context.Context, d *schema.ResourceData, meta 
 
 // resourceAppPackageDelete does nothing, as the is no deployed infrastructure or configuration to remove.
 func resourceAppPackageDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	return nil
-}
-
-// resourceAppPackageRead does nothing, as all attribute values are handled in resourceAppPackageCustomDiff.
-func resourceAppPackageRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	return nil
 }
 
