@@ -96,11 +96,26 @@ func TestIndex_stanza(t *testing.T) {
 	tests := stanzaDefinerTestCases{
 		{
 			Index{Name: "index_a"},
-			Stanza{Name: "index_a", Values: StanzaValues{}},
+			Stanza{
+				Name: "index_a",
+				Values: StanzaValues{
+					"homePath":   "$SPLUNK_DB/index_a/db",
+					"coldPath":   "$SPLUNK_DB/index_a/colddb",
+					"thawedPath": "$SPLUNK_DB/index_a/thaweddb",
+				},
+			},
 		},
 		{
 			Index{Name: "index_a", FrozenTime: TimePeriod{Seconds: 86400}},
-			Stanza{Name: "index_a", Values: StanzaValues{"frozenTimePeriodInSecs": "86400"}},
+			Stanza{
+				Name: "index_a",
+				Values: StanzaValues{
+					"homePath":               "$SPLUNK_DB/index_a/db",
+					"coldPath":               "$SPLUNK_DB/index_a/colddb",
+					"thawedPath":             "$SPLUNK_DB/index_a/thaweddb",
+					"frozenTimePeriodInSecs": "86400",
+				},
+			},
 		},
 	}
 
