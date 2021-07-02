@@ -24,6 +24,9 @@ type Index struct {
 	FrozenTime         TimePeriod `yaml:"frozenTimePeriod"`
 	SearchRolesAllowed RoleNames  `yaml:"srchRolesAllowed"`
 	LookupRows         LookupRows `yaml:"lookup_rows"`
+	HomePath           IndexPath  `yaml:"homePath"`
+	ColdPath           IndexPath  `yaml:"coldPath"`
+	ThawedPath         IndexPath  `yaml:"thawedPath"`
 }
 
 // validate returns an error if the Index is invalid.
@@ -92,6 +95,11 @@ func (index Index) stanzaValues() StanzaValues {
 	if index.FrozenTime.InSeconds() != 0 {
 		stanzaValues["frozenTimePeriodInSecs"] = fmt.Sprintf("%d", index.FrozenTime.InSeconds())
 	}
+
+	// defaultIndexPath will return a valid IndexPath, so we throw away the ok return value, expecting it will never be false
+	stanzaValues["homePath"], _ = firstIndexPathString(index.HomePath, defaultIndexPath(index.Name, "db"))
+	stanzaValues["coldPath"], _ = firstIndexPathString(index.HomePath, defaultIndexPath(index.Name, "colddb"))
+	stanzaValues["thawedPath"], _ = firstIndexPathString(index.HomePath, defaultIndexPath(index.Name, "thaweddb"))
 
 	return stanzaValues
 }

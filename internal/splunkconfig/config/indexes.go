@@ -16,6 +16,11 @@
 
 package config
 
+import (
+	"reflect"
+	"sort"
+)
+
 // Indexes is a list of Index objects.
 type Indexes []Index
 
@@ -66,8 +71,23 @@ func (indexes Indexes) indexesSearchableByRole(role Role) Indexes {
 
 // indexNames returns IndexNames for Indexes.
 func (indexes Indexes) indexNames() IndexNames {
-	indexNameStrings := uidsOfUIDers(indexes)
-	return NewIndexNamesFromStrings(indexNameStrings)
+	uids := uidsOfUIDers(indexes)
+	sort.Strings(uids)
+
+	return NewIndexNamesFromStrings(uids)
+}
+
+// WithIndexName returns the Index object with the given IndexName. Returns ok=false if not found.
+func (indexes Indexes) WithIndexName(indexName IndexName) (found Index, ok bool) {
+	foundUIDer, ok := withUID(indexes, indexName.uid())
+	if !ok {
+		return
+	}
+
+	foundValue := reflect.ValueOf(foundUIDer)
+	found = foundValue.Interface().(Index)
+
+	return
 }
 
 // indexNamesSearchableByRoleName returns IndexNames that are searchable by the provided RoleName.
@@ -91,8 +111,10 @@ func (indexes Indexes) lookupRowsForLookup(lookup Lookup) LookupRows {
 func (indexes Indexes) stanzas() Stanzas {
 	stanzas := make(Stanzas, len(indexes))
 
-	for i, index := range indexes {
-		stanzas[i] = index.stanza()
+	// use indexes.indexNames() to force sorting
+	for i, indexName := range indexes.indexNames() {
+		found, _ := indexes.WithIndexName(indexName)
+		stanzas[i] = found.stanza()
 	}
 
 	return stanzas

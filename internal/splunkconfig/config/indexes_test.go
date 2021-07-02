@@ -126,12 +126,29 @@ func TestIndexes_stanzas(t *testing.T) {
 	tests := stanzasDefinerTestCases{
 		{
 			Indexes{
-				Index{Name: "index_no_values"},
+				// these indexes are not in alphabetical order
 				Index{Name: "index_with_values", FrozenTime: TimePeriod{Seconds: 86400}},
+				Index{Name: "index_no_values"},
 			},
+			// the resulting stanzas *are* in alphabetical order
 			Stanzas{
-				Stanza{Name: "index_no_values", Values: StanzaValues{}},
-				Stanza{Name: "index_with_values", Values: StanzaValues{"frozenTimePeriodInSecs": "86400"}},
+				Stanza{
+					Name: "index_no_values",
+					Values: StanzaValues{
+						"homePath":   "$SPLUNK_DB/index_no_values/db",
+						"coldPath":   "$SPLUNK_DB/index_no_values/colddb",
+						"thawedPath": "$SPLUNK_DB/index_no_values/thaweddb",
+					},
+				},
+				Stanza{
+					Name: "index_with_values",
+					Values: StanzaValues{
+						"homePath":               "$SPLUNK_DB/index_with_values/db",
+						"coldPath":               "$SPLUNK_DB/index_with_values/colddb",
+						"thawedPath":             "$SPLUNK_DB/index_with_values/thaweddb",
+						"frozenTimePeriodInSecs": "86400",
+					},
+				},
 			},
 		},
 	}
@@ -148,7 +165,14 @@ func TestIndexes_confFile(t *testing.T) {
 			ConfFile{
 				Name: "indexes",
 				Stanzas: Stanzas{
-					Stanza{Name: "testindex", Values: StanzaValues{}},
+					Stanza{
+						Name: "testindex",
+						Values: StanzaValues{
+							"homePath":   "$SPLUNK_DB/testindex/db",
+							"coldPath":   "$SPLUNK_DB/testindex/colddb",
+							"thawedPath": "$SPLUNK_DB/testindex/thaweddb",
+						},
+					},
 				},
 			},
 		},

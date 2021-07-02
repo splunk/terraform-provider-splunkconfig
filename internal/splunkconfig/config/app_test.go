@@ -100,7 +100,19 @@ func TestApp_extrapolated(t *testing.T) {
 			Lookups{},
 			Indexes{Index{Name: "index_a"}},
 			ConfFiles{
-				ConfFile{Name: "indexes", Stanzas: Stanzas{Stanza{Name: "index_a", Values: StanzaValues{}}}},
+				ConfFile{
+					Name: "indexes",
+					Stanzas: Stanzas{
+						Stanza{
+							Name: "index_a",
+							Values: StanzaValues{
+								"homePath":   "$SPLUNK_DB/index_a/db",
+								"coldPath":   "$SPLUNK_DB/index_a/colddb",
+								"thawedPath": "$SPLUNK_DB/index_a/thaweddb",
+							},
+						},
+					},
+				},
 				ConfFile{Name: "authorize", Stanzas: Stanzas{}},
 			},
 			false,
@@ -113,7 +125,19 @@ func TestApp_extrapolated(t *testing.T) {
 			Lookups{},
 			Indexes{Index{Name: "index_a"}},
 			ConfFiles{
-				ConfFile{Name: "indexes", Stanzas: Stanzas{Stanza{Name: "index_a", Values: StanzaValues{}}}},
+				ConfFile{
+					Name: "indexes",
+					Stanzas: Stanzas{
+						Stanza{
+							Name: "index_a",
+							Values: StanzaValues{
+								"homePath":   "$SPLUNK_DB/index_a/db",
+								"coldPath":   "$SPLUNK_DB/index_a/colddb",
+								"thawedPath": "$SPLUNK_DB/index_a/thaweddb",
+							},
+						},
+					},
+				},
 				ConfFile{Name: "authorize", Stanzas: Stanzas{}},
 			},
 			false,

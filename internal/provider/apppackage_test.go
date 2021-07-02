@@ -38,7 +38,7 @@ func TestAccResourceAppPackage(t *testing.T) {
 					resource.TestMatchResourceAttr("splunkconfig_app_package.indexes", "files.0.content", regexp.MustCompile("version = 1.0.0")),
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "files.0.path", "default/app.conf"),
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "files.1.path", "default/indexes.conf"),
-					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "files.1.content", "[original_index]\n\n"),
+					resource.TestMatchResourceAttr("splunkconfig_app_package.indexes", "files.1.content", regexp.MustCompile("[original_index]")),
 				),
 			},
 
@@ -51,7 +51,7 @@ func TestAccResourceAppPackage(t *testing.T) {
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "patch_count", "1"),
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "tarball_path", "/tmp/indexes_app-1.0.1.tgz"),
 					resource.TestMatchResourceAttr("splunkconfig_app_package.indexes", "files.0.content", regexp.MustCompile("version = 1.0.1")),
-					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "files.1.content", "[patch_increase_index]\n\n"),
+					resource.TestMatchResourceAttr("splunkconfig_app_package.indexes", "files.1.content", regexp.MustCompile("[patch_increase_index]")),
 				),
 			},
 
@@ -65,7 +65,7 @@ func TestAccResourceAppPackage(t *testing.T) {
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "patch_count", "2"),
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "tarball_path", "/tmp/indexes_app-1.0.2.tgz"),
 					resource.TestMatchResourceAttr("splunkconfig_app_package.indexes", "files.0.content", regexp.MustCompile("version = 1.0.2")),
-					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "files.1.content", "[patch_increase_again_index]\n\n"),
+					resource.TestMatchResourceAttr("splunkconfig_app_package.indexes", "files.1.content", regexp.MustCompile("[patch_increase_again_index]")),
 				),
 			},
 
@@ -78,7 +78,7 @@ func TestAccResourceAppPackage(t *testing.T) {
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "patch_count", "0"),
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "tarball_path", "/tmp/indexes_app-1.1.0.tgz"),
 					resource.TestMatchResourceAttr("splunkconfig_app_package.indexes", "files.0.content", regexp.MustCompile("version = 1.1.0")),
-					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "files.1.content", "[new_version_index]\n\n"),
+					resource.TestMatchResourceAttr("splunkconfig_app_package.indexes", "files.1.content", regexp.MustCompile("[new_version_index]")),
 				),
 			},
 
