@@ -88,18 +88,7 @@ func (lookupFields LookupFields) defaultLookupValuesDefinerValues(definer defaul
 	return defaults
 }
 
-// hasRequiredFields returns true if any of the fields in lookupFields are required.
-func (lookupFields LookupFields) hasRequiredFields() bool {
-	for _, lookupField := range lookupFields {
-		if lookupField.Required {
-			return true
-		}
-	}
-
-	return false
-}
-
-// hasRequiredFields returns true if any of the fields in lookupFields are "default row fields".  This can be used to
+// hasDefaultRowFields returns true if any of the fields in lookupFields are "default row fields".  This can be used to
 // determine if a set of lookupFields should result in default rows being created.
 func (lookupFields LookupFields) hasDefaultRowFields() bool {
 	for _, lookupField := range lookupFields {

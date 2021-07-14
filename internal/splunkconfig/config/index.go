@@ -78,11 +78,6 @@ func (index Index) searchableByRoleName(roleName RoleName) bool {
 	return false
 }
 
-// searchableByRole returns true if this Index lists Role.RoleName in SearchRolesAllowed.
-func (index Index) searchableByRole(role Role) bool {
-	return index.searchableByRoleName(role.Name)
-}
-
 // stanzaName returns the Stanza's Name for an Index.
 func (index Index) stanzaName() string {
 	return string(index.Name)

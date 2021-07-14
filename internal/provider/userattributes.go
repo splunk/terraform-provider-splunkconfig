@@ -88,21 +88,31 @@ func resourceUserAttributesRead(ctx context.Context, d *schema.ResourceData, met
 	}
 
 	if user.Email != "" {
-		d.Set(userEmailKey, user.Email)
+		if err := d.Set(userEmailKey, user.Email); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
-	d.Set(userForceChangePassKey, user.ForceChangePass)
+	if err := d.Set(userForceChangePassKey, user.ForceChangePass); err != nil {
+		return diag.FromErr(err)
+	}
 
 	if user.Password != "" {
-		d.Set(userPasswordKey, user.Password)
+		if err := d.Set(userPasswordKey, user.Password); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	if user.RealName != "" {
-		d.Set(userRealNameKey, user.RealName)
+		if err := d.Set(userRealNameKey, user.RealName); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	if len(user.Roles) > 0 {
-		d.Set(userRolesKey, user.Roles)
+		if err := d.Set(userRolesKey, user.Roles); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return diag.Diagnostics{}

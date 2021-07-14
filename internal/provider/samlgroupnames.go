@@ -49,7 +49,9 @@ func resourceSAMLGroupNamesRead(ctx context.Context, d *schema.ResourceData, met
 	suite := meta.(config.Suite)
 
 	d.SetId(samlGroupNamesIDValue)
-	d.Set(samlGroupNamesKey, suite.ExtrapolatedSAMLGroups().SAMLGroupNames())
+	if err := d.Set(samlGroupNamesKey, suite.ExtrapolatedSAMLGroups().SAMLGroupNames()); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return diag.Diagnostics{}
 }

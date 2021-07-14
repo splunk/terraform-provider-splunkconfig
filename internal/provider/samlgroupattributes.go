@@ -63,7 +63,9 @@ func resourceSAMLGroupAttributesRead(ctx context.Context, d *schema.ResourceData
 	}
 
 	if len(samlGroup.Roles) > 0 {
-		d.Set(rolesKey, samlGroup.Roles)
+		if err := d.Set(rolesKey, samlGroup.Roles); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return diag.Diagnostics{}
