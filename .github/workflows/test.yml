@@ -9,7 +9,7 @@ on:
 jobs:
   test:
     name: Test
-    runs-on: ubunntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Prepare Go
         uses: actions/setup-go@v2
