@@ -134,7 +134,9 @@ func resourceAppPackageCreate(ctx context.Context, d *schema.ResourceData, meta 
 		return diag.FromErr(err)
 	}
 
-	d.Set(appPackageTGZKey, tgzFile)
+	if err := d.Set(appPackageTGZKey, tgzFile); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }
@@ -172,11 +174,15 @@ func resourceAppPackageCustomDiff(ctx context.Context, d *schema.ResourceDiff, m
 	}
 
 	// set the "version" from the fetched-from-suite app
-	d.SetNew(appPackageBaseVersionKey, app.Version.AsString())
+	if err := d.SetNew(appPackageBaseVersionKey, app.Version.AsString()); err != nil {
+		return err
+	}
 
 	// reset (or set initially to 0) patch count
 	if d.HasChange(appPackageBaseVersionKey) {
-		d.SetNew(appPackagePatchCountKey, 0)
+		if err := d.SetNew(appPackagePatchCountKey, 0); err != nil {
+			return err
+		}
 	}
 
 	// update app with patch count
@@ -200,10 +206,9 @@ func resourceAppPackageCustomDiff(ctx context.Context, d *schema.ResourceDiff, m
 	}
 
 	// set "files" from app with patch count
-	d.SetNew(
-		appPackageFilesKey,
-		resourceAppPackageFileContents(appPlusPatchCount),
-	)
+	if err := d.SetNew(appPackageFilesKey, resourceAppPackageFileContents(appPlusPatchCount)); err != nil {
+		return err
+	}
 
 	// but if "files" has changes (and "version" doesn't), bump patch count and re-calculate "files"
 	// the exclusion of "version" changes is because a version change resets the patch count back to 0, and we don't
@@ -211,18 +216,21 @@ func resourceAppPackageCustomDiff(ctx context.Context, d *schema.ResourceDiff, m
 	if !d.HasChange(appPackageBaseVersionKey) && d.HasChange(appPackageFilesKey) {
 		oldPatchCount := d.Get(appPackagePatchCountKey).(int)
 		newPatchCount := oldPatchCount + 1
-		d.SetNew(appPackagePatchCountKey, newPatchCount)
+		if err := d.SetNew(appPackagePatchCountKey, newPatchCount); err != nil {
+			return err
+		}
 
 		// re-create appPlusPatchCount from the *original* app to avoid adding patch count to a previously-bumped
 		// version
 		appPlusPatchCount = app.PlusPatchCount(int64(newPatchCount))
-		d.SetNew(appPackageEffectiveVersionKey, appPlusPatchCount.Version.AsString())
+		if err := d.SetNew(appPackageEffectiveVersionKey, appPlusPatchCount.Version.AsString()); err != nil {
+			return err
+		}
 
 		// because we have a new patch count, we need to re-calculate the file contents to account for the new version
-		d.SetNew(
-			appPackageFilesKey,
-			resourceAppPackageFileContents(appPlusPatchCount),
-		)
+		if err := d.SetNew(appPackageFilesKey, resourceAppPackageFileContents(appPlusPatchCount)); err != nil {
+			return nil
+		}
 	}
 
 	return nil

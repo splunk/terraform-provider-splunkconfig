@@ -117,43 +117,63 @@ func resourceRoleAttributesRead(ctx context.Context, d *schema.ResourceData, met
 	}
 
 	if len(role.SearchIndexesAllowed) > 0 {
-		d.Set(searchIndexesAllowedKey, role.SearchIndexesAllowed)
+		if err := d.Set(searchIndexesAllowedKey, role.SearchIndexesAllowed); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	if len(role.ImportRoles) > 0 {
-		d.Set(importRolesKey, role.ImportRoles)
+		if err := d.Set(importRolesKey, role.ImportRoles); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	if len(role.EnabledCapabilityNames()) > 0 {
-		d.Set(capabilitiesKey, role.EnabledCapabilityNames())
+		if err := d.Set(capabilitiesKey, role.EnabledCapabilityNames()); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	if role.SearchFilter != "" {
-		d.Set(searchFilterKey, role.SearchFilter)
+		if err := d.Set(searchFilterKey, role.SearchFilter); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	if role.CumulativeRTSearchJobsQuota.Explicit {
-		d.Set(cumulativeRTSearchJobsQuotaKey, role.CumulativeRTSearchJobsQuota.Value)
+		if err := d.Set(cumulativeRTSearchJobsQuotaKey, role.CumulativeRTSearchJobsQuota.Value); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	if role.CumulativeSearchJobsQuota.Explicit {
-		d.Set(cumulativeSearchJobsQuotaKey, role.CumulativeSearchJobsQuota.Value)
+		if err := d.Set(cumulativeSearchJobsQuotaKey, role.CumulativeSearchJobsQuota.Value); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	if role.RTSearchJobsQuota.Explicit {
-		d.Set(rtSearchJobsQuotaKey, role.RTSearchJobsQuota.Value)
+		if err := d.Set(rtSearchJobsQuotaKey, role.RTSearchJobsQuota.Value); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	if role.SearchDiskQuota.Explicit {
-		d.Set(searchDiskQuotaKey, role.SearchDiskQuota.Value)
+		if err := d.Set(searchDiskQuotaKey, role.SearchDiskQuota.Value); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	if role.SearchJobsQuota.Explicit {
-		d.Set(searchJobsQuotaKey, role.SearchJobsQuota.Value)
+		if err := d.Set(searchJobsQuotaKey, role.SearchJobsQuota.Value); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	if role.SearchTimeWin.Explicit {
-		d.Set(searchTimeWinKey, role.SearchTimeWin.Value)
+		if err := d.Set(searchTimeWinKey, role.SearchTimeWin.Value); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return diag.Diagnostics{}

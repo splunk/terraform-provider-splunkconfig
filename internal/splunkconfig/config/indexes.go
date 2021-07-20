@@ -64,11 +64,6 @@ func (indexes Indexes) indexesSearchableByRoleName(roleName RoleName) Indexes {
 	return searchableIndexes
 }
 
-// indexesSearchableByRole returns Indexes that are searchable by the provided Role.
-func (indexes Indexes) indexesSearchableByRole(role Role) Indexes {
-	return indexes.indexesSearchableByRoleName(role.Name)
-}
-
 // indexNames returns IndexNames for Indexes.
 func (indexes Indexes) indexNames() IndexNames {
 	uids := uidsOfUIDers(indexes)

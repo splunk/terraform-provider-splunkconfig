@@ -47,7 +47,9 @@ func resourceUserNamesRead(ctx context.Context, d *schema.ResourceData, meta int
 	suite := meta.(config.Suite)
 
 	d.SetId(userNamesIDValue)
-	d.Set(userNamesKey, suite.Users.Names())
+	if err := d.Set(userNamesKey, suite.Users.Names()); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return diag.Diagnostics{}
 }

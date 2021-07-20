@@ -47,7 +47,9 @@ func resourceRoleNamesRead(ctx context.Context, d *schema.ResourceData, meta int
 	suite := meta.(config.Suite)
 
 	d.SetId(roleNamesIDValue)
-	d.Set(roleNamesKey, suite.ExtrapolatedRoles().RoleNames())
+	if err := d.Set(roleNamesKey, suite.ExtrapolatedRoles().RoleNames()); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return diag.Diagnostics{}
 }
