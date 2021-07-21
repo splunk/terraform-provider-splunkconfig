@@ -15,6 +15,14 @@ Define and query a Splunk Configuration to be used by other Terraform providers 
 ## Example Usage
 
 ```terraform
+terraform {
+  required_providers {
+    splunkconfig = {
+      source = "splunk/splunkconfig"
+    }
+  }
+}
+
 provider "splunkconfig" {
   configuration_file = "./splunkconfig.yml"
 }
