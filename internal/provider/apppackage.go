@@ -36,7 +36,7 @@ const (
 
 func resourceAppFile() *schema.Resource {
 	return &schema.Resource{
-		Description:   "Create a tarball for an app",
+		Description:   "Create a tarball for an app. Generated app.conf's version will be automatically incremented when app content changes.",
 		CustomizeDiff: resourceAppPackageCustomDiff,
 		CreateContext: resourceAppPackageCreate,
 		// create/read/update end up doing the same work, so they use the same function
