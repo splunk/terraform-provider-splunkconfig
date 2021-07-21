@@ -74,12 +74,12 @@ func New(version string) func() *schema.Provider {
 				suiteConfigYMLKey: &schema.Schema{
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: fmt.Sprintf("YAML content containing the abstracted configruation. Either this or %s must be set.", suiteConfigFileKey),
+					Description: fmt.Sprintf("YAML content containing the abstracted configruation. Either this or `%s` must be set.", suiteConfigFileKey),
 				},
 				suiteConfigFileKey: &schema.Schema{
 					Type:        schema.TypeString,
 					Optional:    true,
-					Description: fmt.Sprintf("Full path to YAML file containing the abstracted configuration. Either this or %s must be set.", suiteConfigYMLKey),
+					Description: fmt.Sprintf("Full path to YAML file containing the abstracted configuration. Either this or `%s` must be set.", suiteConfigYMLKey),
 				},
 			},
 
