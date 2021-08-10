@@ -33,5 +33,7 @@ provider "splunkconfig" {
 
 ### Optional
 
-- **configuration** (String) YAML content containing the abstracted configruation. Either this or `configuration_file` must be set.
-- **configuration_file** (String) Full path to YAML file containing the abstracted configuration. Either this or `configuration` must be set.
+- **configuration** (String) YAML content containing the abstracted configruation. Either this or `configuration_file`
+  must be set.
+- **configuration_file** (String) Full path to YAML file containing the abstracted configuration. Either this or
+  `configuration` must be set.
