@@ -15,8 +15,24 @@ specification will use the same field name as in that specification.
 ## Fields
 
 - **anchors** (Freeform) Any valid YAML can be placed here for the purpose of defining YAML anchors.
+- **apps** (List of Object) Apps defined. (see [schema for app](#app))
 - **indexes** (List of Object) Indexes defined. (see [schema for index](#index))
 - **lookups** (List of Object) Lookups defined. (see [schema for lookup](#lookup))
+
+<a id="app"></a>
+## Schema for `app` object
+
+- **name** (String) App name.
+- **description** (String) App description.
+- **id** (String) App ID.
+- **author** (String) App author.
+- **isvisible** (Bool) App visibility.
+- **version** (String or Object) App version. If given as a string, must be in `<major>.<minor>.<patch>` format.
+Can also be a `version` object. (see [schema for version](#version))
+- **indexes** (Bool or List of Object) If `true`, include the global `indexes` configuration in this app. Can also
+be a list of index objects to include in the app. (see [schema for index](#index))
+- **lookups** (List of String or List of Object) If defined as a list of strings, include the referenced global
+`lookup` objects in this app. Can also be a list of lookup objects to include in the app. (see [schema for lookup](#lookup))
 
 <a id="index"></a>
 ## Schema for `index` object
@@ -60,3 +76,9 @@ every index or role.
 - **hours** (Integer) Hours.
 - **days** (Integer) Days.
 
+<a id="version"></a>
+## Schema for `version`
+
+- **major** (Integer) Major version.
+- **minor** (Integer) Minor version.
+- **patch** (Integer) Patch version.
