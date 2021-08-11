@@ -18,6 +18,7 @@ specification will use the same field name as in that specification.
 - **apps** (List of Object) Apps defined. (see [schema for app](#app))
 - **indexes** (List of Object) Indexes defined. (see [schema for index](#index))
 - **lookups** (List of Object) Lookups defined. (see [schema for lookup](#lookup))
+- **roles** (List of Object) Roles defined. (see [schema for role](#role))
 
 <a id="app"></a>
 ## Schema for `app` object
@@ -67,6 +68,24 @@ every index or role.
 
 - **lookup_name** (String) Name of lookup the row belongs to. Not used when defined directly in a lookup object.
 - **values** (Map) Lookup values to create.
+
+<a id="role"></a>
+## Schema for `role`
+
+- **name** (String) Name of the role.
+- **saml_groups** (List of String) List of SAML groups that this role should be added to.
+- **srchIndexesAllowed** (List of String) List of indexes that this role can search.
+- **importRoles** (List of String) List of Roles that this role will import.
+- **capabilities** (Map of String to Bool) Capabilities defined for this role. Key (String) is the role name, value
+(Bool) is true if the capability is enabled, false if the capability is disabled.
+- **lookup_rows** (List of Object) Lookup rows to create for this role. (see [schema for lookup_row](#lookup_row))
+- **srchFilter** (String) Search filter defined for the role.
+- **srchTimeWin** (Integer) srchTimeWin for the role.
+- **srchDiskQuota** (Integer) srchDiskQuota for the role.
+- **srchJobsQuota** (Integer) srchJobsQuota for the role.
+- **rtSrchJobsQuota** (Integer) rtSrchJobsQuota for the role.
+- **cumulativeSrchJobsQuota** (Integer) cumulativeSrchJobsQuota for the role.
+- **cumulativeRTSrchJobsQuota** (Integer) cumulativeRTSrchJobsQuota for the role.
 
 <a id="timeperiod"></a>
 ## Schema for `timeperiod`
