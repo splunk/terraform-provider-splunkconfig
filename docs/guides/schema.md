@@ -19,6 +19,7 @@ specification will use the same field name as in that specification.
 - **indexes** (List of Object) Indexes defined. (see [schema for index](#index))
 - **lookups** (List of Object) Lookups defined. (see [schema for lookup](#lookup))
 - **roles** (List of Object) Roles defined. (see [schema for role](#role))
+- **saml_groups** (List of Object) SAML Groups defined. (see [schema for saml_group](#saml_group))
 
 <a id="app"></a>
 ## Schema for `app` object
@@ -86,6 +87,12 @@ every index or role.
 - **rtSrchJobsQuota** (Integer) rtSrchJobsQuota for the role.
 - **cumulativeSrchJobsQuota** (Integer) cumulativeSrchJobsQuota for the role.
 - **cumulativeRTSrchJobsQuota** (Integer) cumulativeRTSrchJobsQuota for the role.
+
+<a id="saml_group"></a>
+## Schema for `saml_group`
+
+- **name** (String) Name of the SAML group.
+- **roles** (List of String) Roles to apply to the SAML group.
 
 <a id="timeperiod"></a>
 ## Schema for `timeperiod`
