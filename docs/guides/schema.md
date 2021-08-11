@@ -85,7 +85,7 @@ every index or role.
 ## Schema for `lookup_row`
 
 - **lookup_name** (String) Name of lookup the row belongs to. Not used when defined directly in a lookup object.
-- **values** (Map) Lookup values to create.
+- **values** (Map) Lookup values to create. Map keys must match fields that exist in the lookup.
 
 <a id="role"></a>
 ## Schema for `role`
