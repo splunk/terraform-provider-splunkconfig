@@ -46,9 +46,19 @@ list of role objects to include in the app. (see [schema for role](#role))
 <a id="index"></a>
 ## Schema for `index`
 
-- **name** (String) Index name.
+- **name** (String, required) Index name. As per the `indexes.conf` specification:
+```
+Index names must consist of only numbers, lowercase letters, underscores,
+and hyphens. They cannot begin with an underscore or hyphen, or contain
+the word "kvstore".
+```
 - **frozenTimePeriod** (Object) Frozen time period. (see [schema for timeperiod](#timeperiod))
-- **srchRolesAllowed** (List of String) Names of roles that can search this index.
+- **srchRolesAllowed** (List of String) Names of roles that can search this index. List values must be valid role
+names. As per the `authorize.conf` specification:
+```
+* Role names cannot have uppercase characters.
+* Role names cannot contain spaces, colons, semicolons, or forward slashes.
+```
 - **lookup_rows** (List of Object) Add rows of values for this index to lookups. (see [schema for lookup_row](#lookup_row))
 - **homePath** (String) homePath of the index. Defaults to `$SPLUNK_DB/<index name>/db`.
 - **coldPath** (String) coldPath of the index. Defaults to `$SPLUNK_DB/<index name>/colddb`.
