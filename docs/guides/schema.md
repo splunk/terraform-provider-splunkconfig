@@ -16,23 +16,6 @@ specification will use the same field name as in that specification.
 
 - **indexes** (List of Object) Indexes defined. (see [schema for index](#index))
 
-### Example indexes
-
-```
-indexes:
-  - name: web
-    frozenTimePeriod:
-      days: 365
-    srchRolesAllowed:
-      - web_admin                    # web will be added to web_admin's srchIndexesAllowed
-
-  - name: proxy
-    lookup_rows:
-      - lookup_name: index_contacts
-        values:
-          contact: Proxy Admins     # row with index=proxy contact="Proxy Admins" will be added to a lookup named index_contacts
-```
-
 <a id="index"></a>
 ## Schema for `index` object
 
