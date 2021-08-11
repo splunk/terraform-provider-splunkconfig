@@ -36,6 +36,8 @@ Can also be a `version` object. (see [schema for version](#version))
 be a list of index objects to include in the app. (see [schema for index](#index))
 - **lookups** (List of String or List of Object) If defined as a list of strings, include the referenced global
 `lookup` objects in this app. Can also be a list of lookup objects to include in the app. (see [schema for lookup](#lookup))
+- **roles** (Bool or List of Object) If `true`, include the global `roles` configuration in this app. Can also be a
+list of role objects to include in the app. (see [schema for role](#role))
 
 <a id="index"></a>
 ## Schema for `index`
