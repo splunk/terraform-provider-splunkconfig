@@ -152,7 +152,12 @@ Only alphanumeric characters and "_" (underscore) are allowed in capability name
 instead be used to trigger rotation of a randomly generated password whenever this value changes.
 - **force_change_pass** (Bool) True if the user should be forced to change their password after logging in.
 - **realname** (String) Real name of the user.
-- **roles** (List of String) Roles to apply to the user.
+- **roles** (List of String) Roles to apply to the user. Listed role names must be valid. As per the
+`authorize.conf` specification:
+```
+* Role names cannot have uppercase characters.
+* Role names cannot contain spaces, colons, semicolons, or forward slashes.
+```
 
 <a id="version"></a>
 ## Schema for `version`
