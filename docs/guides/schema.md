@@ -14,6 +14,7 @@ specification will use the same field name as in that specification.
 
 ## Fields
 
+- **anchors** (Freeform) Any valid YAML can be placed here for the purpose of defining YAML anchors.
 - **indexes** (List of Object) Indexes defined. (see [schema for index](#index))
 
 <a id="index"></a>
