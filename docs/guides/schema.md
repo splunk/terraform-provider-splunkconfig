@@ -67,7 +67,7 @@ names. As per the `authorize.conf` specification:
 <a id="lookup"></a>
 ## Schema for `lookup`
 
-- **name** (String) Lookup name. The resulting CSV file will be `<name>.csv`.
+- **name** (String, required) Lookup name. The resulting CSV file will be `<name>.csv`.
 - **fields** (List of Object) Fields included in the lookup. (see [schema for lookup_field](#lookup_field))
 - **rows** (List of Object) Rows included in the lookup. (see [schema for lookup_row](#lookup_row))
 
