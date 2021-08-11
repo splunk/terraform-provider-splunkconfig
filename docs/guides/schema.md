@@ -25,13 +25,17 @@ specification will use the same field name as in that specification.
 <a id="app"></a>
 ## Schema for `app`
 
-- **name** (String) App name.
+- **name** (String, required) App name.
 - **description** (String) App description.
-- **id** (String) App ID.
+- **id** (String, required) App ID. As per the `app.conf` specification:
+```
+* id must adhere to these cross-platform folder name restrictions:
+* must contain only letters, numbers, "." (dot), and "_" (underscore) characters.
+```
 - **author** (String) App author.
 - **isvisible** (Bool) App visibility.
 - **version** (String or Object) App version. If given as a string, must be in `<major>.<minor>.<patch>` format.
-Can also be a `version` object. (see [schema for version](#version))
+Can also be a `version` object. If not defined, defaults to `0.0.0`. (see [schema for version](#version))
 - **indexes** (Bool or List of Object) If `true`, include the global `indexes` configuration in this app. Can also
 be a list of index objects to include in the app. (see [schema for index](#index))
 - **lookups** (List of String or List of Object) If defined as a list of strings, include the referenced global
