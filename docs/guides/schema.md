@@ -23,7 +23,7 @@ specification will use the same field name as in that specification.
 - **users** (List of Object) Users defined. (see [schema for user](#user))
 
 <a id="app"></a>
-## Schema for `app` object
+## Schema for `app`
 
 - **name** (String) App name.
 - **description** (String) App description.
@@ -38,7 +38,7 @@ be a list of index objects to include in the app. (see [schema for index](#index
 `lookup` objects in this app. Can also be a list of lookup objects to include in the app. (see [schema for lookup](#lookup))
 
 <a id="index"></a>
-## Schema for `index` object
+## Schema for `index`
 
 - **name** (String) Index name.
 - **frozenTimePeriod** (Object) Frozen time period. (see [schema for timeperiod](#timeperiod))
@@ -49,14 +49,14 @@ be a list of index objects to include in the app. (see [schema for index](#index
 - **thawedPath** (String) thawedPath of the index. Defaults to `$SPLUNK_DB/<index name>/thaweddb`.
 
 <a id="lookup"></a>
-## Schema for `lookup` object
+## Schema for `lookup`
 
 - **name** (String) Lookup name. The resulting CSV file will be `<name>.csv`.
 - **fields** (List of Object) Fields included in the lookup. (see [schema for lookup_field](#lookup_field))
 - **rows** (List of Object) Rows included in the lookup. (see [schema for lookup_row](#lookup_row))
 
 <a id="lookup_field"></a>
-## Schema for `lookup_field` object
+## Schema for `lookup_field`
 
 - **name** (String) Name of the field, placed in the header row.
 - **default** (String) Default value for this field.
@@ -66,7 +66,7 @@ every index or role.
 - **required** (Bool) If true, a value for this field must exist for every row, or the lookup will fail validation.
 
 <a id="lookup_row"></a>
-## Schema for `lookup_row` object
+## Schema for `lookup_row`
 
 - **lookup_name** (String) Name of lookup the row belongs to. Not used when defined directly in a lookup object.
 - **values** (Map) Lookup values to create.
