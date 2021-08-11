@@ -74,7 +74,7 @@ names. As per the `authorize.conf` specification:
 <a id="lookup_field"></a>
 ## Schema for `lookup_field`
 
-- **name** (String) Name of the field, placed in the header row.
+- **name** (String, required) Name of the field, placed in the header row.
 - **default** (String) Default value for this field.
 - **default_row_field** (Bool) If true, an object type that sets a value for this field will result in a default row
 being automatically created for the associated lookup. This is useful when you want to automatically create rows for
