@@ -128,7 +128,12 @@ Only alphanumeric characters and "_" (underscore) are allowed in capability name
 ## Schema for `saml_group`
 
 - **name** (String) Name of the SAML group.
-- **roles** (List of String) Roles to apply to the SAML group.
+- **roles** (List of String) Roles to apply to the SAML group. Listed role names must be valid. As per the
+`authorize.conf` specification:
+```
+* Role names cannot have uppercase characters.
+* Role names cannot contain spaces, colons, semicolons, or forward slashes.
+```
 
 <a id="timeperiod"></a>
 ## Schema for `timeperiod`
