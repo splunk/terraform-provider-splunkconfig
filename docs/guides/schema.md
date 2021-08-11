@@ -90,12 +90,31 @@ every index or role.
 <a id="role"></a>
 ## Schema for `role`
 
-- **name** (String) Name of the role.
+- **name** (String, required) Name of the role.  As per the `authorize.conf` specification:
+```
+* Role names cannot have uppercase characters.
+* Role names cannot contain spaces, colons, semicolons, or forward slashes.
+```
 - **saml_groups** (List of String) List of SAML groups that this role should be added to.
-- **srchIndexesAllowed** (List of String) List of indexes that this role can search.
-- **importRoles** (List of String) List of Roles that this role will import.
-- **capabilities** (Map of String to Bool) Capabilities defined for this role. Key (String) is the role name, value
-(Bool) is true if the capability is enabled, false if the capability is disabled.
+- **srchIndexesAllowed** (List of String) List of indexes that this role can search. Listed index names must be
+valid.  As per the `indexes.conf` specification:
+```
+Index names must consist of only numbers, lowercase letters, underscores,
+and hyphens. They cannot begin with an underscore or hyphen, or contain
+the word "kvstore".
+```
+- **importRoles** (List of String) List of Roles that this role will import. Listed role names must be valid. As
+per the `authorize.conf` specification:
+```
+* Role names cannot have uppercase characters.
+* Role names cannot contain spaces, colons, semicolons, or forward slashes.
+```
+- **capabilities** (Map of String to Bool) Capabilities defined for this role. Key (String) is the capability name,
+value (Bool) is true if the capability is enabled, false if the capability is disabled. Capability names must be
+valid. As per the `authorize.conf` specification:
+```
+Only alphanumeric characters and "_" (underscore) are allowed in capability names.
+```
 - **lookup_rows** (List of Object) Lookup rows to create for this role. (see [schema for lookup_row](#lookup_row))
 - **srchFilter** (String) Search filter defined for the role.
 - **srchTimeWin** (Integer) srchTimeWin for the role.
