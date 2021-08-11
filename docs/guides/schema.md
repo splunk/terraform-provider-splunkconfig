@@ -20,6 +20,7 @@ specification will use the same field name as in that specification.
 - **lookups** (List of Object) Lookups defined. (see [schema for lookup](#lookup))
 - **roles** (List of Object) Roles defined. (see [schema for role](#role))
 - **saml_groups** (List of Object) SAML Groups defined. (see [schema for saml_group](#saml_group))
+- **users** (List of Object) Users defined. (see [schema for user](#user))
 
 <a id="app"></a>
 ## Schema for `app` object
@@ -101,6 +102,17 @@ every index or role.
 - **minutes** (Integer) Minutes.
 - **hours** (Integer) Hours.
 - **days** (Integer) Days.
+
+<a id="user"></a>
+## Schema for `user`
+
+- **name** (String) Name of the user (username used to log in).
+- **email** (String) Email address of the user.
+- **password** (String, sensitive) Password of the user. Avoid using this for any real password value. It can
+instead be used to trigger rotation of a randomly generated password whenever this value changes.
+- **force_change_pass** (Bool) True if the user should be forced to change their password after logging in.
+- **realname** (String) Real name of the user.
+- **roles** (List of String) Roles to apply to the user.
 
 <a id="version"></a>
 ## Schema for `version`
