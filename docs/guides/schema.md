@@ -22,6 +22,41 @@ specification will use the same field name as in that specification.
 - **saml_groups** (List of Object) SAML Groups defined. (see [schema for saml_group](#saml_group))
 - **users** (List of Object) Users defined. (see [schema for user](#user))
 
+## Example
+
+```
+roles:
+  - name: proxy_admins
+    srchIndexesAllowed: [proxy]
+
+saml_groups:
+  - name: Proxy-Admins
+    roles: [proxy_admins]
+
+lookups:
+  - name: index_alerting
+    fields:
+      - name: index
+      - name: expected_interval
+
+indexes:
+  - name: proxy
+    frozenTimePeriod: {days: 365}
+    lookup_rows:
+      - lookup_name: index_alerting
+        values: {expected_interval: 300}
+
+apps:
+  - name: Indexes
+    id: indexes
+    indexes: true
+    version: 1.0.0
+  - name: Alert Lookups
+    id: alert_lookups
+    lookups: [index_alerting]
+    version: 1.0.0
+```
+
 <a id="app"></a>
 ## Schema for `app`
 
