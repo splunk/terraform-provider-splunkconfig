@@ -32,6 +32,7 @@ const (
 	appPackageResourceName          = "splunkconfig_app_package"
 	userNamesResourceName           = "splunkconfig_user_names"
 	userAttributesResourceName      = "splunkconfig_user_attributes"
+	lookupAttributesResourceName    = "splunkconfig_lookup_attributes"
 )
 
 func configure(version string, p *schema.Provider) func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
@@ -91,6 +92,7 @@ func New(version string) func() *schema.Provider {
 				samlGroupAttributesResourceName: resourceSAMLGroupAttributes(),
 				userNamesResourceName:           resourceUserNames(),
 				userAttributesResourceName:      resourceUserAttributes(),
+				lookupAttributesResourceName:    resourceLookupAttributes(),
 			},
 
 			// resources schema
