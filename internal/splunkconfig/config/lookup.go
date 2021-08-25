@@ -20,13 +20,17 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"strings"
 )
 
 // Lookup is a combination of a LookupDefinition and a list of LookupRows to make a complete representation of a lookup.
 type Lookup struct {
-	Name   string
-	Fields LookupFields
-	Rows   LookupRows
+	Name            string
+	Fields          LookupFields
+	ExternalCommand string `yaml:"external_cmd"`
+	ExternalType    string `yaml:"external_type"`
+	Collection      string
+	Rows            LookupRows
 }
 
 // validate returns an error if the Lookup is invalid. It is invalid if its Definition is invalid, or if its Rows
@@ -85,8 +89,12 @@ func (lookup Lookup) FilePath() string {
 	return fmt.Sprintf("lookups/%s", lookup.filename())
 }
 
-// TemplatedContent returns the templated CSV content.
+// TemplatedContent returns the templated CSV content, or an empty string if no content should be created.
 func (lookup Lookup) TemplatedContent() string {
+	if lookup.ExternalType != "" {
+		return ""
+	}
+
 	buf := new(bytes.Buffer)
 
 	if err := lookup.writeCSV(buf); err != nil {
@@ -94,6 +102,37 @@ func (lookup Lookup) TemplatedContent() string {
 	}
 
 	return buf.String()
+}
+
+// stanzaValues returns the StanzaValues for the Lookup.
+func (lookup Lookup) stanzaValues() StanzaValues {
+	stanzaValues := StanzaValues{
+		"filename": lookup.filename(),
+	}
+
+	if lookup.ExternalType != "" {
+		stanzaValues["external_type"] = lookup.ExternalType
+		// fields_list only comes into play when external_type is set
+		stanzaValues["fields_list"] = strings.Join(lookup.Fields.FieldNames(), ", ")
+	}
+
+	if lookup.ExternalCommand != "" {
+		stanzaValues["external_cmd"] = lookup.ExternalCommand
+	}
+
+	if lookup.Collection != "" {
+		stanzaValues["collection"] = lookup.Collection
+	}
+
+	return stanzaValues
+}
+
+// stanza returns the Stanza for the Lookup.
+func (lookup Lookup) stanza() Stanza {
+	return Stanza{
+		Name:   lookup.Name,
+		Values: lookup.stanzaValues(),
+	}
 }
 
 // defaultRow returns the default row for a defaultLookupValuesDefiner if it would be valid for this Lookup's Fields.

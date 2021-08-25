@@ -113,7 +113,7 @@ func (indexes Indexes) stanzas() Stanzas {
 	return stanzas
 }
 
-// confFiles returns the ConfFile for Indexes.
+// confFile returns the ConfFile for Indexes.
 func (indexes Indexes) confFile() ConfFile {
 	return ConfFile{
 		Name:    "indexes",

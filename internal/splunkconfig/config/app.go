@@ -141,7 +141,7 @@ func (app App) tarFilename() string {
 func (app App) FileContenters() FileContenters {
 	contenters := FileContenters{app.appConfFile()}
 	contenters = append(contenters, NewFileContentersFromList(app.ConfFiles)...)
-	contenters = append(contenters, NewFileContentersFromList(app.LookupsPlaceholder.Lookups)...)
+	contenters = append(contenters, app.LookupsPlaceholder.Lookups.fileContenters()...)
 
 	return contenters.WithContent()
 }
