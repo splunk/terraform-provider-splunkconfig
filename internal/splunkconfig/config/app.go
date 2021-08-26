@@ -35,6 +35,7 @@ type App struct {
 	IndexesPlaceholder IndexesPlaceholder `yaml:"indexes"`
 	RolesPlaceholder   RolesPlaceholder   `yaml:"roles"`
 	LookupsPlaceholder LookupsPlaceholder `yaml:"lookups"`
+	ACL                ACL
 }
 
 // validate returns an error if App is invalid.  It is invalid if:
@@ -44,6 +45,7 @@ type App struct {
 // * has invalid IndexesPlaceholder
 // * has invalid RolesPlaceholder
 // * has invalid LookupsPlaceholder
+// * has an invalid ACL
 func (app App) validate() error {
 	if app.Name == "" {
 		return fmt.Errorf("invalid App (%v), has an empty Name", app)
@@ -55,6 +57,7 @@ func (app App) validate() error {
 		"IndexesPlaceholder": app.IndexesPlaceholder,
 		"RolesPlaceholder":   app.RolesPlaceholder,
 		"LookupsPlaceholder": app.LookupsPlaceholder,
+		"ACL":                app.ACL,
 	}
 
 	for vName, v := range validators {
@@ -107,6 +110,23 @@ func (app App) appConfFile() ConfFile {
 	}
 }
 
+// metaConfFile returns a ConfFile for an App's default.meta.
+func (app App) metaConfFile() ConfFile {
+	stanza := Stanza{
+		Name:   "",
+		Values: app.ACL.stanzaValues(),
+	}
+
+	return ConfFile{
+		Name:      "default",
+		Extension: "meta",
+		Location:  "metadata",
+		Stanzas: Stanzas{
+			stanza,
+		},
+	}
+}
+
 // extrapolated returns a new copy of App that has external components (Indexes, Lookups) substituted for any true
 // placeholders.
 func (app App) extrapolated(indexes Indexes, roles Roles, lookups Lookups) (App, error) {
@@ -142,6 +162,9 @@ func (app App) FileContenters() FileContenters {
 	contenters := FileContenters{app.appConfFile()}
 	contenters = append(contenters, NewFileContentersFromList(app.ConfFiles)...)
 	contenters = append(contenters, NewFileContentersFromList(app.LookupsPlaceholder.Lookups)...)
+
+	// .meta at the end like a bow
+	contenters = append(contenters, app.metaConfFile())
 
 	return contenters.WithContent()
 }
