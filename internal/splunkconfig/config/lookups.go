@@ -120,6 +120,8 @@ func (lookups Lookups) confFile() ConfFile {
 	}
 }
 
+// fileContenters returns a FileContenters object for the Lookups, including CSV files for each included Lookup, and
+// .conf files for the collection of Lookups.
 func (lookups Lookups) fileContenters() FileContenters {
 	contenters := NewFileContentersFromList(lookups)
 	contenters = append(contenters, lookups.confFile())
