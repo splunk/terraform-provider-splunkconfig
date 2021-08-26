@@ -25,6 +25,7 @@ func TestRoleName_validate(t *testing.T) {
 		{RoleName("12345"), false},
 		{RoleName("abcde"), false},
 		{RoleName("ab&de"), true},
+		{RoleName("*"), false},
 	}
 
 	tests.test(t)
