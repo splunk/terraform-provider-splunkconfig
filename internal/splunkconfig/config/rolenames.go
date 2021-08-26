@@ -15,6 +15,7 @@
 package config
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 )
@@ -50,4 +51,21 @@ func (roleNames RoleNames) deduplicatedSorted() RoleNames {
 // authorizeConfImportRolesValue returns a string suitable for use in authorize.conf for importRoles.
 func (roleNames RoleNames) authorizeConfImportRolesValue() string {
 	return strings.Join(uidsOfUIDers(roleNames.deduplicatedSorted()), ";")
+}
+
+// metaAccessValue returns the string to be used in a .meta access value for the RoleNames, or an empty string if
+// RoleNames is nil.
+func (roleNames RoleNames) metaAccessValue() string {
+	if roleNames == nil {
+		return ""
+	}
+
+	// 0-length handled separately just to avoid two spaces between the brackets
+	if len(roleNames) == 0 {
+		return "[ ]"
+	}
+
+	names := uidsOfUIDers(roleNames)
+
+	return fmt.Sprintf("[ %s ]", strings.Join(names, ", "))
 }
