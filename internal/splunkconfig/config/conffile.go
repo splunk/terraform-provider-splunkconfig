@@ -14,12 +14,17 @@
 
 package config
 
-import "fmt"
+import (
+	"fmt"
+	"path"
+)
 
 // ConfFile represents a configuration file.
 type ConfFile struct {
-	Name    string
-	Stanzas Stanzas
+	Name      string
+	Extension string
+	Location  string
+	Stanzas   Stanzas
 }
 
 // validate returns an error if ConfFile is invalid.  It is invalid if it:
@@ -44,12 +49,22 @@ func (confFile ConfFile) uid() string {
 
 // filename returns the filename for a configuration file, which is just its Name with a suffix of .conf.
 func (confFile ConfFile) filename() string {
-	return fmt.Sprintf("%s.conf", confFile.Name)
+	extension := "conf"
+	if confFile.Extension != "" {
+		extension = confFile.Extension
+	}
+
+	return fmt.Sprintf("%s.%s", confFile.Name, extension)
 }
 
 // FilePath returns the path for the configuration file, relative to the app directory.
 func (confFile ConfFile) FilePath() string {
-	return fmt.Sprintf("default/%s", confFile.filename())
+	location := "default"
+	if confFile.Location != "" {
+		location = confFile.Location
+	}
+
+	return path.Join(location, confFile.filename())
 }
 
 // WithStanzas returns a new ConfFile that is a copy of this ConfFile with additional Stanzas added.  Stanzas are not
