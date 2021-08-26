@@ -28,8 +28,8 @@ type App struct {
 	Description        string
 	ID                 AppID
 	Author             string
-	IsVisible          bool
-	CheckForUpdates    bool
+	IsVisible          bool `yaml:"is_visible"`
+	CheckForUpdates    bool `yaml:"check_for_updates"`
 	Version            Version
 	ConfFiles          ConfFiles
 	IndexesPlaceholder IndexesPlaceholder `yaml:"indexes"`
