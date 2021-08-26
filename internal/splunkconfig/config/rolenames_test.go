@@ -15,6 +15,7 @@
 package config
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -32,4 +33,31 @@ func TestRoleNames_validate(t *testing.T) {
 	}
 
 	tests.test(t)
+}
+
+func TestRoleNames_metaAccessValue(t *testing.T) {
+	tests := []struct {
+		input RoleNames
+		want  string
+	}{
+		{
+			RoleNames{"one", "two"},
+			"[ one, two ]",
+		},
+		{
+			RoleNames{},
+			"[ ]",
+		},
+		{
+			nil,
+			"",
+		},
+	}
+
+	for _, test := range tests {
+		got := test.input.metaAccessValue()
+		message := fmt.Sprintf("%T{%+v}.metaAccessValue()", test.input, test.input)
+
+		testEqual(got, test.want, message, t)
+	}
 }
