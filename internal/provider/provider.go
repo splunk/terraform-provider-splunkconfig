@@ -31,6 +31,7 @@ const (
 	samlGroupNamesResourceName      = "splunkconfig_saml_group_names"
 	samlGroupAttributesResourceName = "splunkconfig_saml_group_attributes"
 	appPackageResourceName          = "splunkconfig_app_package"
+	appIdsResourceName              = "splunkconfig_app_ids"
 	appAttributesResourceName       = "splunkconfig_app_attributes"
 	userNamesResourceName           = "splunkconfig_user_names"
 	userAttributesResourceName      = "splunkconfig_user_attributes"
@@ -95,6 +96,7 @@ func New(version string) func() *schema.Provider {
 				userNamesResourceName:           resourceUserNames(),
 				userAttributesResourceName:      resourceUserAttributes(),
 				lookupAttributesResourceName:    resourceLookupAttributes(),
+				appIdsResourceName:              resourceAppIds(),
 				appAttributesResourceName:       resourceAppAttributes(),
 			},
 
