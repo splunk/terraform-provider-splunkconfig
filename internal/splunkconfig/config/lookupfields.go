@@ -111,3 +111,14 @@ func (lookupFields LookupFields) valuesHaveAllDefaultRowFields(lookupValues Look
 
 	return true
 }
+
+// FieldNames returns the list of names of the fields in a LookupFields object.
+func (lookupFields LookupFields) FieldNames() []string {
+	fieldNames := make([]string, len(lookupFields))
+
+	for i, field := range lookupFields {
+		fieldNames[i] = field.Name
+	}
+
+	return fieldNames
+}

@@ -104,3 +104,100 @@ func TestLookupFields_defaultLookupValuesDefinerValues(t *testing.T) {
 		testEqual(gotValues, test.wantValues, message, t)
 	}
 }
+
+func TestLookupFields_stanzas(t *testing.T) {
+	tests := stanzasDefinerTestCases{
+		{
+			Lookups{
+				Lookup{
+					Name:   "first_lookup",
+					Fields: LookupFields{{Name: "any_field"}},
+				},
+				Lookup{
+					// this Lookup is out of order, and should be reordered in the resulting Stanzas
+					Name:   "third_lookup",
+					Fields: LookupFields{{Name: "third_field"}},
+				},
+				Lookup{
+					Name:   "second_lookup",
+					Fields: LookupFields{{Name: "another_field"}},
+				},
+			},
+			Stanzas{
+				{
+					Name: "first_lookup",
+					Values: StanzaValues{
+						// "fields_list": "any_field",
+						"filename": "first_lookup.csv",
+					},
+				},
+				{
+					Name: "second_lookup",
+					Values: StanzaValues{
+						// "fields_list": "another_field",
+						"filename": "second_lookup.csv",
+					},
+				},
+				{
+					Name: "third_lookup",
+					Values: StanzaValues{
+						// "fields_list": "third_field",
+						"filename": "third_lookup.csv",
+					},
+				},
+			},
+		},
+	}
+
+	tests.test(t)
+}
+
+func TestLookups_confFile(t *testing.T) {
+	tests := confFileDefinerTestCases{
+		{
+			Lookups{
+				{
+					Name:   "test_lookup",
+					Fields: LookupFields{{Name: "test_field"}},
+				},
+			},
+			ConfFile{
+				Name: "transforms",
+				Stanzas: Stanzas{
+					{
+						Name: "test_lookup",
+						Values: StanzaValues{
+							"filename": "test_lookup.csv",
+						},
+					},
+				},
+			},
+		},
+	}
+
+	tests.test(t)
+}
+
+func TestLookupFields_FieldNames(t *testing.T) {
+	tests := []struct {
+		input LookupFields
+		want  []string
+	}{
+		{
+			LookupFields{
+				{Name: "unsorted_field"},
+				{Name: "field_1"},
+				{Name: "field_2"},
+				{Name: "field_3"},
+			},
+			// fields are not sorted
+			[]string{"unsorted_field", "field_1", "field_2", "field_3"},
+		},
+	}
+
+	for _, test := range tests {
+		got := test.input.FieldNames()
+		message := fmt.Sprintf("%T{%+v}.FieldNames()", test.input, test.input)
+		testEqual(got, test.want, message, t)
+	}
+}

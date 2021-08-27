@@ -67,11 +67,7 @@ func resourceLookupAttributesRead(ctx context.Context, d *schema.ResourceData, m
 	}
 
 	// fields
-	fieldNames := make([]string, len(lookup.Fields))
-
-	for i, field := range lookup.Fields {
-		fieldNames[i] = field.Name
-	}
+	fieldNames := lookup.Fields.FieldNames()
 
 	if err := d.Set(fieldNamesKey, fieldNames); err != nil {
 		return diag.FromErr(err)

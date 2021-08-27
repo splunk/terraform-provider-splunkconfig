@@ -62,6 +62,19 @@ valueA,,
 ,"value""B""",
 `,
 		},
+		{
+			Lookup{
+				Fields: LookupFields{
+					LookupField{Name: "fieldA"},
+				},
+				ExternalType: "kvstore",
+				Rows: LookupRows{
+					LookupRow{Values: LookupValues{"fieldA": "valueA"}},
+				},
+			},
+			// templated content will be empty because ExternalType is set
+			"",
+		},
 	}
 
 	tests.test(t)
@@ -178,4 +191,46 @@ func TestLookup_extrapolatedWithLookupRowsForLookupDefiners(t *testing.T) {
 		message := fmt.Sprintf("%T{%+v}.extrapolatedWithLookupRowsForLookupDefiners(%T{%+v}...)", test.lookup, test.lookup, test.definers, test.definers)
 		testEqual(gotLookup, test.wantLookup, message, t)
 	}
+}
+
+func TestLookup_stanza(t *testing.T) {
+	tests := stanzaDefinerTestCases{
+		{
+			Lookup{
+				Name: "test_lookup",
+				// will not generage fields_list because external_type not set
+				Fields: LookupFields{
+					{Name: "field_1"},
+					{Name: "field_2"},
+				},
+			},
+			Stanza{
+				Name: "test_lookup",
+				Values: StanzaValues{
+					"filename": "test_lookup.csv",
+				},
+			},
+		},
+		{
+			Lookup{
+				Name: "test_lookup",
+				// *will* generate fields_list because external_type *is* set
+				Fields: LookupFields{
+					{Name: "field_1"},
+					{Name: "field_2"},
+				},
+				ExternalType: "kvstore",
+			},
+			Stanza{
+				Name: "test_lookup",
+				Values: StanzaValues{
+					"filename":      "test_lookup.csv",
+					"external_type": "kvstore",
+					"fields_list":   "field_1, field_2",
+				},
+			},
+		},
+	}
+
+	tests.test(t)
 }

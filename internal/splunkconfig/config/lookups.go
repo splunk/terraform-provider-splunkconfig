@@ -17,6 +17,7 @@ package config
 import (
 	"fmt"
 	"reflect"
+	"sort"
 )
 
 // Lookups is a list of Lookup objects.
@@ -83,4 +84,47 @@ func (lookups Lookups) WithNames(names []string) (Lookups, error) {
 	}
 
 	return foundLookups, nil
+}
+
+// lookupNames returns a list of lookup names for Lookups.
+func (lookups Lookups) lookupNames() []string {
+	lookupNames := make([]string, len(lookups))
+
+	for i, lookup := range lookups {
+		lookupNames[i] = lookup.Name
+	}
+
+	sort.Strings(lookupNames)
+
+	return lookupNames
+}
+
+// stanzas returns the Stanzas for Lookups.
+func (lookups Lookups) stanzas() Stanzas {
+	stanzas := make(Stanzas, len(lookups))
+
+	// use lookups.lookupNames() to force sorting
+	for i, lookupName := range lookups.lookupNames() {
+		found, _ := lookups.WithName(lookupName)
+		stanzas[i] = found.stanza()
+	}
+
+	return stanzas
+}
+
+// confFile returns the ConfFile for Lookups.
+func (lookups Lookups) confFile() ConfFile {
+	return ConfFile{
+		Name:    "transforms",
+		Stanzas: lookups.stanzas(),
+	}
+}
+
+// fileContenters returns a FileContenters object for the Lookups, including CSV files for each included Lookup, and
+// .conf files for the collection of Lookups.
+func (lookups Lookups) fileContenters() FileContenters {
+	contenters := NewFileContentersFromList(lookups)
+	contenters = append(contenters, lookups.confFile())
+
+	return contenters
 }
