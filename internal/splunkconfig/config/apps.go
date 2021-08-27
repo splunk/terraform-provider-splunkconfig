@@ -55,3 +55,14 @@ func (apps Apps) WithID(name string) (found App, ok bool) {
 
 	return
 }
+
+// AppIDs returns a list of AppID values for each App in the list.
+func (apps Apps) AppIDs() []AppID {
+	appIDs := make([]AppID, len(apps))
+
+	for i, app := range apps {
+		appIDs[i] = app.ID
+	}
+
+	return appIDs
+}
