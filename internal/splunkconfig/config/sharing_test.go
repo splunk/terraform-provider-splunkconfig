@@ -14,7 +14,10 @@
 
 package config
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestSharing_validate(t *testing.T) {
 	tests := validatorTestCases{
@@ -42,4 +45,35 @@ func TestSharing_validate(t *testing.T) {
 	}
 
 	tests.test(t)
+}
+
+func TestSharing_metaValue(t *testing.T) {
+	tests := []struct {
+		input Sharing
+		want  string
+	}{
+		{
+			SHAREUNDEF,
+			"",
+		},
+		{
+			SHAREUSER,
+			"",
+		},
+		{
+			SHAREAPP,
+			"",
+		},
+		{
+			SHAREGLOBAL,
+			"system",
+		},
+	}
+
+	for _, test := range tests {
+		got := test.input.metaValue()
+		message := fmt.Sprintf("%T{%+v}.metaValue()", test.input, test.input)
+
+		testEqual(got, test.want, message, t)
+	}
 }
