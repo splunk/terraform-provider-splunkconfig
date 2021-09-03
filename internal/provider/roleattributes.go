@@ -16,23 +16,24 @@ package provider
 
 import (
 	"context"
+	"terraform-provider-splunkconfig/internal/splunkconfig/config"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"terraform-provider-splunkconfig/internal/splunkconfig/config"
 )
 
 const (
-	roleNameKey                    = "role_name"
-	searchIndexesAllowedKey        = "search_indexes_allowed"
-	importRolesKey                 = "imported_roles"
-	capabilitiesKey                = "capabilities"
-	searchFilterKey                = "search_filter"
-	cumulativeRTSearchJobsQuotaKey = "cumulative_realtime_search_jobs_quota"
-	cumulativeSearchJobsQuotaKey   = "cumulative_search_jobs_quota"
-	rtSearchJobsQuotaKey           = "realtime_search_jobs_quota"
-	searchDiskQuotaKey             = "search_disk_quota"
-	searchJobsQuotaKey             = "search_jobs_quota"
-	searchTimeWinKey               = "search_time_win"
+	roleAttributesRoleNameKey                    = "role_name"
+	roleAttributesSearchIndexesAllowedKey        = "search_indexes_allowed"
+	roleAttributesImportRolesKey                 = "imported_roles"
+	roleAttributesCapabilitiesKey                = "capabilities"
+	roleAttributesSearchFilterKey                = "search_filter"
+	roleAttributesCumulativeRTSearchJobsQuotaKey = "cumulative_realtime_search_jobs_quota"
+	roleAttributesCumulativeSearchJobsQuotaKey   = "cumulative_search_jobs_quota"
+	roleAttributesRtSearchJobsQuotaKey           = "realtime_search_jobs_quota"
+	roleAttributesSearchDiskQuotaKey             = "search_disk_quota"
+	roleAttributesSearchJobsQuotaKey             = "search_jobs_quota"
+	roleAttributesSearchTimeWinKey               = "search_time_win"
 )
 
 func resourceRoleAttributes() *schema.Resource {
@@ -40,60 +41,60 @@ func resourceRoleAttributes() *schema.Resource {
 		Description: "Get attributes for a specific role",
 		ReadContext: resourceRoleAttributesRead,
 		Schema: map[string]*schema.Schema{
-			roleNameKey: {
+			roleAttributesRoleNameKey: {
 				Description: "Name of the role",
 				Type:        schema.TypeString,
 				Required:    true,
 			},
-			searchIndexesAllowedKey: {
+			roleAttributesSearchIndexesAllowedKey: {
 				Description: "List of indexes searchable by the role",
 				Type:        schema.TypeList,
 				Computed:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
-			importRolesKey: {
+			roleAttributesImportRolesKey: {
 				Description: "List of roles imported by the role",
 				Type:        schema.TypeList,
 				Computed:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
-			capabilitiesKey: {
+			roleAttributesCapabilitiesKey: {
 				Description: "List of capabilities assigned to the role",
 				Type:        schema.TypeList,
 				Computed:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
-			searchFilterKey: {
+			roleAttributesSearchFilterKey: {
 				Description: "Search filter applied to the role",
 				Type:        schema.TypeString,
 				Computed:    true,
 			},
-			cumulativeRTSearchJobsQuotaKey: {
+			roleAttributesCumulativeRTSearchJobsQuotaKey: {
 				Description: "Cumulative real-time search jobs quota applied to the role",
 				Type:        schema.TypeInt,
 				Computed:    true,
 			},
-			cumulativeSearchJobsQuotaKey: {
+			roleAttributesCumulativeSearchJobsQuotaKey: {
 				Description: "Cumulative search jobs quota applied to the role",
 				Type:        schema.TypeInt,
 				Computed:    true,
 			},
-			rtSearchJobsQuotaKey: {
+			roleAttributesRtSearchJobsQuotaKey: {
 				Description: "Real-time search jobs quota applied to the role",
 				Type:        schema.TypeInt,
 				Computed:    true,
 			},
-			searchDiskQuotaKey: {
+			roleAttributesSearchDiskQuotaKey: {
 				Description: "Search disk quota applied to the role",
 				Type:        schema.TypeInt,
 				Computed:    true,
 			},
-			searchJobsQuotaKey: {
+			roleAttributesSearchJobsQuotaKey: {
 				Description: "Search jobs quota applied to the role",
 				Type:        schema.TypeInt,
 				Computed:    true,
 			},
-			searchTimeWinKey: {
+			roleAttributesSearchTimeWinKey: {
 				Description: "Search time window applied to the role",
 				Type:        schema.TypeInt,
 				Computed:    true,
@@ -105,7 +106,7 @@ func resourceRoleAttributes() *schema.Resource {
 func resourceRoleAttributesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	suite := meta.(config.Suite)
 
-	roleName := d.Get(roleNameKey).(string)
+	roleName := d.Get(roleAttributesRoleNameKey).(string)
 
 	d.SetId(roleName)
 
@@ -115,61 +116,61 @@ func resourceRoleAttributesRead(ctx context.Context, d *schema.ResourceData, met
 	}
 
 	if len(role.SearchIndexesAllowed) > 0 {
-		if err := d.Set(searchIndexesAllowedKey, role.SearchIndexesAllowed); err != nil {
+		if err := d.Set(roleAttributesSearchIndexesAllowedKey, role.SearchIndexesAllowed); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	if len(role.ImportRoles) > 0 {
-		if err := d.Set(importRolesKey, role.ImportRoles); err != nil {
+		if err := d.Set(roleAttributesImportRolesKey, role.ImportRoles); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	if len(role.EnabledCapabilityNames()) > 0 {
-		if err := d.Set(capabilitiesKey, role.EnabledCapabilityNames()); err != nil {
+		if err := d.Set(roleAttributesCapabilitiesKey, role.EnabledCapabilityNames()); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	if role.SearchFilter != "" {
-		if err := d.Set(searchFilterKey, role.SearchFilter); err != nil {
+		if err := d.Set(roleAttributesSearchFilterKey, role.SearchFilter); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	if role.CumulativeRTSearchJobsQuota.Explicit {
-		if err := d.Set(cumulativeRTSearchJobsQuotaKey, role.CumulativeRTSearchJobsQuota.Value); err != nil {
+		if err := d.Set(roleAttributesCumulativeRTSearchJobsQuotaKey, role.CumulativeRTSearchJobsQuota.Value); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	if role.CumulativeSearchJobsQuota.Explicit {
-		if err := d.Set(cumulativeSearchJobsQuotaKey, role.CumulativeSearchJobsQuota.Value); err != nil {
+		if err := d.Set(roleAttributesCumulativeSearchJobsQuotaKey, role.CumulativeSearchJobsQuota.Value); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	if role.RTSearchJobsQuota.Explicit {
-		if err := d.Set(rtSearchJobsQuotaKey, role.RTSearchJobsQuota.Value); err != nil {
+		if err := d.Set(roleAttributesRtSearchJobsQuotaKey, role.RTSearchJobsQuota.Value); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	if role.SearchDiskQuota.Explicit {
-		if err := d.Set(searchDiskQuotaKey, role.SearchDiskQuota.Value); err != nil {
+		if err := d.Set(roleAttributesSearchDiskQuotaKey, role.SearchDiskQuota.Value); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	if role.SearchJobsQuota.Explicit {
-		if err := d.Set(searchJobsQuotaKey, role.SearchJobsQuota.Value); err != nil {
+		if err := d.Set(roleAttributesSearchJobsQuotaKey, role.SearchJobsQuota.Value); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	if role.SearchTimeWin.Explicit {
-		if err := d.Set(searchTimeWinKey, role.SearchTimeWin.Value); err != nil {
+		if err := d.Set(roleAttributesSearchTimeWinKey, role.SearchTimeWin.Value); err != nil {
 			return diag.FromErr(err)
 		}
 	}

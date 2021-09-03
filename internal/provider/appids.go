@@ -23,8 +23,8 @@ import (
 )
 
 const (
-	appIdsKey     = "app_ids"
-	appIdsIdValue = "splunkconfig_app_ids"
+	appIdsAppIdsKey = "app_ids"
+	appIdsIdValue   = "splunkconfig_app_ids"
 )
 
 func resourceAppIds() *schema.Resource {
@@ -32,7 +32,7 @@ func resourceAppIds() *schema.Resource {
 		Description: "Return App IDs from the Splunk Configuration",
 		ReadContext: resourceAppIdsRead,
 		Schema: map[string]*schema.Schema{
-			appIdsKey: {
+			appIdsAppIdsKey: {
 				Description: "List of App IDs in the Splunk Configuration",
 				Type:        schema.TypeList,
 				Computed:    true,
@@ -52,7 +52,7 @@ func resourceAppIdsRead(ctx context.Context, d *schema.ResourceData, meta interf
 		return diag.FromErr(err)
 	}
 
-	if err := d.Set(appIdsKey, apps.AppIDs()); err != nil {
+	if err := d.Set(appIdsAppIdsKey, apps.AppIDs()); err != nil {
 		return diag.FromErr(err)
 	}
 

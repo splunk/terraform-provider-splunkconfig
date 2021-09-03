@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	appAttributesIdKey              = "app_id"
+	appAttributesAppIdKey           = "app_id"
 	appAttributesNameKey            = "name"
 	appAttributesDescriptionKey     = "description"
 	appAttributesAuthorKey          = "author"
@@ -40,7 +40,7 @@ func resourceAppAttributes() *schema.Resource {
 		Description: "Get attributes for a specific app",
 		ReadContext: resourceAppAttributesRead,
 		Schema: map[string]*schema.Schema{
-			appAttributesIdKey: {
+			appAttributesAppIdKey: {
 				Description: "ID of the app",
 				Type:        schema.TypeString,
 				Required:    true,
@@ -99,7 +99,7 @@ func resourceAppAttributes() *schema.Resource {
 func resourceAppAttributesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	suite := meta.(config.Suite)
 
-	appId := d.Get(appAttributesIdKey).(string)
+	appId := d.Get(appAttributesAppIdKey).(string)
 
 	d.SetId(appId)
 

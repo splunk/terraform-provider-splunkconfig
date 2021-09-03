@@ -24,8 +24,8 @@ import (
 )
 
 const (
-	samlGroupNamesKey     = "saml_group_names"
-	samlGroupNamesIDValue = "splunkconfig_saml_group_names"
+	samlGroupNamesSamlGroupNamesKey = "saml_group_names"
+	samlGroupNamesIDValue           = "splunkconfig_saml_group_names"
 )
 
 func resourceSAMLGroupNames() *schema.Resource {
@@ -33,7 +33,7 @@ func resourceSAMLGroupNames() *schema.Resource {
 		Description: "Return SAML Group Names from the Splunk Configuration",
 		ReadContext: resourceSAMLGroupNamesRead,
 		Schema: map[string]*schema.Schema{
-			samlGroupNamesKey: {
+			samlGroupNamesSamlGroupNamesKey: {
 				Description: "List of SAML Group Names in the Splunk Configuration",
 				Type:        schema.TypeList,
 				Computed:    true,
@@ -47,7 +47,7 @@ func resourceSAMLGroupNamesRead(ctx context.Context, d *schema.ResourceData, met
 	suite := meta.(config.Suite)
 
 	d.SetId(samlGroupNamesIDValue)
-	if err := d.Set(samlGroupNamesKey, suite.ExtrapolatedSAMLGroups().SAMLGroupNames()); err != nil {
+	if err := d.Set(samlGroupNamesSamlGroupNamesKey, suite.ExtrapolatedSAMLGroups().SAMLGroupNames()); err != nil {
 		return diag.FromErr(err)
 	}
 

@@ -16,14 +16,15 @@ package provider
 
 import (
 	"context"
+	"terraform-provider-splunkconfig/internal/splunkconfig/config"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"terraform-provider-splunkconfig/internal/splunkconfig/config"
 )
 
 const (
-	roleNamesKey     = "role_names"
-	roleNamesIDValue = "splunkconfig_role_names"
+	roleNamesRoleNamesKey = "role_names"
+	roleNamesIDValue      = "splunkconfig_role_names"
 )
 
 func resourceRoleNames() *schema.Resource {
@@ -31,7 +32,7 @@ func resourceRoleNames() *schema.Resource {
 		Description: "Return Role Names from the Splunk Configuration",
 		ReadContext: resourceRoleNamesRead,
 		Schema: map[string]*schema.Schema{
-			roleNamesKey: {
+			roleNamesRoleNamesKey: {
 				Description: "List of Role Names in the Splunk Configuration",
 				Type:        schema.TypeList,
 				Computed:    true,
@@ -45,7 +46,7 @@ func resourceRoleNamesRead(ctx context.Context, d *schema.ResourceData, meta int
 	suite := meta.(config.Suite)
 
 	d.SetId(roleNamesIDValue)
-	if err := d.Set(roleNamesKey, suite.ExtrapolatedRoles().RoleNames()); err != nil {
+	if err := d.Set(roleNamesRoleNamesKey, suite.ExtrapolatedRoles().RoleNames()); err != nil {
 		return diag.FromErr(err)
 	}
 

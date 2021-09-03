@@ -16,14 +16,15 @@ package provider
 
 import (
 	"context"
+	"terraform-provider-splunkconfig/internal/splunkconfig/config"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"terraform-provider-splunkconfig/internal/splunkconfig/config"
 )
 
 const (
-	userNamesKey     = "user_names"
-	userNamesIDValue = "splunkconfig_user_names"
+	userNamesUserNamesKey = "user_names"
+	userNamesIDValue      = "splunkconfig_user_names"
 )
 
 func resourceUserNames() *schema.Resource {
@@ -31,7 +32,7 @@ func resourceUserNames() *schema.Resource {
 		Description: "Return User Names from the Splunk Configuration",
 		ReadContext: resourceUserNamesRead,
 		Schema: map[string]*schema.Schema{
-			userNamesKey: {
+			userNamesUserNamesKey: {
 				Description: "List of User Names in the Splunk Configuration",
 				Type:        schema.TypeList,
 				Computed:    true,
@@ -45,7 +46,7 @@ func resourceUserNamesRead(ctx context.Context, d *schema.ResourceData, meta int
 	suite := meta.(config.Suite)
 
 	d.SetId(userNamesIDValue)
-	if err := d.Set(userNamesKey, suite.Users.Names()); err != nil {
+	if err := d.Set(userNamesUserNamesKey, suite.Users.Names()); err != nil {
 		return diag.FromErr(err)
 	}
 
