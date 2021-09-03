@@ -50,7 +50,6 @@ resource "splunkconfig_app_package" "indexes" {
 
 ### Read-Only
 
-- **id** (String) The ID of this resource.
 - **base_version** (String) Version of the app, directly from the provider
 - **effective_version** (String) Version of the app, accounting for patch count
 - **files** (List of Object) File content of the app (see [below for nested schema](#nestedatt--files))

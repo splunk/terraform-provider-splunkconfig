@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,17 +23,17 @@ import (
 )
 
 const (
-	roleNamesRoleNamesKey = "role_names"
-	roleNamesIDValue      = "splunkconfig_role_names"
+	appIdsAppIdsKey = "app_ids"
+	appIdsIdValue   = "splunkconfig_app_ids"
 )
 
-func resourceRoleNames() *schema.Resource {
+func resourceAppIds() *schema.Resource {
 	return &schema.Resource{
-		Description: "Return Role Names from the Splunk Configuration",
-		ReadContext: resourceRoleNamesRead,
+		Description: "Return App IDs from the Splunk Configuration",
+		ReadContext: resourceAppIdsRead,
 		Schema: map[string]*schema.Schema{
-			roleNamesRoleNamesKey: {
-				Description: "List of Role Names in the Splunk Configuration",
+			appIdsAppIdsKey: {
+				Description: "List of App IDs in the Splunk Configuration",
 				Type:        schema.TypeList,
 				Computed:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
@@ -42,11 +42,17 @@ func resourceRoleNames() *schema.Resource {
 	}
 }
 
-func resourceRoleNamesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceAppIdsRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	suite := meta.(config.Suite)
 
-	d.SetId(roleNamesIDValue)
-	if err := d.Set(roleNamesRoleNamesKey, suite.ExtrapolatedRoles().RoleNames()); err != nil {
+	d.SetId(appIdsIdValue)
+
+	apps, err := suite.ExtrapolatedApps()
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	if err := d.Set(appIdsAppIdsKey, apps.AppIDs()); err != nil {
 		return diag.FromErr(err)
 	}
 

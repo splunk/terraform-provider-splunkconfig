@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,21 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package config
+package provider
 
-import (
-	"testing"
-)
+import "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-// validateRoleName should return an error when one is expected
-func TestRoleName_validate(t *testing.T) {
-	tests := validatorTestCases{
-		{RoleName(""), true},
-		{RoleName("12345"), false},
-		{RoleName("abcde"), false},
-		{RoleName("ab&de"), true},
-		{RoleName("*"), false},
+// conditionalConfigurations is a list of conditionalConfiguration items.
+type conditionalConfigurations []conditionalConfiguration
+
+// apply applies each of the items in the conditionalConfigurations list.
+func (c conditionalConfigurations) apply(d *schema.ResourceData) error {
+	for _, item := range c {
+		if err := item.apply(d); err != nil {
+			return err
+		}
 	}
 
-	tests.test(t)
+	return nil
 }

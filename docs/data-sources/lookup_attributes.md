@@ -21,7 +21,6 @@ Get fields and rows for a specific lookup
 
 ### Read-Only
 
-- **id** (String) The ID of this resource.
 - **field_names** (List of String) List of fields in the lookup
 - **rows** (List of Map of String) List of rows in the lookup
 

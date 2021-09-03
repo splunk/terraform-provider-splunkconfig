@@ -20,12 +20,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccResourceLookupFields(t *testing.T) {
+func TestAccResourceLookupAttributes(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
 		ProviderFactories: providerFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceLookupFieldsConfig,
+				Config: testAccDataSourceLookupAttributesConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testCheckResourceAttrList("data.splunkconfig_lookup_attributes.foo", "field_names", []string{
 						"field_a",
@@ -41,7 +41,7 @@ func TestAccResourceLookupFields(t *testing.T) {
 	})
 }
 
-const testAccDataSourceLookupFieldsConfig = `
+const testAccDataSourceLookupAttributesConfig = `
 provider "splunkconfig" {
     configuration = <<EOT
 lookups:

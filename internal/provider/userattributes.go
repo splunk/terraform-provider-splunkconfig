@@ -24,12 +24,12 @@ import (
 )
 
 const (
-	userNameKey            = "user_name"
-	userEmailKey           = "email"
-	userForceChangePassKey = "force_change_pass"
-	userPasswordKey        = "password"
-	userRealNameKey        = "realname"
-	userRolesKey           = "roles"
+	userAttributesUserNameKey            = "user_name"
+	userAttributesUserEmailKey           = "email"
+	userAttributesUserForceChangePassKey = "force_change_pass"
+	userAttributesUserPasswordKey        = "password"
+	userAttributesUserRealNameKey        = "realname"
+	userAttributesUserRolesKey           = "roles"
 )
 
 func resourceUserAttributes() *schema.Resource {
@@ -37,33 +37,33 @@ func resourceUserAttributes() *schema.Resource {
 		Description: "Get attributes for a specific user",
 		ReadContext: resourceUserAttributesRead,
 		Schema: map[string]*schema.Schema{
-			userNameKey: {
+			userAttributesUserNameKey: {
 				Description: "Name of the user",
 				Type:        schema.TypeString,
 				Required:    true,
 			},
-			userEmailKey: {
+			userAttributesUserEmailKey: {
 				Description: "Email address of the user",
 				Type:        schema.TypeString,
 				Computed:    true,
 			},
-			userForceChangePassKey: {
+			userAttributesUserForceChangePassKey: {
 				Description: "Force password change status of the user",
 				Type:        schema.TypeBool,
 				Computed:    true,
 			},
-			userPasswordKey: {
+			userAttributesUserPasswordKey: {
 				Description: "Password of the user",
 				Type:        schema.TypeString,
 				Computed:    true,
 				Sensitive:   true,
 			},
-			userRealNameKey: {
+			userAttributesUserRealNameKey: {
 				Description: "Real name of the user",
 				Type:        schema.TypeString,
 				Computed:    true,
 			},
-			userRolesKey: {
+			userAttributesUserRolesKey: {
 				Description: "Cumulative real-time search jobs quota applied to the role",
 				Type:        schema.TypeList,
 				Computed:    true,
@@ -76,7 +76,7 @@ func resourceUserAttributes() *schema.Resource {
 func resourceUserAttributesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	suite := meta.(config.Suite)
 
-	userName := d.Get(userNameKey).(string)
+	userName := d.Get(userAttributesUserNameKey).(string)
 
 	d.SetId(userName)
 
@@ -86,29 +86,29 @@ func resourceUserAttributesRead(ctx context.Context, d *schema.ResourceData, met
 	}
 
 	if user.Email != "" {
-		if err := d.Set(userEmailKey, user.Email); err != nil {
+		if err := d.Set(userAttributesUserEmailKey, user.Email); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
-	if err := d.Set(userForceChangePassKey, user.ForceChangePass); err != nil {
+	if err := d.Set(userAttributesUserForceChangePassKey, user.ForceChangePass); err != nil {
 		return diag.FromErr(err)
 	}
 
 	if user.Password != "" {
-		if err := d.Set(userPasswordKey, user.Password); err != nil {
+		if err := d.Set(userAttributesUserPasswordKey, user.Password); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	if user.RealName != "" {
-		if err := d.Set(userRealNameKey, user.RealName); err != nil {
+		if err := d.Set(userAttributesUserRealNameKey, user.RealName); err != nil {
 			return diag.FromErr(err)
 		}
 	}
 
 	if len(user.Roles) > 0 {
-		if err := d.Set(userRolesKey, user.Roles); err != nil {
+		if err := d.Set(userAttributesUserRolesKey, user.Roles); err != nil {
 			return diag.FromErr(err)
 		}
 	}

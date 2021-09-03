@@ -31,9 +31,10 @@ func (roleName RoleName) validate() error {
 
 	// the above documentation doesn't have a full list of disallowed characters, so we'll define a valid name
 	// as containing only lowercase letters, numbers, underscores, and dashes
+	// EXCEPTION: a role name is permitted to be exactly "*" to match "any role"
 	generalRegex := regexp.MustCompile("^[a-z0-9_-]+$")
 
-	if !generalRegex.MatchString(string(roleName)) {
+	if roleName != "*" && !generalRegex.MatchString(string(roleName)) {
 		return fmt.Errorf("role name (%s) is invalid, should only contain lowercase letters, numbers, underscores, and dashes", roleName)
 	}
 

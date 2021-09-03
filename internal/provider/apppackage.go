@@ -17,13 +17,14 @@ package provider
 import (
 	"context"
 	"fmt"
+	"terraform-provider-splunkconfig/internal/splunkconfig/config"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"terraform-provider-splunkconfig/internal/splunkconfig/config"
 )
 
 const (
-	appPackageIDKey               = "app_id"
+	appPackageAppIDKey            = "app_id"
 	appPackagePathKey             = "path"
 	appPackageTGZKey              = "tarball_path"
 	appPackageBaseVersionKey      = "base_version"
@@ -44,7 +45,7 @@ func resourceAppFile() *schema.Resource {
 		UpdateContext: resourceAppPackageCreate,
 		DeleteContext: resourceAppPackageDelete,
 		Schema: map[string]*schema.Schema{
-			appPackageIDKey: {
+			appPackageAppIDKey: {
 				Description: "ID of the app",
 				Type:        schema.TypeString,
 				Required:    true,
@@ -116,7 +117,7 @@ func resourceAppPackageGetApp(appID string, meta interface{}) (config.App, error
 // and "update" contexts, because we want to always write the tarball for the app to be used by other downstream
 // resources.
 func resourceAppPackageCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
-	appID := d.Get(appPackageIDKey).(string)
+	appID := d.Get(appPackageAppIDKey).(string)
 	d.SetId(appID)
 
 	app, err := resourceAppPackageGetApp(d.Id(), meta)
@@ -164,7 +165,7 @@ func resourceAppPackageFileContents(app config.App) []map[string]string {
 // as a CustomizeDiff function to enable seeing the calculated views in the terraform plan diff *prior* to the apply.
 func resourceAppPackageCustomDiff(ctx context.Context, d *schema.ResourceDiff, meta interface{}) error {
 	// CustomizeDiff is called before CreateContext, so we can't use d.Id() here
-	appID := d.Get(appPackageIDKey).(string)
+	appID := d.Get(appPackageAppIDKey).(string)
 
 	app, err := resourceAppPackageGetApp(appID, meta)
 	if err != nil {

@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,44 +19,60 @@ import (
 	"testing"
 )
 
-// RoleNames.validate() should return an error when expected.
-func TestRoleNames_validate(t *testing.T) {
+func TestSharing_validate(t *testing.T) {
 	tests := validatorTestCases{
 		{
-			RoleNames{"ok", "anotherok"},
+			Sharing(""),
 			false,
 		},
 		{
-			RoleNames{"duplicate", "duplicate"},
+			// "system" isn't a valid value for sharing, though it is what gets placed in .meta
+			Sharing("system"),
 			true,
+		},
+		{
+			Sharing("app"),
+			false,
+		},
+		{
+			Sharing("user"),
+			false,
+		},
+		{
+			Sharing("global"),
+			false,
 		},
 	}
 
 	tests.test(t)
 }
 
-func TestRoleNames_metaAccessValue(t *testing.T) {
+func TestSharing_metaValue(t *testing.T) {
 	tests := []struct {
-		input RoleNames
+		input Sharing
 		want  string
 	}{
 		{
-			RoleNames{"one", "two"},
-			"[ one, two ]",
-		},
-		{
-			RoleNames{},
-			"[ ]",
-		},
-		{
-			nil,
+			SHAREUNDEF,
 			"",
+		},
+		{
+			SHAREUSER,
+			"",
+		},
+		{
+			SHAREAPP,
+			"",
+		},
+		{
+			SHAREGLOBAL,
+			"system",
 		},
 	}
 
 	for _, test := range tests {
-		got := test.input.metaAccessValue()
-		message := fmt.Sprintf("%T{%+v}.metaAccessValue()", test.input, test.input)
+		got := test.input.metaValue()
+		message := fmt.Sprintf("%T{%+v}.metaValue()", test.input, test.input)
 
 		testEqual(got, test.want, message, t)
 	}

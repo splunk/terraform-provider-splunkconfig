@@ -24,8 +24,8 @@ import (
 )
 
 const (
-	samlGroupNameKey = "saml_group_name"
-	rolesKey         = "roles"
+	samlGroupNamesSamlGroupNameKey = "saml_group_name"
+	samlGroupNamesRolesKey         = "roles"
 )
 
 func resourceSAMLGroupAttributes() *schema.Resource {
@@ -33,12 +33,12 @@ func resourceSAMLGroupAttributes() *schema.Resource {
 		Description: "Get attributes for a specific SAML group",
 		ReadContext: resourceSAMLGroupAttributesRead,
 		Schema: map[string]*schema.Schema{
-			samlGroupNameKey: {
+			samlGroupNamesSamlGroupNameKey: {
 				Description: "Name of the SAML group",
 				Type:        schema.TypeString,
 				Required:    true,
 			},
-			rolesKey: {
+			samlGroupNamesRolesKey: {
 				Description: "List of roles associated with the SAML group",
 				Type:        schema.TypeList,
 				Computed:    true,
@@ -51,7 +51,7 @@ func resourceSAMLGroupAttributes() *schema.Resource {
 func resourceSAMLGroupAttributesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	suite := meta.(config.Suite)
 
-	samlGroupName := d.Get(samlGroupNameKey).(string)
+	samlGroupName := d.Get(samlGroupNamesSamlGroupNameKey).(string)
 
 	d.SetId(samlGroupName)
 
@@ -61,7 +61,7 @@ func resourceSAMLGroupAttributesRead(ctx context.Context, d *schema.ResourceData
 	}
 
 	if len(samlGroup.Roles) > 0 {
-		if err := d.Set(rolesKey, samlGroup.Roles); err != nil {
+		if err := d.Set(samlGroupNamesRolesKey, samlGroup.Roles); err != nil {
 			return diag.FromErr(err)
 		}
 	}

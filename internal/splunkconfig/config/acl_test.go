@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,44 +19,37 @@ import (
 	"testing"
 )
 
-// RoleNames.validate() should return an error when expected.
-func TestRoleNames_validate(t *testing.T) {
-	tests := validatorTestCases{
-		{
-			RoleNames{"ok", "anotherok"},
-			false,
-		},
-		{
-			RoleNames{"duplicate", "duplicate"},
-			true,
-		},
-	}
-
-	tests.test(t)
-}
-
-func TestRoleNames_metaAccessValue(t *testing.T) {
+func TestACL_stanzaValues(t *testing.T) {
 	tests := []struct {
-		input RoleNames
-		want  string
+		input ACL
+		want  StanzaValues
 	}{
 		{
-			RoleNames{"one", "two"},
-			"[ one, two ]",
+			ACL{},
+			StanzaValues{},
 		},
 		{
-			RoleNames{},
-			"[ ]",
+			ACL{Read: RoleNames{}, Write: RoleNames{}},
+			StanzaValues{"access": "read : [ ], write : [ ]"},
 		},
 		{
-			nil,
-			"",
+			ACL{
+				Read:  RoleNames{"read_role_1", "read_role_2"},
+				Write: RoleNames{"write_role_1", "write_role_2"},
+			},
+			StanzaValues{"access": "read : [ read_role_1, read_role_2 ], write : [ write_role_1, write_role_2 ]"},
+		},
+		{
+			ACL{
+				Sharing: "global",
+			},
+			StanzaValues{"export": "system"},
 		},
 	}
 
 	for _, test := range tests {
-		got := test.input.metaAccessValue()
-		message := fmt.Sprintf("%T{%+v}.metaAccessValue()", test.input, test.input)
+		got := test.input.stanzaValues()
+		message := fmt.Sprintf("%T{%+v}.stanzaValues()", test.input, test.input)
 
 		testEqual(got, test.want, message, t)
 	}

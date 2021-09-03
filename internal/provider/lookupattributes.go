@@ -23,9 +23,9 @@ import (
 )
 
 const (
-	lookupNameKey = "lookup_name"
-	fieldNamesKey = "field_names"
-	rowsKey       = "rows"
+	lookupAttributesLookupNameKey = "lookup_name"
+	lookupAttributesFieldNamesKey = "field_names"
+	lookupAttributesRowsKey       = "rows"
 )
 
 func resourceLookupAttributes() *schema.Resource {
@@ -33,18 +33,18 @@ func resourceLookupAttributes() *schema.Resource {
 		Description: "Get fields and rows for a specific lookup",
 		ReadContext: resourceLookupAttributesRead,
 		Schema: map[string]*schema.Schema{
-			lookupNameKey: {
+			lookupAttributesLookupNameKey: {
 				Description: "Name of the lookup",
 				Type:        schema.TypeString,
 				Required:    true,
 			},
-			fieldNamesKey: {
+			lookupAttributesFieldNamesKey: {
 				Description: "List of fields in the lookup",
 				Type:        schema.TypeList,
 				Computed:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
 			},
-			rowsKey: {
+			lookupAttributesRowsKey: {
 				Description: "List of rows in the lookup",
 				Type:        schema.TypeList,
 				Computed:    true,
@@ -57,7 +57,7 @@ func resourceLookupAttributes() *schema.Resource {
 func resourceLookupAttributesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	suite := meta.(config.Suite)
 
-	lookupName := d.Get(lookupNameKey).(string)
+	lookupName := d.Get(lookupAttributesLookupNameKey).(string)
 
 	d.SetId(lookupName)
 
@@ -69,7 +69,7 @@ func resourceLookupAttributesRead(ctx context.Context, d *schema.ResourceData, m
 	// fields
 	fieldNames := lookup.Fields.FieldNames()
 
-	if err := d.Set(fieldNamesKey, fieldNames); err != nil {
+	if err := d.Set(lookupAttributesFieldNamesKey, fieldNames); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -80,7 +80,7 @@ func resourceLookupAttributesRead(ctx context.Context, d *schema.ResourceData, m
 		rows[i] = map[string]string(row.Values)
 	}
 
-	if err := d.Set(rowsKey, rows); err != nil {
+	if err := d.Set(lookupAttributesRowsKey, rows); err != nil {
 		return diag.FromErr(err)
 	}
 

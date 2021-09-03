@@ -57,6 +57,17 @@ apps:
     version: 1.0.0
 ```
 
+<a id="acl"></a>
+## Schema for `acl`
+
+Represents the ACL configuration for a knowledge object.
+
+- ** app ** (String)  App context for the resource. Not valid for application resources.
+- ** owner ** (String) User that owns the resource. Not valid for application resources.
+- ** sharing ** (String) How the resource is shared. Permitted values are `app`, `global`, and `user`. For application resources or resources packaged into an app, only `app` and `global` are valid.
+- ** read ** (List of String) Roles with read access to the resource.
+- ** write ** (List of String) Roles with write access to the resource.
+
 <a id="app"></a>
 ## Schema for `app`
 
@@ -77,6 +88,7 @@ be a list of index objects to include in the app. (see [schema for index](#index
 `lookup` objects in this app. Can also be a list of lookup objects to include in the app. (see [schema for lookup](#lookup))
 - **roles** (Bool or List of Object) If `true`, include the global `roles` configuration in this app. Can also be a
 list of role objects to include in the app. (see [schema for role](#role))
+- **acl** (Object) ACL configuration for the app. (see [schema for acl](#acl))
 
 <a id="index"></a>
 ## Schema for `index`
