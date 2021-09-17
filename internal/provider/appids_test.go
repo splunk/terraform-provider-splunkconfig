@@ -26,10 +26,15 @@ func TestAccResourceAppIds(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccDataSourceAppIdsConfig,
-				Check: testCheckResourceAttrList("data.splunkconfig_app_ids.foo", "app_ids", []string{
-					"app_a",
-					"app_b",
-				}),
+				Check: resource.ComposeTestCheckFunc(
+					testCheckResourceAttrList("data.splunkconfig_app_ids.all", "app_ids", []string{
+						"app_a",
+						"app_b",
+					}),
+					testCheckResourceAttrList("data.splunkconfig_app_ids.filtered", "app_ids", []string{
+						"app_a",
+					}),
+				),
 			},
 		},
 	})
@@ -41,10 +46,20 @@ provider "splunkconfig" {
 apps:
   - id: app_a
     name: App A
+    tags:
+      - name: env
+        values: [prod]
   - id: app_b
     name: App B
 EOT
 }
 
-data "splunkconfig_app_ids" "foo" {}
+data "splunkconfig_app_ids" "all" {}
+
+data "splunkconfig_app_ids" "filtered" {
+	require_tag {
+		name   = "env"
+		values = ["prod"]
+	}
+}
 `
