@@ -89,6 +89,7 @@ be a list of index objects to include in the app. (see [schema for index](#index
 - **roles** (Bool or List of Object) If `true`, include the global `roles` configuration in this app. Can also be a
 list of role objects to include in the app. (see [schema for role](#role))
 - **acl** (Object) ACL configuration for the app. (see [schema for acl](#acl))
+- **tags** (List of Object) Tags for the app. (see [schema for tag](#tag))
 
 <a id="index"></a>
 ## Schema for `index`
@@ -181,6 +182,12 @@ Only alphanumeric characters and "_" (underscore) are allowed in capability name
 * Role names cannot have uppercase characters.
 * Role names cannot contain spaces, colons, semicolons, or forward slashes.
 ```
+
+<a id="tag"></a>
+## Schema for `tag`
+
+- **name** (String) Tag name.
+- **values** (List of String) Tag values.
 
 <a id="timeperiod"></a>
 ## Schema for `timeperiod`
