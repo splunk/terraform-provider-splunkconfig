@@ -1,3 +1,10 @@
+## 1.3.0 (September 21, 2021)
+
+FEATURES:
+
+* **Schema Change**: `Apps` can have tags
+* **Data Source Enhancement**: `splunkconfig_app_ids` implements `require_tags`
+
 ## 1.2.0 (September 3, 2021)
 
 FEATURES:
