@@ -58,10 +58,18 @@ func (apps Apps) WithID(name string) (found App, ok bool) {
 
 // AppIDs returns a list of AppID values for each App in the list.
 func (apps Apps) AppIDs() []AppID {
-	appIDs := make([]AppID, len(apps))
+	return apps.AppIDsSatisfyingTags(Tags{})
+}
 
-	for i, app := range apps {
-		appIDs[i] = app.ID
+// AppIDsWithTags returns a list of AppID values for each App that contains the
+// given Tags.
+func (apps Apps) AppIDsSatisfyingTags(checkTags Tags) []AppID {
+	appIDs := make([]AppID, 0, len(apps))
+
+	for _, app := range apps {
+		if app.Tags.satisfiesTags(checkTags) {
+			appIDs = append(appIDs, app.ID)
+		}
 	}
 
 	return appIDs

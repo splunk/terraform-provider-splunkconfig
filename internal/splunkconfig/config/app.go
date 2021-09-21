@@ -36,6 +36,7 @@ type App struct {
 	RolesPlaceholder   RolesPlaceholder   `yaml:"roles"`
 	LookupsPlaceholder LookupsPlaceholder `yaml:"lookups"`
 	ACL                ACL
+	Tags               Tags
 }
 
 // validate returns an error if App is invalid.  It is invalid if:
