@@ -26,8 +26,9 @@ type AppID string
 // * id must adhere to these cross-platform folder name restrictions:
 //  * must contain only letters, numbers, "." (dot), and "_" (underscore)
 //    characters.
+// "-" (dash) characters are also permitted as many official Splunk apps have them in their IDs
 func (appID AppID) validate() error {
-	validRegex := regexp.MustCompile("^[A-Za-z0-9_.]+$")
+	validRegex := regexp.MustCompile("^[A-Za-z0-9_.-]+$")
 
 	if !validRegex.MatchString(string(appID)) {
 		return fmt.Errorf("AppID is invalid, may only contain letters, numbers, dots, and underscores")
