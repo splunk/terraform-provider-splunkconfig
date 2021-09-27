@@ -1,3 +1,9 @@
+## 1.3.1 (September 27, 2021)
+
+FIXES:
+
+* **Schema Change**: `App` IDs can have dashes
+
 ## 1.3.0 (September 21, 2021)
 
 FEATURES:

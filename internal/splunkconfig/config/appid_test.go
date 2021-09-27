@@ -28,7 +28,7 @@ func TestAppID_validate(t *testing.T) {
 		},
 		{
 			AppID("A-B"),
-			true,
+			false,
 		},
 		{
 			AppID("A_B"),
