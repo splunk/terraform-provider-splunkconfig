@@ -41,7 +41,7 @@ func (r Role) validate() error {
 		return err
 	}
 
-	if err := r.SearchIndexesAllowed.validate(); err != nil {
+	if err := r.SearchIndexesAllowed.validatePattern(); err != nil {
 		return err
 	}
 

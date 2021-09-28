@@ -32,7 +32,7 @@ func (indexName IndexName) validate() error {
 	kvstoreRegex := regexp.MustCompile("kvstore")
 
 	// NOTE: we allow leading underscores, because not all Index objects are new indexes, some describe defaults
-	generalRegex := regexp.MustCompile("^[a-z0-9_][a-z0-9_-]+$")
+	generalRegex := regexp.MustCompile("^[a-z0-9_][a-z0-9_-]*$")
 
 	if kvstoreRegex.MatchString(string(indexName)) {
 		return fmt.Errorf("index name (%s) can not contain the word kvstore", indexName)
@@ -40,6 +40,18 @@ func (indexName IndexName) validate() error {
 
 	if !generalRegex.MatchString(string(indexName)) {
 		return fmt.Errorf("index name (%s) must consist of only numbers, lowercase letters, underscores, and hyphens, and must not beigin with a hyphen", indexName)
+	}
+
+	return nil
+}
+
+// validatePattern returns an error if IndexName is invalid as an pattern, suitable to use in srchIndexesAllowed, etc.
+func (indexName IndexName) validatePattern() error {
+	// same pattern as generalRegex in validate(), but asterisk permitted anywhere
+	patternRegex := regexp.MustCompile("^[*a-z0-9_][*a-z0-9_-]*$")
+
+	if !patternRegex.MatchString(string(indexName)) {
+		return fmt.Errorf("index name (%s) can only consist of numbers, lowercase letters, underscores, hyphens, and asterisks to be a valid index pattern", indexName)
 	}
 
 	return nil

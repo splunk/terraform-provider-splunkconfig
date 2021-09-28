@@ -39,6 +39,30 @@ func TestIndexNames_validate(t *testing.T) {
 	tests.test(t)
 }
 
+// IndexNames.validatePattern should return an error when expected.
+func TestIndexNames_validatePattern(t *testing.T) {
+	tests := []struct {
+		input     IndexNames
+		wantError bool
+	}{
+		{
+			IndexNames{"fine", "alsofine", "*wildcardsfine"},
+			false,
+		},
+		{
+			IndexNames{"fine", "!fine", "also_fine"},
+			true,
+		},
+	}
+
+	for _, test := range tests {
+		gotError := test.input.validatePattern() != nil
+		message := fmt.Sprintf("%#v.validatePattern() returned error?", test.input)
+
+		testEqual(gotError, test.wantError, message, t)
+	}
+}
+
 func TestIndexNames_deduplicatedSorted(t *testing.T) {
 	indexNames := IndexNames{
 		"a",

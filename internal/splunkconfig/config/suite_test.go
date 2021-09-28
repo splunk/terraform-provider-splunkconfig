@@ -70,6 +70,18 @@ func TestSuite_validate(t *testing.T) {
 			},
 			true,
 		},
+		{
+			// SrchIndexesAllowed uses wildcards
+			Suite{
+				Roles: Roles{
+					Role{
+						Name:                 "role_a",
+						SearchIndexesAllowed: IndexNames{"*"},
+					},
+				},
+			},
+			false,
+		},
 	}
 
 	tests.test(t)

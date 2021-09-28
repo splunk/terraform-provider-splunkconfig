@@ -1,3 +1,9 @@
+## 1.3.2 (September 28, 2021)
+
+FIXES:
+
+* **Schema Change**: Index names can have asterisks (*) for `srchIndexesAllowed`.
+
 ## 1.3.1 (September 27, 2021)
 
 FIXES:
