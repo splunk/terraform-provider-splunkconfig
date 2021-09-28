@@ -39,6 +39,17 @@ func (indexNames IndexNames) validate() error {
 	return allValidNoDuplicates(uniqueValidators(indexNames))
 }
 
+// validatePattern returns an error if any members of IndexNames is an invalid pattern.
+func (indexNames IndexNames) validatePattern() error {
+	for _, indexName := range indexNames {
+		if err := indexName.validatePattern(); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 // deduplicatedSorted returns a deduplicated and sorted IndexNames from one that potentiall has duplication.
 func (indexNames IndexNames) deduplicatedSorted() IndexNames {
 	deduplicatedNames := uniqueUIDsOfUIDers(indexNames)
