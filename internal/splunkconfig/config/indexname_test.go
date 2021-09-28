@@ -15,6 +15,7 @@
 package config
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -22,6 +23,7 @@ import (
 func TestIndexName_validate(t *testing.T) {
 	tests := validatorTestCases{
 		{IndexName(""), true},
+		{IndexName("*"), true},
 		{IndexName("-blah"), true},
 		{IndexName("_blah"), false},
 		{IndexName("mykvstore"), true},
@@ -31,4 +33,30 @@ func TestIndexName_validate(t *testing.T) {
 	}
 
 	tests.test(t)
+}
+
+// validateIndexName should return an error when one is expected.
+func TestIndexName_validatePattern(t *testing.T) {
+	tests := []struct {
+		input     IndexName
+		wantError bool
+	}{
+		{IndexName(""), true},
+		{IndexName("*"), false},
+		{IndexName("_*"), false},
+		{IndexName("-blah"), true},
+		{IndexName("_blah"), false},
+		// mykvstore isn't a valid index name, but it's a valid _pattern_
+		{IndexName("mykvstore"), false},
+		{IndexName("mail@company"), true},
+		{IndexName("mail.company"), true},
+		{IndexName("summary7days"), false},
+	}
+
+	for _, test := range tests {
+		gotError := test.input.validatePattern() != nil
+		message := fmt.Sprintf("%#v.validatePattern() returned error?", test.input)
+
+		testEqual(gotError, test.wantError, message, t)
+	}
 }
