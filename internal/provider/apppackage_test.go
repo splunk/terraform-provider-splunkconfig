@@ -36,7 +36,10 @@ func TestAccResourceAppPackage(t *testing.T) {
 					resource.TestMatchResourceAttr("splunkconfig_app_package.indexes", "files.0.content", regexp.MustCompile("version = 1.0.0")),
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "files.0.path", "default/app.conf"),
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "files.1.path", "default/indexes.conf"),
-					resource.TestMatchResourceAttr("splunkconfig_app_package.indexes", "files.1.content", regexp.MustCompile("[original_index]")),
+					resource.TestMatchResourceAttr("splunkconfig_app_package.indexes", "files.1.content", regexp.MustCompile(`\[original_index]`)),
+					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "files.2.path", "default/collections.conf"),
+					resource.TestMatchResourceAttr("splunkconfig_app_package.indexes", "files.2.content", regexp.MustCompile(`\[collection_a]`)),
+					resource.TestMatchResourceAttr("splunkconfig_app_package.indexes", "files.2.content", regexp.MustCompile("field.field_a = string")),
 				),
 			},
 
@@ -98,6 +101,10 @@ apps:
     version: 1.0.0
     indexes:
       - name: original_index
+    collections:
+      - name: collection_a
+        fields:
+          field_a: string
 EOT
 }
 
