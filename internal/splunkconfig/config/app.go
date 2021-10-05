@@ -35,6 +35,7 @@ type App struct {
 	IndexesPlaceholder IndexesPlaceholder `yaml:"indexes"`
 	RolesPlaceholder   RolesPlaceholder   `yaml:"roles"`
 	LookupsPlaceholder LookupsPlaceholder `yaml:"lookups"`
+	Collections        Collections
 	ACL                ACL
 	Tags               Tags
 }
@@ -58,6 +59,7 @@ func (app App) validate() error {
 		"IndexesPlaceholder": app.IndexesPlaceholder,
 		"RolesPlaceholder":   app.RolesPlaceholder,
 		"LookupsPlaceholder": app.LookupsPlaceholder,
+		"Collections":        app.Collections,
 		"ACL":                app.ACL,
 	}
 
@@ -163,6 +165,7 @@ func (app App) FileContenters() FileContenters {
 	contenters := FileContenters{app.appConfFile()}
 	contenters = append(contenters, NewFileContentersFromList(app.ConfFiles)...)
 	contenters = append(contenters, app.LookupsPlaceholder.Lookups.fileContenters()...)
+	contenters = append(contenters, app.Collections.confFile())
 
 	// .meta at the end like a bow
 	contenters = append(contenters, app.metaConfFile())

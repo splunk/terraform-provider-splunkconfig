@@ -37,3 +37,11 @@ func (collections Collections) stanzas() Stanzas {
 
 	return stanzas
 }
+
+// confFile returns the ConfFile for Collections.
+func (collections Collections) confFile() ConfFile {
+	return ConfFile{
+		Name:    "collections",
+		Stanzas: collections.stanzas(),
+	}
+}
