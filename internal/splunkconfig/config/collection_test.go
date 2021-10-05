@@ -42,3 +42,35 @@ func TestCollection_validate(t *testing.T) {
 
 	tests.test(t)
 }
+
+func TestCollection_stanza(t *testing.T) {
+	tests := stanzaDefinerTestCases{
+		{
+			Collection{
+				Name: "test_collection",
+			},
+			Stanza{
+				Name:   "test_collection",
+				Values: StanzaValues{},
+			},
+		},
+		{
+			Collection{
+				Name: "test_collection",
+				Fields: CollectionFields{
+					"bool_field":   "bool",
+					"string_field": "string",
+				},
+			},
+			Stanza{
+				Name: "test_collection",
+				Values: StanzaValues{
+					"field.bool_field":   "bool",
+					"field.string_field": "string",
+				},
+			},
+		},
+	}
+
+	tests.test(t)
+}
