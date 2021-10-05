@@ -1,3 +1,9 @@
+## 1.4.0 (TBD)
+
+FEATURES:
+
+* **Schema Change**: `Apps` can have `collections`.
+
 ## 1.3.2 (September 28, 2021)
 
 FIXES:
