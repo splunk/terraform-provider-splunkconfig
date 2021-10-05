@@ -86,10 +86,21 @@ Can also be a `version` object. If not defined, defaults to `0.0.0`. (see [schem
 be a list of index objects to include in the app. (see [schema for index](#index))
 - **lookups** (List of String or List of Object) If defined as a list of strings, include the referenced global
 `lookup` objects in this app. Can also be a list of lookup objects to include in the app. (see [schema for lookup](#lookup))
+- **collections** (List of Object) List of `collection` objects. (see [schema for collection](#collection))
 - **roles** (Bool or List of Object) If `true`, include the global `roles` configuration in this app. Can also be a
 list of role objects to include in the app. (see [schema for role](#role))
 - **acl** (Object) ACL configuration for the app. (see [schema for acl](#acl))
 - **tags** (List of Object) Tags for the app. (see [schema for tag](#tag))
+
+<a id="collection"></a>
+## Schema for `collection`
+
+- **name** (String, required) Collection name.
+- **enforceTypes** (Bool) Indicates whether to enforce data types when inserting data into the collection.
+Defaults to `false`.
+- **replicate** (Bool) Indicates whether to replicate this collection on indexers. Defaults to `false`.
+- **fields** (Map, optional) Map of field names to field types. Valid field types are: `number`, `bool`, `string`,
+and `time`.
 
 <a id="index"></a>
 ## Schema for `index`

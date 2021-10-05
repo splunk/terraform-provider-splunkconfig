@@ -19,7 +19,7 @@ import "fmt"
 // Collection represents a KVStore Collection.
 type Collection struct {
 	Name         string
-	EnforceTypes bool
+	EnforceTypes bool `yaml:"enforceTypes"`
 	Fields       CollectionFields
 	Replicate    bool
 }
