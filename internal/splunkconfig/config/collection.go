@@ -39,3 +39,36 @@ func (collection Collection) validate() error {
 
 	return nil
 }
+
+// stanzaName returns the stanza's name for a Collection.
+func (collection Collection) stanzaName() string {
+	return string(collection.Name)
+}
+
+// stanzaValues returns the StanzaValues for a Collection.
+func (collection Collection) stanzaValues() StanzaValues {
+	stanzaValues := StanzaValues{}
+
+	if collection.EnforceTypes {
+		stanzaValues["enforceTypes"] = fmt.Sprintf("%v", collection.EnforceTypes)
+	}
+
+	if collection.Replicate {
+		stanzaValues["replicate"] = fmt.Sprintf("%v", collection.Replicate)
+	}
+
+	for fieldName, fieldType := range collection.Fields {
+		fieldKey := fmt.Sprintf("field.%s", fieldName)
+		stanzaValues[fieldKey] = string(fieldType)
+	}
+
+	return stanzaValues
+}
+
+// stanza returns the Stanza for a Collection.
+func (collection Collection) stanza() Stanza {
+	return Stanza{
+		Name:   collection.stanzaName(),
+		Values: collection.stanzaValues(),
+	}
+}
