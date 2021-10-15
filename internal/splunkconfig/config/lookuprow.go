@@ -61,3 +61,18 @@ func (lookupRow LookupRow) withDefaultLookupValues(lookupValues LookupValues) Lo
 func (lookupRow LookupRow) withValuesForLookupFromDefaultLookupValuesDefiner(lookup Lookup, definer defaultLookupValuesDefiner) LookupRow {
 	return lookupRow.withDefaultLookupValues(defaultLookupValuesForLookup(lookup, definer))
 }
+
+// newLookupRowWithFieldsAndValues creates a new LookupRow from the given list of field names and values.
+func newLookupRowWithFieldsAndValues(fieldNames []string, fieldValues []string) (newLookupRow LookupRow, err error) {
+	if len(fieldNames) != len(fieldValues) {
+		return LookupRow{}, fmt.Errorf("unable to create newLookupRowWithFieldsValues, fields length (%d) different from values length (%d)", len(fieldNames), len(fieldValues))
+	}
+
+	newLookupRow.Values = make(LookupValues, len(fieldNames))
+
+	for i, fieldName := range fieldNames {
+		newLookupRow.Values[fieldName] = fieldValues[i]
+	}
+
+	return newLookupRow, nil
+}
