@@ -17,8 +17,9 @@ package config
 import (
 	"bytes"
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
+
+	"gopkg.in/yaml.v2"
 )
 
 // Suite is a type that represents a collection of component configurations.
