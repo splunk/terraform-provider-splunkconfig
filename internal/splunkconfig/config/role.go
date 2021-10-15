@@ -70,7 +70,7 @@ func (r Role) validateForLookups(lookups Lookups) error {
 func (r Role) validateForSAMLGroups(samlGroups SAMLGroups) error {
 	for _, samlGroupName := range r.SAMLGroups {
 		if !samlGroups.hasSAMLGroupName(samlGroupName) {
-			return fmt.Errorf("role %s is has invalid SAMLGroup name: %s", r.Name, samlGroupName)
+			return fmt.Errorf("role %s is invalid, refers to undefined SAMLGroup name: %s", r.Name, samlGroupName)
 		}
 	}
 
