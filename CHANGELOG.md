@@ -1,4 +1,4 @@
-## 1.4.0 (TBD)
+## 1.4.0 (October 10, 2021)
 
 FEATURES:
 
