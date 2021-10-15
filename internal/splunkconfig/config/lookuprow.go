@@ -19,7 +19,7 @@ import "fmt"
 // LookupRow is a map of field names to field values.
 type LookupRow struct {
 	// LookupName is used to indirectly associate this Row with a LookupDefinition
-	LookupName string `yaml:"lookup_name"`
+	LookupName string `yaml:"lookup_name,omitempty"`
 	Values     LookupValues
 }
 

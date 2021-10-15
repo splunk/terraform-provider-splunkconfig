@@ -27,9 +27,9 @@ import (
 type Lookup struct {
 	Name            string
 	Fields          LookupFields
-	ExternalCommand string `yaml:"external_cmd"`
-	ExternalType    string `yaml:"external_type"`
-	Collection      string
+	ExternalCommand string `yaml:"external_cmd,omitempty"`
+	ExternalType    string `yaml:"external_type,omitempty"`
+	Collection      string `yaml:"collection,omitempty"`
 	Rows            LookupRows
 }
 

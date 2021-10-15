@@ -19,9 +19,9 @@ import "fmt"
 // LookupField is a single field of a lookup.
 type LookupField struct {
 	Name            string
-	Required        bool
-	DefaultRowField bool `yaml:"default_row_field"`
-	Default         string
+	Required        bool   `yaml:"required,omitempty"`
+	DefaultRowField bool   `yaml:"default_row_field,omitempty"`
+	Default         string `yaml:"default,omitempty"`
 }
 
 // validate returns an error if LookupField is invalid. It is invalid if it:
