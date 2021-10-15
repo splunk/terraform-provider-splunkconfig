@@ -1,4 +1,4 @@
-## 1.4.0 (October 10, 2021)
+## 1.4.0 (October 15, 2021)
 
 FEATURES:
 
