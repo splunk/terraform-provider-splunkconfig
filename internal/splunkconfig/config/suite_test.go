@@ -168,3 +168,45 @@ func TestSuite_mergeSuite(t *testing.T) {
 		testEqual(got, test.want, message, t)
 	}
 }
+
+func TestSuite_mergeSuites(t *testing.T) {
+	tests := []struct {
+		inputSuite            Suite
+		inputAdditionalSuites []Suite
+		want                  Suite
+	}{
+		{
+			Suite{},
+			[]Suite{},
+			Suite{},
+		},
+		{
+			Suite{Indexes: Indexes{{Name: "indexA"}}},
+			[]Suite{},
+			Suite{Indexes: Indexes{{Name: "indexA"}}},
+		},
+		{
+			Suite{},
+			[]Suite{
+				{Indexes: Indexes{{Name: "indexA"}}},
+				{Indexes: Indexes{{Name: "indexB"}}},
+			},
+			Suite{Indexes: Indexes{{Name: "indexA"}, {Name: "indexB"}}},
+		},
+		{
+			Suite{Indexes: Indexes{{Name: "indexA"}}},
+			[]Suite{
+				{Indexes: Indexes{{Name: "indexB"}}},
+				{Indexes: Indexes{{Name: "indexC"}}},
+			},
+			Suite{Indexes: Indexes{{Name: "indexA"}, {Name: "indexB"}, {Name: "indexC"}}},
+		},
+	}
+
+	for _, test := range tests {
+		got := test.inputSuite.mergeSuites(test.inputAdditionalSuites...)
+		message := fmt.Sprintf("%#v.mergeSuites(%#v) = %#v, want %#v", test.inputSuite, test.inputAdditionalSuites, got, test.want)
+
+		testEqual(got, test.want, message, t)
+	}
+}
