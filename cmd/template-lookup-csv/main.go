@@ -28,7 +28,7 @@ func main() {
 	csvFilename := flag.String("csvFilename", "", "CSV file to import (required)")
 
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "\template-lookup-csv: Print splunkconfig YAML from CSV file\n\n\n")
+		fmt.Fprintf(os.Stderr, "\ntemplate-lookup-csv: Print YAML for a Lookup from CSV content.\n\n\n")
 		fmt.Fprintf(os.Stderr, "Options:\n")
 		flag.PrintDefaults()
 	}
