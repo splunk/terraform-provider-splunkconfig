@@ -146,6 +146,19 @@ func (suite Suite) mergeSuite(additionalSuite Suite) (mergedSuite Suite) {
 	return
 }
 
+// mergeSuites returns a new Suite by merging the contents of additionalSuites.
+func (suite Suite) mergeSuites(additionalSuites ...Suite) (mergedSuite Suite) {
+	// starting state is identical to suite
+	mergedSuite = suite
+
+	// add on each additionalSuite
+	for _, additionalSuite := range additionalSuites {
+		mergedSuite = mergedSuite.mergeSuite(additionalSuite)
+	}
+
+	return
+}
+
 // ExtrapolatedRoles returns the Suite's Roles extrapolated against its Indexes.
 func (suite Suite) ExtrapolatedRoles() Roles {
 	return suite.Roles.extrapolateWithIndexes(suite.Indexes)
