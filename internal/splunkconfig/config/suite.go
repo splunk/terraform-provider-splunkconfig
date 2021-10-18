@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"reflect"
 
 	"gopkg.in/yaml.v2"
 )
@@ -114,6 +115,34 @@ func NewSuiteFromYAMLFile(path string) (suite Suite, err error) {
 	}
 
 	suite, err = NewSuiteFromYAML(content)
+	return
+}
+
+// mergeSuite returns a new Suite by merging the contents of additionalSuite.  This method assumes that Suite
+// only ever contains members that are slices (other than Anchors, which is not merged).
+func (suite Suite) mergeSuite(additionalSuite Suite) (mergedSuite Suite) {
+	suiteV := reflect.ValueOf(&suite).Elem()
+	additionalSuiteV := reflect.ValueOf(&additionalSuite).Elem()
+	mergedSuiteV := reflect.ValueOf(&mergedSuite).Elem()
+
+	// perform merge for each field (except Anchors)
+	for i := 0; i < suiteV.NumField(); i++ {
+		suiteField := suiteV.Type().Field(i)
+
+		// no merging occurs for Anchors, they're only used within a single YAML file
+		if suiteField.Name == "Anchors" {
+			continue
+		}
+
+		// get this field's reflect.Value for existing, additional, merged Suites
+		suiteFieldValue := suiteV.Field(i)
+		additionalSuiteFieldValue := additionalSuiteV.Field(i)
+		mergedSuiteFieldValue := mergedSuiteV.Field(i)
+
+		// set merged Suite's value to the result of appending existing and additional values
+		mergedSuiteFieldValue.Set(reflect.AppendSlice(suiteFieldValue, additionalSuiteFieldValue))
+	}
+
 	return
 }
 
