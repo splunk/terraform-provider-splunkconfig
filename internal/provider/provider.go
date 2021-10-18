@@ -26,6 +26,7 @@ import (
 const (
 	suiteConfigYMLKey               = "configuration"
 	suiteConfigFileKey              = "configuration_file"
+	suiteConfigPathKey              = "configuration_path"
 	roleNamesResourceName           = "splunkconfig_role_names"
 	roleAttributesResourceName      = "splunkconfig_role_attributes"
 	samlGroupNamesResourceName      = "splunkconfig_saml_group_names"
@@ -42,10 +43,7 @@ func configure(version string, p *schema.Provider) func(context.Context, *schema
 	return func(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
 		configContent := d.Get(suiteConfigYMLKey).(string)
 		configFile := d.Get(suiteConfigFileKey).(string)
-
-		if configContent != "" && configFile != "" {
-			return config.Suite{}, diag.Errorf("Both %s and %s specified, only one allowed", suiteConfigYMLKey, suiteConfigFileKey)
-		}
+		configPath := d.Get(suiteConfigPathKey).(string)
 
 		if configContent != "" {
 			suite, err := config.NewSuiteFromYAML([]byte(configContent))
@@ -65,7 +63,16 @@ func configure(version string, p *schema.Provider) func(context.Context, *schema
 			return suite, diag.Diagnostics{}
 		}
 
-		return config.Suite{}, diag.Errorf("must set %s or %s", suiteConfigYMLKey, suiteConfigFileKey)
+		if configPath != "" {
+			suite, err := config.NewSuiteFromYAMLPath(configPath)
+			if err != nil {
+				return config.Suite{}, diag.Errorf("unable to create NewSuiteFromYAMLPath: %s", err)
+			}
+
+			return suite, diag.Diagnostics{}
+		}
+
+		return config.Suite{}, diag.Errorf("must set %s, %s, or %s", suiteConfigYMLKey, suiteConfigFileKey, suiteConfigPathKey)
 	}
 }
 
@@ -76,14 +83,22 @@ func New(version string) func() *schema.Provider {
 			// provider schema
 			Schema: map[string]*schema.Schema{
 				suiteConfigYMLKey: &schema.Schema{
-					Type:        schema.TypeString,
-					Optional:    true,
-					Description: fmt.Sprintf("YAML content containing the abstracted configruation. Either this or `%s` must be set.", suiteConfigFileKey),
+					Type:          schema.TypeString,
+					Optional:      true,
+					ConflictsWith: []string{suiteConfigFileKey, suiteConfigPathKey},
+					Description:   fmt.Sprintf("YAML content containing the abstracted configuration. This, `%s`,  or `%s` must be set.", suiteConfigFileKey, suiteConfigPathKey),
 				},
 				suiteConfigFileKey: &schema.Schema{
-					Type:        schema.TypeString,
-					Optional:    true,
-					Description: fmt.Sprintf("Full path to YAML file containing the abstracted configuration. Either this or `%s` must be set.", suiteConfigYMLKey),
+					Type:          schema.TypeString,
+					Optional:      true,
+					ConflictsWith: []string{suiteConfigYMLKey, suiteConfigPathKey},
+					Description:   fmt.Sprintf("Full path to YAML file containing the abstracted configuration. This, `%s`, or `%s` must be set.", suiteConfigYMLKey, suiteConfigPathKey),
+				},
+				suiteConfigPathKey: &schema.Schema{
+					Type:          schema.TypeString,
+					Optional:      true,
+					ConflictsWith: []string{suiteConfigYMLKey, suiteConfigFileKey},
+					Description:   fmt.Sprintf("Full path to directory containing one or more YAML files containing the abstracted configuration. This, `%s`, or `%s` must be set.", suiteConfigYMLKey, suiteConfigFileKey),
 				},
 			},
 
