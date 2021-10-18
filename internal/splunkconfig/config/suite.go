@@ -176,19 +176,6 @@ func (suite Suite) mergeSuite(additionalSuite Suite) (mergedSuite Suite) {
 	return
 }
 
-// mergeSuites returns a new Suite by merging the contents of additionalSuites.
-func (suite Suite) mergeSuites(additionalSuites ...Suite) (mergedSuite Suite) {
-	// starting state is identical to suite
-	mergedSuite = suite
-
-	// add on each additionalSuite
-	for _, additionalSuite := range additionalSuites {
-		mergedSuite = mergedSuite.mergeSuite(additionalSuite)
-	}
-
-	return
-}
-
 // NewSuiteFromYAMLPath returns a new Suite object from YAML files in a given path. It returns an error if any errors
 // were encountered while attempting to unmarshal the content or if the resulting Suite is invalid.
 func NewSuiteFromYAMLPath(path string) (suite Suite, err error) {
