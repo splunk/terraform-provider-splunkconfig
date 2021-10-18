@@ -86,19 +86,19 @@ func New(version string) func() *schema.Provider {
 					Type:          schema.TypeString,
 					Optional:      true,
 					ConflictsWith: []string{suiteConfigFileKey, suiteConfigPathKey},
-					Description:   fmt.Sprintf("YAML content containing the abstracted configuration. This, `%s`,  or `%s` must be set.", suiteConfigFileKey, suiteConfigPathKey),
+					Description:   fmt.Sprintf("YAML content containing the abstracted configuration. Exactly one of `%s`, `%s`, or `%s` must be set.", suiteConfigYMLKey, suiteConfigFileKey, suiteConfigPathKey),
 				},
 				suiteConfigFileKey: &schema.Schema{
 					Type:          schema.TypeString,
 					Optional:      true,
 					ConflictsWith: []string{suiteConfigYMLKey, suiteConfigPathKey},
-					Description:   fmt.Sprintf("Full path to YAML file containing the abstracted configuration. This, `%s`, or `%s` must be set.", suiteConfigYMLKey, suiteConfigPathKey),
+					Description:   fmt.Sprintf("Full path to YAML file containing the abstracted configuration. Exactly one of `%s`, `%s`, or `%s` must be set.", suiteConfigYMLKey, suiteConfigFileKey, suiteConfigPathKey),
 				},
 				suiteConfigPathKey: &schema.Schema{
 					Type:          schema.TypeString,
 					Optional:      true,
 					ConflictsWith: []string{suiteConfigYMLKey, suiteConfigFileKey},
-					Description:   fmt.Sprintf("Full path to directory containing one or more YAML files containing the abstracted configuration. This, `%s`, or `%s` must be set.", suiteConfigYMLKey, suiteConfigFileKey),
+					Description:   fmt.Sprintf("Full path to directory containing one or more YAML files containing the abstracted configuration. Exactly one of `%s`, `%s`, or `%s` must be set.", suiteConfigYMLKey, suiteConfigFileKey, suiteConfigPathKey),
 				},
 			},
 
