@@ -132,3 +132,39 @@ users:
 	message := fmt.Sprintf("NewSuiteFromYAML(%q)", yamlContent)
 	testEqual(got, want, message, t)
 }
+
+func TestSuite_mergeSuite(t *testing.T) {
+	tests := []struct {
+		inputSuite           Suite
+		inputAdditionalSuite Suite
+		want                 Suite
+	}{
+		{
+			Suite{},
+			Suite{},
+			Suite{},
+		},
+		{
+			Suite{Indexes: Indexes{{Name: "indexA"}}},
+			Suite{},
+			Suite{Indexes: Indexes{{Name: "indexA"}}},
+		},
+		{
+			Suite{},
+			Suite{Indexes: Indexes{{Name: "indexA"}}},
+			Suite{Indexes: Indexes{{Name: "indexA"}}},
+		},
+		{
+			Suite{Indexes: Indexes{{Name: "indexA"}}},
+			Suite{Indexes: Indexes{{Name: "indexB"}}},
+			Suite{Indexes: Indexes{{Name: "indexA"}, {Name: "indexB"}}},
+		},
+	}
+
+	for _, test := range tests {
+		got := test.inputSuite.mergeSuite(test.inputAdditionalSuite)
+		message := fmt.Sprintf("%#v.mergeSuite(%#v) = %#v, want %#v", test.inputSuite, test.inputAdditionalSuite, got, test.want)
+
+		testEqual(got, test.want, message, t)
+	}
+}
