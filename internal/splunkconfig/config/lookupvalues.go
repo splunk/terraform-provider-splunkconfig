@@ -91,3 +91,21 @@ func (lookupValues LookupValues) hasFieldNames(fieldNames []string) bool {
 
 	return true
 }
+
+// MarshalYAML overrides the default YAML marshaling of LookupValues to remove empty values.
+func (lookupValues LookupValues) MarshalYAML() (interface{}, error) {
+	// effectively passthrough if lookupValues is the zero-value for a map
+	if lookupValues == nil {
+		return nil, nil
+	}
+
+	marshalValues := make(map[string]string, len(lookupValues))
+
+	for key, value := range lookupValues {
+		if value != "" {
+			marshalValues[key] = value
+		}
+	}
+
+	return marshalValues, nil
+}

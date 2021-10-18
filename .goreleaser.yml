@@ -1,5 +1,6 @@
 builds:
-  - env:
+  - &common_build_config
+    env:
       # goreleaser does not work with CGO, it could also complicate
       # usage by users in CI/CD systems like Terraform Cloud where
       # they are unable to install libraries.
@@ -23,6 +24,10 @@ builds:
       - goos: darwin
         goarch: '386'
     binary: '{{ .ProjectName }}_v{{ .Version }}'
+  - <<: *common_build_config
+    id: template-lookup-csv
+    main: ./cmd/template-lookup-csv/main.go
+    binary: 'tools/import-lookup-csv'
 archives:
   - format: zip
     name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'

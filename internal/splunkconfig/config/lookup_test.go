@@ -16,6 +16,7 @@ package config
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 )
 
@@ -233,4 +234,52 @@ func TestLookup_stanza(t *testing.T) {
 	}
 
 	tests.test(t)
+}
+
+func TestLookup_NewLookupFromIoReader(t *testing.T) {
+	tests := []struct {
+		input      string
+		wantLookup Lookup
+		wantError  bool
+	}{
+		// it doesn't seem possible to test more values than fields, because the number of fields determines the number of values returned by csv.Reader
+		// as long as there aren't more values than fields
+
+		// more values than fields
+		{
+			"fieldA\n,,",
+			Lookup{},
+			true,
+		},
+		// fields/values match up
+		{
+			"fieldA,fieldB\nvalueA,valueB",
+			Lookup{
+				Fields: LookupFields{
+					{Name: "fieldA"},
+					{Name: "fieldB"},
+				},
+				Rows: LookupRows{
+					{
+						Values: LookupValues{
+							"fieldA": "valueA",
+							"fieldB": "valueB",
+						},
+					},
+				},
+			},
+			false,
+		},
+	}
+
+	for _, test := range tests {
+		reader := strings.NewReader(test.input)
+		gotLookup, err := NewLookupFromIoReader("", reader)
+		gotError := err != nil
+		lookupMessage := fmt.Sprintf("NewLookupFromCSV(%q) = %#v, %#v", test.input, gotLookup, test.wantLookup)
+		errorMessage := fmt.Sprintf("NewLookupFromCSV(%q) returned error? %v (%s)", test.input, gotError, err)
+
+		testEqual(gotLookup, test.wantLookup, lookupMessage, t)
+		testEqual(gotError, test.wantError, errorMessage, t)
+	}
 }

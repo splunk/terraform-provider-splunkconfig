@@ -74,3 +74,46 @@ func TestLookupRow_valuesForLookupFields(t *testing.T) {
 		testEqual(gotValues, test.wantValues, message, t)
 	}
 }
+
+func TestLookupRow_newLookupRowWithFieldsAndValues(t *testing.T) {
+	tests := []struct {
+		inputFields   []string
+		inputValues   []string
+		wantLookupRow LookupRow
+		wantError     bool
+	}{
+		// more fields than values
+		{
+			[]string{"fieldA"},
+			[]string{},
+			LookupRow{},
+			true,
+		},
+		// more values than fields
+		{
+			[]string{},
+			[]string{"valueA"},
+			LookupRow{},
+			true,
+		},
+		// just right
+		{
+			[]string{"fieldA", "fieldB"},
+			[]string{"valueA", "valueB"},
+			LookupRow{
+				Values: LookupValues{"fieldA": "valueA", "fieldB": "valueB"},
+			},
+			false,
+		},
+	}
+
+	for _, test := range tests {
+		gotLookupRow, err := newLookupRowWithFieldsAndValues(test.inputFields, test.inputValues)
+		gotError := err != nil
+		lookupRowMessage := fmt.Sprintf("newLookupRowWithFieldsAndValues(%#v, %#v) = %#v, want %#v", test.inputFields, test.inputValues, gotLookupRow, test.wantLookupRow)
+		errorMessage := fmt.Sprintf("newLookupRowWithFieldsAndValues(%#v, %#v) returned error?", test.inputFields, test.inputValues)
+
+		testEqual(gotLookupRow, test.wantLookupRow, lookupRowMessage, t)
+		testEqual(gotError, test.wantError, errorMessage, t)
+	}
+}

@@ -130,3 +130,28 @@ func TestLookupValues_hasFieldNames(t *testing.T) {
 		testEqual(gotBool, test.wantBool, message, t)
 	}
 }
+
+func TestLookupValues_MarshalYAML(t *testing.T) {
+	tests := yamlMarshalerTestCases{
+		// zero-value for LookupValues is unchanged
+		{
+			LookupValues(nil),
+			nil,
+			false,
+		},
+		// "normal" key=value
+		{
+			LookupValues{"fieldA": "valueA", "fieldB": "valueB"},
+			map[string]string{"fieldA": "valueA", "fieldB": "valueB"},
+			false,
+		},
+		// empty keys removed
+		{
+			LookupValues{"fieldA": "valueA", "fieldB": ""},
+			map[string]string{"fieldA": "valueA"},
+			false,
+		},
+	}
+
+	tests.test(t)
+}

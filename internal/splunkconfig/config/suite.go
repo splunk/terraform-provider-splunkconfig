@@ -17,21 +17,22 @@ package config
 import (
 	"bytes"
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
+
+	"gopkg.in/yaml.v2"
 )
 
 // Suite is a type that represents a collection of component configurations.
 type Suite struct {
-	Indexes    Indexes
-	Roles      Roles
-	SAMLGroups SAMLGroups `yaml:"saml_groups"`
-	Lookups    Lookups
-	Apps       Apps
-	Users      Users
+	Indexes    Indexes    `yaml:"indexes,omitempty"`
+	Roles      Roles      `yaml:"roles,omitempty"`
+	SAMLGroups SAMLGroups `yaml:"saml_groups,omitempty"`
+	Lookups    Lookups    `yaml:"lookups,omitempty"`
+	Apps       Apps       `yaml:"apps,omitempty"`
+	Users      Users      `yaml:"users,omitempty"`
 	// Anchors isn't actually part of the configuration, it just gives you somewhere to define
 	// YAML anchors while still disallowing unknown keys.
-	Anchors interface{}
+	Anchors interface{} `yaml:"anchors,omitempty"`
 }
 
 // validate returns an error if any of a Suite's configurations are invalid.

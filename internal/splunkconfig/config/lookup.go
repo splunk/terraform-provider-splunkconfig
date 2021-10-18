@@ -27,10 +27,51 @@ import (
 type Lookup struct {
 	Name            string
 	Fields          LookupFields
-	ExternalCommand string `yaml:"external_cmd"`
-	ExternalType    string `yaml:"external_type"`
-	Collection      string
+	ExternalCommand string `yaml:"external_cmd,omitempty"`
+	ExternalType    string `yaml:"external_type,omitempty"`
+	Collection      string `yaml:"collection,omitempty"`
 	Rows            LookupRows
+}
+
+// NewLookupFromIoReader returns a new Lookup by reading from the given io.Reader.
+func NewLookupFromIoReader(name string, reader io.Reader) (Lookup, error) {
+	r := csv.NewReader(reader)
+
+	fields, err := r.Read()
+	if err != nil {
+		return Lookup{}, err
+	}
+
+	newLookup := Lookup{Name: name}
+	newLookup.Fields = make(LookupFields, len(fields))
+	for i, fieldName := range fields {
+		newLookup.Fields[i] = LookupField{
+			Name: fieldName,
+		}
+	}
+
+	newLookup.Rows = LookupRows{}
+
+	row, readErr := r.Read()
+	for readErr != io.EOF {
+		if err != nil {
+			return Lookup{}, err
+		}
+
+		newLookupRow, lookupRowErr := newLookupRowWithFieldsAndValues(fields, row)
+		if lookupRowErr != nil {
+			return Lookup{}, fmt.Errorf("%#v, %#v: %s", newLookup.Fields, row, lookupRowErr)
+		}
+
+		newLookup.Rows = append(
+			newLookup.Rows,
+			newLookupRow,
+		)
+
+		row, readErr = r.Read()
+	}
+
+	return newLookup, nil
 }
 
 // validate returns an error if the Lookup is invalid. It is invalid if its Definition is invalid, or if its Rows
