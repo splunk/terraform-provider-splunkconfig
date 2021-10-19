@@ -1,8 +1,10 @@
-## 1.4.0 (October 15, 2021)
+## 1.4.0 (October 19, 2021)
 
 FEATURES:
 
+* **Provider Change**: New configuration argument `configuration_path`.
 * **Schema Change**: `Apps` can have `collections`.
+* **New Tool**: `template-lookup-csv`
 
 ## 1.3.2 (September 28, 2021)
 
