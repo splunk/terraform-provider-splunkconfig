@@ -18,6 +18,9 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"os"
+	"path/filepath"
+	"reflect"
 
 	"gopkg.in/yaml.v2"
 )
@@ -86,13 +89,23 @@ func (suite Suite) validate() error {
 	return nil
 }
 
-// NewSuiteFromYAML returns a new Suite object from the YAML contents passed in. It returns an error if any errors
-// were encountered while attempting to unmarshal the content or if the resulting Suite is invalid.
-func NewSuiteFromYAML(yamlContent []byte) (suite Suite, err error) {
+// newSuiteFromYAML returns a new Suite object from the YAML contents passed in. It returns an error if any errors
+// were encountered while attempting to unmarshal the content. This unexported method does *not* perform validation
+// of the resulting Suite.
+func newSuiteFromYAML(yamlContent []byte) (suite Suite, err error) {
 	decoder := yaml.NewDecoder(bytes.NewReader(yamlContent))
 	decoder.SetStrict(true)
 
-	if err = decoder.Decode(&suite); err != nil {
+	err = decoder.Decode(&suite)
+
+	return
+}
+
+// NewSuiteFromYAML returns a new Suite object from the YAML contents passed in. It returns an error if any errors
+// were encountered while attempting to unmarshal the content or if the resulting Suite is invalid.
+func NewSuiteFromYAML(yamlContent []byte) (suite Suite, err error) {
+	suite, err = newSuiteFromYAML(yamlContent)
+	if err != nil {
 		return
 	}
 
@@ -105,15 +118,103 @@ func NewSuiteFromYAML(yamlContent []byte) (suite Suite, err error) {
 	return
 }
 
-// NewSuiteFromYAMLFile returns a new Suite object from the YAML contents passed in. It returns an error if any errors
-// were encountered while attempting to unmarshal the content or if the resulting Suite is invalid.
-func NewSuiteFromYAMLFile(path string) (suite Suite, err error) {
+// newSuiteFromYAMLFile returns a new Suite object from a YAML file. It returns an error if any errors
+// were encountered while attempting to unmarshal the content. This unexported method does *not* perform validation
+// of the resulting Suite.
+func newSuiteFromYAMLFile(path string) (suite Suite, err error) {
 	content, err := ioutil.ReadFile(path)
 	if err != nil {
 		return
 	}
 
-	suite, err = NewSuiteFromYAML(content)
+	suite, err = newSuiteFromYAML(content)
+	return
+}
+
+// newSuiteFromYAMLFile returns a new Suite object from a YAML file. It returns an error if any errors
+// were encountered while attempting to unmarshal the content or if the resulting Suite is invalid.
+func NewSuiteFromYAMLFile(path string) (suite Suite, err error) {
+	suite, err = newSuiteFromYAMLFile(path)
+	if err != nil {
+		return
+	}
+
+	err = suite.validate()
+	if err != nil {
+		// return empty Suite object if invalid
+		suite = Suite{}
+	}
+
+	return
+}
+
+// mergeSuite returns a new Suite by merging the contents of additionalSuite.  This method assumes that Suite
+// only ever contains members that are slices (other than Anchors, which is not merged).
+func (suite Suite) mergeSuite(additionalSuite Suite) (mergedSuite Suite) {
+	suiteV := reflect.ValueOf(&suite).Elem()
+	additionalSuiteV := reflect.ValueOf(&additionalSuite).Elem()
+	mergedSuiteV := reflect.ValueOf(&mergedSuite).Elem()
+
+	// perform merge for each field (except Anchors)
+	for i := 0; i < suiteV.NumField(); i++ {
+		suiteField := suiteV.Type().Field(i)
+
+		// no merging occurs for Anchors, they're only used within a single YAML file
+		if suiteField.Name == "Anchors" {
+			continue
+		}
+
+		// get this field's reflect.Value for existing, additional, merged Suites
+		suiteFieldValue := suiteV.Field(i)
+		additionalSuiteFieldValue := additionalSuiteV.Field(i)
+		mergedSuiteFieldValue := mergedSuiteV.Field(i)
+
+		// set merged Suite's value to the result of appending existing and additional values
+		mergedSuiteFieldValue.Set(reflect.AppendSlice(suiteFieldValue, additionalSuiteFieldValue))
+	}
+
+	return
+}
+
+// NewSuiteFromYAMLPath returns a new Suite object from YAML files in a given path. It returns an error if any errors
+// were encountered while attempting to unmarshal the content or if the resulting Suite is invalid.
+func NewSuiteFromYAMLPath(path string) (suite Suite, err error) {
+	pathStat, err := os.Stat(path)
+	if err != nil {
+		return Suite{}, fmt.Errorf("unable to get NewSuiteFromYAMLPath, unable to stat path %s: %s", path, err)
+	}
+	if !pathStat.IsDir() {
+		return Suite{}, fmt.Errorf("unable to get NewSuiteFromYAMLPath, path %s is not a directory", path)
+	}
+
+	// ignore case, permit .yaml and .yml
+	globs := []string{
+		filepath.Join(path, "*.[Yy][Mm][Ll]"),
+		filepath.Join(path, "*.[Yy][Aa][Mm][Ll]"),
+	}
+
+	for _, glob := range globs {
+		filePaths, err := filepath.Glob(glob)
+		if err != nil {
+			return Suite{}, fmt.Errorf("unable to get NewSuiteFromYAMLPath: %s", err)
+		}
+
+		for _, filePath := range filePaths {
+			fileSuite, err := newSuiteFromYAMLFile(filePath)
+			if err != nil {
+				return Suite{}, fmt.Errorf("uanble to get NewSuiteFromYAMLPath: %s", err)
+			}
+
+			suite = suite.mergeSuite(fileSuite)
+		}
+	}
+
+	err = suite.validate()
+	if err != nil {
+		// return empty Suite object if invalid
+		suite = Suite{}
+	}
+
 	return
 }
 
