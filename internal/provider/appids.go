@@ -99,7 +99,7 @@ func resourceAppIdsRead(ctx context.Context, d *schema.ResourceData, meta interf
 		return diag.FromErr(err)
 	}
 
-	if err := d.Set(appIdsAppIdsKey, apps.AppIDsSatisfyingTags(tags)); err != nil {
+	if err := d.Set(appIdsAppIdsKey, apps.SatisfyingTags(tags).AppIDs()); err != nil {
 		return diag.FromErr(err)
 	}
 

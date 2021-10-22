@@ -16,3 +16,14 @@ package config
 
 // AppIDs is a list of AppID objects.
 type AppIDs []AppID
+
+// NewAppIDsFromStrings creates and returns an AppIDs object from a list of strings.
+func NewAppIDsFromStrings(values []string) AppIDs {
+	appIDs := make(AppIDs, len(values))
+
+	for i, value := range values {
+		appIDs[i] = AppID(value)
+	}
+
+	return appIDs
+}
