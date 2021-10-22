@@ -65,13 +65,13 @@ func (apps Apps) AppIDs() AppIDs {
 	return NewAppIDsFromStrings(uids)
 }
 
-// SatisfyingTags returns an Apps object containing each App that contains the
-// given Tags.
-func (apps Apps) SatisfyingTags(checkTags Tags) Apps {
+// SatisfyingTags returns an Apps object containing each App that satisfies
+// all of requireTags and none of excludeTags.
+func (apps Apps) SatisfyingTags(requireTags Tags, excludeTags Tags) Apps {
 	satisfyingApps := make(Apps, 0, len(apps))
 
 	for _, app := range apps {
-		if app.Tags.satisfiesTags(checkTags) {
+		if app.Tags.satisfiesTags(requireTags) && app.Tags.excludesTags(excludeTags) {
 			satisfyingApps = append(satisfyingApps, app)
 		}
 	}
