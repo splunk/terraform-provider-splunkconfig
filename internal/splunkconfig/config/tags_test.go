@@ -183,7 +183,7 @@ func TestTags_excludesTags(t *testing.T) {
 
 	for _, test := range tests {
 		got := test.inputTags.excludesTags(test.checkTags)
-		message := fmt.Sprintf("%#v.satisfiesTags(%#v)", test.inputTags, test.checkTags)
+		message := fmt.Sprintf("%#v.excludesTags(%#v)", test.inputTags, test.checkTags)
 
 		testEqual(got, test.want, message, t)
 	}
