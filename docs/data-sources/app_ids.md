@@ -17,18 +17,19 @@ Return App IDs from the Splunk Configuration
 
 ### Optional
 
-- **require_tag** (Block List) Tags to require for returned App IDs (see [below for nested schema](#nestedblock--require_tag))
+- **exclude_tag** (Block List) Tags to exclude for returned App IDs (see [below for nested schema](#nestedblock--tag))
+- **require_tag** (Block List) Tags to require for returned App IDs (see [below for nested schema](#nestedblock--tag))
 
 ### Read-Only
 
 - **app_ids** (List of String) List of App IDs in the Splunk Configuration
 
-<a id="nestedblock--require_tag"></a>
-### Nested Schema for `require_tag`
+<a id="nestedblock--tag"></a>
+### Nested Schema for `tag`
 
 Required:
 
-- **name** (String) Name of the tag to require
-- **values** (List of String) Values of the tag to require
+- **name** (String) Name of the tag
+- **values** (List of String) Values of the tag
 
 
