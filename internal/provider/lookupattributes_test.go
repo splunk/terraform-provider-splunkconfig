@@ -27,14 +27,27 @@ func TestAccResourceLookupAttributes(t *testing.T) {
 			{
 				Config: testAccDataSourceLookupAttributesConfig,
 				Check: resource.ComposeTestCheckFunc(
-					testCheckResourceAttrList("data.splunkconfig_lookup_attributes.foo", "field_names", []string{
+					// unnumbered
+					testCheckResourceAttrList("data.splunkconfig_lookup_attributes.unnumbered", "field_names", []string{
 						"field_a",
 						"field_b",
 					}),
-					resource.TestCheckResourceAttr("data.splunkconfig_lookup_attributes.foo", "rows.0.field_a", "row_1_value_a"),
-					resource.TestCheckResourceAttr("data.splunkconfig_lookup_attributes.foo", "rows.0.field_b", "row_1_value_b"),
-					resource.TestCheckResourceAttr("data.splunkconfig_lookup_attributes.foo", "rows.1.field_a", "row_2_value_a"),
-					resource.TestCheckResourceAttr("data.splunkconfig_lookup_attributes.foo", "rows.1.field_b", "row_2_value_b"),
+					resource.TestCheckResourceAttr("data.splunkconfig_lookup_attributes.unnumbered", "rows.0.field_a", "row_1_value_a"),
+					resource.TestCheckResourceAttr("data.splunkconfig_lookup_attributes.unnumbered", "rows.0.field_b", "row_1_value_b"),
+					resource.TestCheckResourceAttr("data.splunkconfig_lookup_attributes.unnumbered", "rows.1.field_a", "row_2_value_a"),
+					resource.TestCheckResourceAttr("data.splunkconfig_lookup_attributes.unnumbered", "rows.1.field_b", "row_2_value_b"),
+					// numbered
+					testCheckResourceAttrList("data.splunkconfig_lookup_attributes.numbered", "field_names", []string{
+						"row_number",
+						"field_a",
+						"field_b",
+					}),
+					resource.TestCheckResourceAttr("data.splunkconfig_lookup_attributes.numbered", "rows.0.row_number", "1"),
+					resource.TestCheckResourceAttr("data.splunkconfig_lookup_attributes.numbered", "rows.0.field_a", "row_1_value_a"),
+					resource.TestCheckResourceAttr("data.splunkconfig_lookup_attributes.numbered", "rows.0.field_b", "row_1_value_b"),
+					resource.TestCheckResourceAttr("data.splunkconfig_lookup_attributes.numbered", "rows.1.row_number", "2"),
+					resource.TestCheckResourceAttr("data.splunkconfig_lookup_attributes.numbered", "rows.1.field_a", "row_2_value_a"),
+					resource.TestCheckResourceAttr("data.splunkconfig_lookup_attributes.numbered", "rows.1.field_b", "row_2_value_b"),
 				),
 			},
 		},
@@ -59,7 +72,12 @@ lookups:
 EOT
 }
 
-data "splunkconfig_lookup_attributes" "foo" {
+data "splunkconfig_lookup_attributes" "unnumbered" {
     lookup_name = "test_lookup"
+}
+
+data "splunkconfig_lookup_attributes" "numbered" {
+	lookup_name = "test_lookup"
+    row_number_field = "row_number"
 }
 `
