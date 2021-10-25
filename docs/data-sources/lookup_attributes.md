@@ -19,6 +19,10 @@ Get fields and rows for a specific lookup
 
 - **lookup_name** (String) Name of the lookup
 
+### Optional
+
+- **row_number_field** (String) Name of field to hold the row number. If not set, no field will be created for row numbers.
+
 ### Read-Only
 
 - **field_names** (List of String) List of fields in the lookup
