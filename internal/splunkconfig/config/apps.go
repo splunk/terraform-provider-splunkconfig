@@ -17,6 +17,7 @@ package config
 import (
 	"fmt"
 	"reflect"
+	"sort"
 )
 
 // Apps is a list of App objects.
@@ -56,21 +57,24 @@ func (apps Apps) WithID(name string) (found App, ok bool) {
 	return
 }
 
-// AppIDs returns a list of AppID values for each App in the list.
-func (apps Apps) AppIDs() []AppID {
-	return apps.AppIDsSatisfyingTags(Tags{})
+// AppIDs returns an AppIDs object containing the AppID for each App in the list.
+func (apps Apps) AppIDs() AppIDs {
+	uids := uidsOfUIDers(apps)
+	sort.Strings(uids)
+
+	return NewAppIDsFromStrings(uids)
 }
 
-// AppIDsWithTags returns a list of AppID values for each App that contains the
-// given Tags.
-func (apps Apps) AppIDsSatisfyingTags(checkTags Tags) []AppID {
-	appIDs := make([]AppID, 0, len(apps))
+// SatisfyingTags returns an Apps object containing each App that satisfies
+// all of requireTags and none of excludeTags.
+func (apps Apps) SatisfyingTags(requireTags Tags, excludeTags Tags) Apps {
+	satisfyingApps := make(Apps, 0, len(apps))
 
 	for _, app := range apps {
-		if app.Tags.satisfiesTags(checkTags) {
-			appIDs = append(appIDs, app.ID)
+		if app.Tags.satisfiesTags(requireTags) && app.Tags.excludesTags(excludeTags) {
+			satisfyingApps = append(satisfyingApps, app)
 		}
 	}
 
-	return appIDs
+	return satisfyingApps
 }

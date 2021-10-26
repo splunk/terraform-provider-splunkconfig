@@ -38,3 +38,14 @@ func (t Tags) satisfiesTags(checkTags Tags) bool {
 
 	return true
 }
+
+// excludesTags returns false if any of the given Tags are satisfied by this Tags object.
+func (t Tags) excludesTags(checkTags Tags) bool {
+	for _, checkTag := range checkTags {
+		if t.satisfiesTag(checkTag) {
+			return false
+		}
+	}
+
+	return true
+}

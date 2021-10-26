@@ -99,3 +99,92 @@ func TestTags_satisfiesTags(t *testing.T) {
 		testEqual(got, test.want, message, t)
 	}
 }
+
+func TestTags_excludesTags(t *testing.T) {
+	tests := []struct {
+		inputTags Tags
+		checkTags Tags
+		want      bool
+	}{
+		// empty checkTags against empty Tags
+		{
+			Tags{},
+			Tags{},
+			true,
+		},
+		// empty checkTags against populated Tags
+		{
+			Tags{{Name: "any name", Values: []string{"any value"}}},
+			Tags{},
+			true,
+		},
+		// one of checkTags exists in Tags
+		{
+			Tags{{Name: "matched name", Values: []string{"matched value"}}},
+			Tags{
+				{Name: "matched name", Values: []string{"matched value"}},
+				{Name: "unmatched name", Values: []string{"unmatched value"}},
+			},
+			false,
+		},
+		// all of checkTags exist in Tags
+		{
+			Tags{
+				{Name: "matched name", Values: []string{"matched value"}},
+				{Name: "another matched name", Values: []string{"anothermatched value"}},
+			},
+			Tags{
+				{Name: "matched name", Values: []string{"matched value"}},
+				{Name: "another matched name", Values: []string{"anothermatched value"}},
+			},
+			false,
+		},
+		// not all values in checkTags exist in Tags
+		{
+			Tags{
+				{Name: "matched name", Values: []string{"matched value"}},
+			},
+			Tags{
+				{Name: "matched name", Values: []string{"matched value", "unmatched value"}},
+			},
+			true,
+		},
+		// all values in checkTags exist in Tags (exact match)
+		{
+			Tags{
+				{Name: "matched name", Values: []string{"matched value", "another matched value"}},
+			},
+			Tags{
+				{Name: "matched name", Values: []string{"matched value", "another matched value"}},
+			},
+			false,
+		},
+		// all values in checkTags exist in Tags (unordered match)
+		{
+			Tags{
+				{Name: "matched name", Values: []string{"matched value", "another matched value"}},
+			},
+			Tags{
+				{Name: "matched name", Values: []string{"another matched value", "matched value"}},
+			},
+			false,
+		},
+		// all values in checkTags exist in Tags (but Tags has more)
+		{
+			Tags{
+				{Name: "matched name", Values: []string{"matched value", "unmatched value"}},
+			},
+			Tags{
+				{Name: "matched name", Values: []string{"matched value"}},
+			},
+			false,
+		},
+	}
+
+	for _, test := range tests {
+		got := test.inputTags.excludesTags(test.checkTags)
+		message := fmt.Sprintf("%#v.excludesTags(%#v)", test.inputTags, test.checkTags)
+
+		testEqual(got, test.want, message, t)
+	}
+}

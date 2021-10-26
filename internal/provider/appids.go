@@ -23,11 +23,10 @@ import (
 )
 
 const (
-	appIdsTagKey       = "require_tag"
-	appIdsTagNameKey   = "name"
-	appIdsTagsValueKey = "values"
-	appIdsAppIdsKey    = "app_ids"
-	appIdsIdValue      = "splunkconfig_app_ids"
+	appIdsRequireTagKey = "require_tag"
+	appIdsExcludeTagKey = "exclude_tag"
+	appIdsAppIdsKey     = "app_ids"
+	appIdsIdValue       = "splunkconfig_app_ids"
 )
 
 func resourceAppIds() *schema.Resource {
@@ -35,27 +34,17 @@ func resourceAppIds() *schema.Resource {
 		Description: "Return App IDs from the Splunk Configuration",
 		ReadContext: resourceAppIdsRead,
 		Schema: map[string]*schema.Schema{
-			appIdsTagKey: {
+			appIdsRequireTagKey: {
 				Description: "Tags to require for returned App IDs",
 				Type:        schema.TypeList,
 				Optional:    true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						appIdsTagNameKey: {
-							Type:        schema.TypeString,
-							Required:    true,
-							Description: "Name of the tag to require",
-						},
-						appIdsTagsValueKey: {
-							Type:        schema.TypeList,
-							Required:    true,
-							Description: "Values of the tag to require",
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-						},
-					},
-				},
+				Elem:        tagsSchema(),
+			},
+			appIdsExcludeTagKey: {
+				Description: "Tags to exclude for returned App IDs",
+				Type:        schema.TypeList,
+				Optional:    true,
+				Elem:        tagsSchema(),
 			},
 			appIdsAppIdsKey: {
 				Description: "List of App IDs in the Splunk Configuration",
@@ -72,34 +61,15 @@ func resourceAppIdsRead(ctx context.Context, d *schema.ResourceData, meta interf
 
 	d.SetId(appIdsIdValue)
 
-	// nested schemas are "fun".
-	// we have to iterate through each piece as a list or map of interfaces, and type assert
-	// to the true type at each layer that is nested.
-	// this block does that, converting the []interface{} that the SDK gives us into a Tags object.
-	// start with a list of interfaces, each of which is a tag block
-	tagInterfaces := d.Get(appIdsTagKey).([]interface{})
-	tags := make(config.Tags, len(tagInterfaces))
-	for tagNumber, tagInterface := range tagInterfaces {
-		// type assert the item into a map (with keys of "name" and "values")
-		tagMap := tagInterface.(map[string]interface{})
-		tagName := tagMap[appIdsTagNameKey].(string)
-		// when fetching the "values" key, we'll get a list of interfaces
-		tagValueInterfaces := tagMap[appIdsTagsValueKey].([]interface{})
-		tagValues := make([]string, len(tagValueInterfaces))
-		for tagValueNumber, tagValueInterface := range tagValueInterfaces {
-			// type assert the value interface into a string
-			tagValues[tagValueNumber] = tagValueInterface.(string)
-		}
-		// add a tag with the determiend name/values to our real Tags object
-		tags[tagNumber] = config.Tag{Name: tagName, Values: tagValues}
-	}
+	requireTags := newTagsFromInterface(d.Get(appIdsRequireTagKey))
+	excludeTags := newTagsFromInterface(d.Get(appIdsExcludeTagKey))
 
 	apps, err := suite.ExtrapolatedApps()
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	if err := d.Set(appIdsAppIdsKey, apps.AppIDsSatisfyingTags(tags)); err != nil {
+	if err := d.Set(appIdsAppIdsKey, apps.SatisfyingTags(requireTags, excludeTags).AppIDs()); err != nil {
 		return diag.FromErr(err)
 	}
 

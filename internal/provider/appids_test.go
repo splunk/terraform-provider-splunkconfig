@@ -30,6 +30,7 @@ func TestAccResourceAppIds(t *testing.T) {
 					testCheckResourceAttrList("data.splunkconfig_app_ids.all", "app_ids", []string{
 						"app_a",
 						"app_b",
+						"app_c",
 					}),
 					testCheckResourceAttrList("data.splunkconfig_app_ids.filtered", "app_ids", []string{
 						"app_a",
@@ -51,6 +52,13 @@ apps:
         values: [prod]
   - id: app_b
     name: App B
+  - id: app_c
+    name: App C
+    tags:
+      - name: env
+        values: [prod]
+      - name: status
+        values: [decom]
 EOT
 }
 
@@ -60,6 +68,11 @@ data "splunkconfig_app_ids" "filtered" {
 	require_tag {
 		name   = "env"
 		values = ["prod"]
+	}
+
+    exclude_tag {
+		name   = "status"
+		values = ["decom"]
 	}
 }
 `
