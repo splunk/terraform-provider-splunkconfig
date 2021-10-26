@@ -1,3 +1,10 @@
+## 1.5.0 (October 26, 2021)
+
+FEATURES:
+
+* **Data Source Enhancement**: `splunkconfig_lookup_attributes` implements `row_number_field`
+* **Data Source Enhancement**: `splunkconfig_app_ids` implements `exclude_tag`
+
 ## 1.4.0 (October 19, 2021)
 
 FEATURES:
@@ -23,7 +30,7 @@ FIXES:
 FEATURES:
 
 * **Schema Change**: `Apps` can have tags
-* **Data Source Enhancement**: `splunkconfig_app_ids` implements `require_tags`
+* **Data Source Enhancement**: `splunkconfig_app_ids` implements `require_tag`
 
 ## 1.2.0 (September 3, 2021)
 
