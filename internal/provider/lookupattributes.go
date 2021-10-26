@@ -16,6 +16,7 @@ package provider
 
 import (
 	"context"
+	"strconv"
 	"terraform-provider-splunkconfig/internal/splunkconfig/config"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -23,9 +24,10 @@ import (
 )
 
 const (
-	lookupAttributesLookupNameKey = "lookup_name"
-	lookupAttributesFieldNamesKey = "field_names"
-	lookupAttributesRowsKey       = "rows"
+	lookupAttributesLookupNameKey     = "lookup_name"
+	lookupAttributesFieldNamesKey     = "field_names"
+	lookupAttributesRowsKey           = "rows"
+	lookupAttributesRowNumberFieldKey = "row_number_field"
 )
 
 func resourceLookupAttributes() *schema.Resource {
@@ -50,6 +52,11 @@ func resourceLookupAttributes() *schema.Resource {
 				Computed:    true,
 				Elem:        &schema.Schema{Type: schema.TypeMap},
 			},
+			lookupAttributesRowNumberFieldKey: {
+				Description: "Name of field to hold the row number. If not set, no field will be created for row numbers.",
+				Type:        schema.TypeString,
+				Optional:    true,
+			},
 		},
 	}
 }
@@ -58,6 +65,7 @@ func resourceLookupAttributesRead(ctx context.Context, d *schema.ResourceData, m
 	suite := meta.(config.Suite)
 
 	lookupName := d.Get(lookupAttributesLookupNameKey).(string)
+	rowNumberField := d.Get(lookupAttributesRowNumberFieldKey).(string)
 
 	d.SetId(lookupName)
 
@@ -68,6 +76,9 @@ func resourceLookupAttributesRead(ctx context.Context, d *schema.ResourceData, m
 
 	// fields
 	fieldNames := lookup.Fields.FieldNames()
+	if rowNumberField != "" {
+		fieldNames = append([]string{rowNumberField}, fieldNames...)
+	}
 
 	if err := d.Set(lookupAttributesFieldNamesKey, fieldNames); err != nil {
 		return diag.FromErr(err)
@@ -78,6 +89,10 @@ func resourceLookupAttributesRead(ctx context.Context, d *schema.ResourceData, m
 
 	for i, row := range lookup.Rows {
 		rows[i] = map[string]string(row.Values)
+		if rowNumberField != "" {
+			// i is zero-indexed, but row numbers should probably be one-indexed, so adjust before formatting i
+			rows[i][rowNumberField] = strconv.FormatInt(int64(i+1), 10)
+		}
 	}
 
 	if err := d.Set(lookupAttributesRowsKey, rows); err != nil {
