@@ -117,7 +117,7 @@ func New(version string) func() *schema.Provider {
 
 			// resources schema
 			ResourcesMap: map[string]*schema.Resource{
-				appPackageResourceName: resourceAppFile(),
+				appPackageResourceName: resourceAppPackage(),
 			},
 		}
 

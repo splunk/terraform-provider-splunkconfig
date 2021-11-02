@@ -35,7 +35,7 @@ const (
 	appPackageFileContentKey      = "content"
 )
 
-func resourceAppFile() *schema.Resource {
+func resourceAppPackage() *schema.Resource {
 	return &schema.Resource{
 		Description:   "Create a tarball for an app. Generated app.conf's version will be automatically incremented when app content changes.",
 		CustomizeDiff: resourceAppPackageCustomDiff,
