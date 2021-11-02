@@ -242,3 +242,18 @@ func (suite Suite) ExtrapolatedApps() (Apps, error) {
 
 	return extrapolatedApps, nil
 }
+
+// ExtrapolatedAppWithId returns the extrapolated App with the given ID.
+func (suite Suite) ExtrapolatedAppWithId(appId string) (App, error) {
+	apps, err := suite.ExtrapolatedApps()
+	if err != nil {
+		return App{}, fmt.Errorf("unable to extrapolate apps: %s", err)
+	}
+
+	app, ok := apps.WithID(appId)
+	if !ok {
+		return App{}, fmt.Errorf("unable to find app with ID %q", appId)
+	}
+
+	return app, nil
+}

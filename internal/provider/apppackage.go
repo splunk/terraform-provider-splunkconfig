@@ -96,31 +96,16 @@ func resourceAppPackage() *schema.Resource {
 	}
 }
 
-// resourceAppPackageGetApp returns the given App from an appID. It returns an error if one was encountered.
-func resourceAppPackageGetApp(appID string, meta interface{}) (config.App, error) {
-	suite := meta.(config.Suite)
-
-	apps, err := suite.ExtrapolatedApps()
-	if err != nil {
-		return config.App{}, fmt.Errorf("resourceAppPackageGetApp unable to extrapolate apps: %s", err)
-	}
-
-	app, ok := apps.WithID(appID)
-	if !ok {
-		return config.App{}, fmt.Errorf("resourceAppPackageGetApp unable to find app with ID %q", appID)
-	}
-
-	return app, nil
-}
-
 // resourceAppPackageRead writes the package tarball at the specified location. It is also called for the "create"
 // and "update" contexts, because we want to always write the tarball for the app to be used by other downstream
 // resources.
 func resourceAppPackageRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	suite := meta.(config.Suite)
+
 	appID := d.Get(appPackageAppIDKey).(string)
 	d.SetId(appID)
 
-	app, err := resourceAppPackageGetApp(d.Id(), meta)
+	app, err := suite.ExtrapolatedAppWithId(d.Id())
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("resourceAppPackageRead error: %s", err))
 	}
@@ -164,10 +149,12 @@ func resourceAppPackageFileContents(app config.App) []map[string]string {
 // resourceAppPackageCustomDiff calculates and sets all attributes for the resource. This functionality is performed
 // as a CustomizeDiff function to enable seeing the calculated views in the terraform plan diff *prior* to the apply.
 func resourceAppPackageCustomDiff(ctx context.Context, d *schema.ResourceDiff, meta interface{}) error {
+	suite := meta.(config.Suite)
+
 	// CustomizeDiff is called before CreateContext, so we can't use d.Id() here
 	appID := d.Get(appPackageAppIDKey).(string)
 
-	app, err := resourceAppPackageGetApp(appID, meta)
+	app, err := suite.ExtrapolatedAppWithId(appID)
 	if err != nil {
 		return fmt.Errorf("diff calculation error: %s", err)
 	}
