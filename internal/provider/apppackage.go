@@ -39,10 +39,10 @@ func resourceAppFile() *schema.Resource {
 	return &schema.Resource{
 		Description:   "Create a tarball for an app. Generated app.conf's version will be automatically incremented when app content changes.",
 		CustomizeDiff: resourceAppPackageCustomDiff,
-		CreateContext: resourceAppPackageCreate,
 		// create/read/update end up doing the same work, so they use the same function
-		ReadContext:   resourceAppPackageCreate,
-		UpdateContext: resourceAppPackageCreate,
+		CreateContext: resourceAppPackageRead,
+		ReadContext:   resourceAppPackageRead,
+		UpdateContext: resourceAppPackageRead,
 		DeleteContext: resourceAppPackageDelete,
 		Schema: map[string]*schema.Schema{
 			appPackageAppIDKey: {
@@ -113,16 +113,16 @@ func resourceAppPackageGetApp(appID string, meta interface{}) (config.App, error
 	return app, nil
 }
 
-// resourceAppPackageCreate writes the package tarball at the specified location. It is also called for the "read"
+// resourceAppPackageRead writes the package tarball at the specified location. It is also called for the "create"
 // and "update" contexts, because we want to always write the tarball for the app to be used by other downstream
 // resources.
-func resourceAppPackageCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceAppPackageRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	appID := d.Get(appPackageAppIDKey).(string)
 	d.SetId(appID)
 
 	app, err := resourceAppPackageGetApp(d.Id(), meta)
 	if err != nil {
-		return diag.FromErr(fmt.Errorf("resourceAppPackageCreate error: %s", err))
+		return diag.FromErr(fmt.Errorf("resourceAppPackageRead error: %s", err))
 	}
 
 	app = app.PlusPatchCount(int64(d.Get(appPackagePatchCountKey).(int)))
