@@ -82,19 +82,19 @@ func New(version string) func() *schema.Provider {
 		p := &schema.Provider{
 			// provider schema
 			Schema: map[string]*schema.Schema{
-				suiteConfigYMLKey: &schema.Schema{
+				suiteConfigYMLKey: {
 					Type:          schema.TypeString,
 					Optional:      true,
 					ConflictsWith: []string{suiteConfigFileKey, suiteConfigPathKey},
 					Description:   fmt.Sprintf("YAML content containing the abstracted configuration. Exactly one of `%s`, `%s`, or `%s` must be set.", suiteConfigYMLKey, suiteConfigFileKey, suiteConfigPathKey),
 				},
-				suiteConfigFileKey: &schema.Schema{
+				suiteConfigFileKey: {
 					Type:          schema.TypeString,
 					Optional:      true,
 					ConflictsWith: []string{suiteConfigYMLKey, suiteConfigPathKey},
 					Description:   fmt.Sprintf("Full path to YAML file containing the abstracted configuration. Exactly one of `%s`, `%s`, or `%s` must be set.", suiteConfigYMLKey, suiteConfigFileKey, suiteConfigPathKey),
 				},
-				suiteConfigPathKey: &schema.Schema{
+				suiteConfigPathKey: {
 					Type:          schema.TypeString,
 					Optional:      true,
 					ConflictsWith: []string{suiteConfigYMLKey, suiteConfigFileKey},
