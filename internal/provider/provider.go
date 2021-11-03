@@ -114,6 +114,7 @@ func New(version string) func() *schema.Provider {
 				lookupAttributesResourceName:    resourceLookupAttributes(),
 				appIdsResourceName:              resourceAppIds(),
 				appAttributesResourceName:       resourceAppAttributes(),
+				appPackageResourceName:          dataAppPackage(),
 			},
 
 			// resources schema
