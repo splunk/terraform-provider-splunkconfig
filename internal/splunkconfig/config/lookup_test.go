@@ -225,7 +225,6 @@ func TestLookup_stanza(t *testing.T) {
 			Stanza{
 				Name: "test_lookup",
 				Values: StanzaValues{
-					"filename":      "test_lookup.csv",
 					"external_type": "kvstore",
 					"fields_list":   "field_1, field_2",
 				},

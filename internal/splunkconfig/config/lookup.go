@@ -147,8 +147,11 @@ func (lookup Lookup) TemplatedContent() string {
 
 // stanzaValues returns the StanzaValues for the Lookup.
 func (lookup Lookup) stanzaValues() StanzaValues {
-	stanzaValues := StanzaValues{
-		"filename": lookup.filename(),
+	stanzaValues := StanzaValues{}
+
+	// filename is unused when external_type or external_cmd is set
+	if lookup.ExternalType == "" && lookup.ExternalCommand == "" {
+		stanzaValues["filename"] = lookup.filename()
 	}
 
 	if lookup.ExternalType != "" {
