@@ -16,24 +16,25 @@ package provider
 
 import (
 	"context"
-	"terraform-provider-splunkconfig/internal/splunkconfig/config"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"terraform-provider-splunkconfig/internal/splunkconfig/config"
 )
 
 const (
-	userNamesUserNamesKey = "user_names"
-	userNamesIDValue      = "splunkconfig_user_names"
+	samlGroupNamesSamlGroupNamesKey = "saml_group_names"
+	samlGroupNamesIDValue           = "splunkconfig_saml_group_names"
 )
 
-func resourceUserNames() *schema.Resource {
+func dataSAMLGroupNames() *schema.Resource {
 	return &schema.Resource{
-		Description: "Return User Names from the Splunk Configuration",
-		ReadContext: resourceUserNamesRead,
+		Description: "Return SAML Group Names from the Splunk Configuration",
+		ReadContext: resourceSAMLGroupNamesRead,
 		Schema: map[string]*schema.Schema{
-			userNamesUserNamesKey: {
-				Description: "List of User Names in the Splunk Configuration",
+			samlGroupNamesSamlGroupNamesKey: {
+				Description: "List of SAML Group Names in the Splunk Configuration",
 				Type:        schema.TypeList,
 				Computed:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
@@ -42,11 +43,11 @@ func resourceUserNames() *schema.Resource {
 	}
 }
 
-func resourceUserNamesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceSAMLGroupNamesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	suite := meta.(config.Suite)
 
-	d.SetId(userNamesIDValue)
-	if err := d.Set(userNamesUserNamesKey, suite.Users.Names()); err != nil {
+	d.SetId(samlGroupNamesIDValue)
+	if err := d.Set(samlGroupNamesSamlGroupNamesKey, suite.ExtrapolatedSAMLGroups().SAMLGroupNames()); err != nil {
 		return diag.FromErr(err)
 	}
 

@@ -32,7 +32,7 @@ const (
 	userAttributesUserRolesKey           = "roles"
 )
 
-func resourceUserAttributes() *schema.Resource {
+func dataUserAttributes() *schema.Resource {
 	return &schema.Resource{
 		Description: "Get attributes for a specific user",
 		ReadContext: resourceUserAttributesRead,

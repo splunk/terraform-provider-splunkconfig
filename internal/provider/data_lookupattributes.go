@@ -30,7 +30,7 @@ const (
 	lookupAttributesRowNumberFieldKey = "row_number_field"
 )
 
-func resourceLookupAttributes() *schema.Resource {
+func dataLookupAttributes() *schema.Resource {
 	return &schema.Resource{
 		Description: "Get fields and rows for a specific lookup",
 		ReadContext: resourceLookupAttributesRead,
