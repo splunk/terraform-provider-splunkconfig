@@ -15,7 +15,11 @@
 package config
 
 import (
+	"crypto/sha1"
 	"fmt"
+	"io"
+	"io/ioutil"
+	"os"
 	"testing"
 )
 
@@ -204,4 +208,41 @@ func TestApp_PlusPatchCount(t *testing.T) {
 
 		testEqual(gotApp, test.wantApp, message, t)
 	}
+}
+
+func TestApp_consistentTarball(t *testing.T) {
+	app := App{Name: "Test App", ID: "test_app"}
+
+	shaA := appSha1(app, t)
+	shaB := appSha1(app, t)
+
+	if shaA != shaB {
+		t.Error("app created with differing SHA values")
+	}
+}
+
+func appSha1(app App, t *testing.T) string {
+	tempdir, err := ioutil.TempDir("", "")
+	if err != nil {
+		t.Fatalf("unable to create tempdir: %s", err)
+	}
+	defer os.RemoveAll(tempdir)
+
+	tgzFile, err := app.WriteTar(tempdir)
+	if err != nil {
+		t.Fatalf("unable to create tgzFile: %s", err)
+	}
+
+	data, err := os.Open(tgzFile)
+	if err != nil {
+		t.Fatalf("unable to open tgzFile: %s", err)
+	}
+	defer data.Close()
+
+	hash := sha1.New()
+	if _, err := io.Copy(hash, data); err != nil {
+		t.Fatalf("unable to calculate app SHA: %s", err)
+	}
+
+	return fmt.Sprintf("%x", hash.Sum(nil))
 }
