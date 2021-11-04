@@ -1,3 +1,11 @@
+## 1.6.0 (TBD)
+
+FEATURES:
+
+* **New Data Source**: `splunkconfig_app_package`
+* **New Resource**: `splunkconfig_app_auto_version`
+* **Deprecated Resource**: `splunkconfig_app_package`
+
 ## 1.5.0 (October 26, 2021)
 
 FEATURES:
