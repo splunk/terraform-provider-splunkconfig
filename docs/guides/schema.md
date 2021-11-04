@@ -129,6 +129,9 @@ names. As per the `authorize.conf` specification:
 - **name** (String, required) Lookup name. The resulting CSV file will be `<name>.csv`.
 - **fields** (List of Object) Fields included in the lookup. (see [schema for lookup_field](#lookup_field))
 - **rows** (List of Object) Rows included in the lookup. (see [schema for lookup_row](#lookup_row))
+- **external_cmd** (String, optional) External command for the lookup.
+- **external_type** (String, optional) Type of external lookup.
+- **collection** (String, optional) Name of collection to use when `external_type` is `kvstore`.
 
 <a id="lookup_field"></a>
 ## Schema for `lookup_field`
