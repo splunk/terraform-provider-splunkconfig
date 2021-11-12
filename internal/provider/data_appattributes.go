@@ -35,7 +35,7 @@ const (
 	appAttributesAclSharingKey      = "acl_sharing"
 )
 
-func resourceAppAttributes() *schema.Resource {
+func dataAppAttributes() *schema.Resource {
 	return &schema.Resource{
 		Description: "Get attributes for a specific app",
 		ReadContext: resourceAppAttributesRead,

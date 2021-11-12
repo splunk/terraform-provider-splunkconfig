@@ -36,7 +36,7 @@ const (
 	roleAttributesSearchTimeWinKey               = "search_time_win"
 )
 
-func resourceRoleAttributes() *schema.Resource {
+func dataRoleAttributes() *schema.Resource {
 	return &schema.Resource{
 		Description: "Get attributes for a specific role",
 		ReadContext: resourceRoleAttributesRead,

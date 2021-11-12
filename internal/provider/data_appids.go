@@ -29,7 +29,7 @@ const (
 	appIdsIdValue       = "splunkconfig_app_ids"
 )
 
-func resourceAppIds() *schema.Resource {
+func dataAppIds() *schema.Resource {
 	return &schema.Resource{
 		Description: "Return App IDs from the Splunk Configuration",
 		ReadContext: resourceAppIdsRead,

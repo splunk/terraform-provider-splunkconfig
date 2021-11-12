@@ -24,19 +24,21 @@ import (
 )
 
 const (
-	suiteConfigYMLKey               = "configuration"
-	suiteConfigFileKey              = "configuration_file"
-	suiteConfigPathKey              = "configuration_path"
-	roleNamesResourceName           = "splunkconfig_role_names"
-	roleAttributesResourceName      = "splunkconfig_role_attributes"
-	samlGroupNamesResourceName      = "splunkconfig_saml_group_names"
-	samlGroupAttributesResourceName = "splunkconfig_saml_group_attributes"
-	appPackageResourceName          = "splunkconfig_app_package"
-	appIdsResourceName              = "splunkconfig_app_ids"
-	appAttributesResourceName       = "splunkconfig_app_attributes"
-	userNamesResourceName           = "splunkconfig_user_names"
-	userAttributesResourceName      = "splunkconfig_user_attributes"
-	lookupAttributesResourceName    = "splunkconfig_lookup_attributes"
+	suiteConfigYMLKey           = "configuration"
+	suiteConfigFileKey          = "configuration_file"
+	suiteConfigPathKey          = "configuration_path"
+	roleNamesDataName           = "splunkconfig_role_names"
+	roleAttributesdataName      = "splunkconfig_role_attributes"
+	samlGroupNamesDataName      = "splunkconfig_saml_group_names"
+	samlGroupAttributesDataName = "splunkconfig_saml_group_attributes"
+	appPackageDataName          = "splunkconfig_app_package"
+	appPackageResourceName      = "splunkconfig_app_package"
+	appAutoVersionResourceName  = "splunkconfig_app_auto_version"
+	appIdsDataName              = "splunkconfig_app_ids"
+	appAttributesDataName       = "splunkconfig_app_attributes"
+	userNamesDataName           = "splunkconfig_user_names"
+	userAttributesdataName      = "splunkconfig_user_attributes"
+	lookupAttributesDataName    = "splunkconfig_lookup_attributes"
 )
 
 func configure(version string, p *schema.Provider) func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
@@ -82,19 +84,19 @@ func New(version string) func() *schema.Provider {
 		p := &schema.Provider{
 			// provider schema
 			Schema: map[string]*schema.Schema{
-				suiteConfigYMLKey: &schema.Schema{
+				suiteConfigYMLKey: {
 					Type:          schema.TypeString,
 					Optional:      true,
 					ConflictsWith: []string{suiteConfigFileKey, suiteConfigPathKey},
 					Description:   fmt.Sprintf("YAML content containing the abstracted configuration. Exactly one of `%s`, `%s`, or `%s` must be set.", suiteConfigYMLKey, suiteConfigFileKey, suiteConfigPathKey),
 				},
-				suiteConfigFileKey: &schema.Schema{
+				suiteConfigFileKey: {
 					Type:          schema.TypeString,
 					Optional:      true,
 					ConflictsWith: []string{suiteConfigYMLKey, suiteConfigPathKey},
 					Description:   fmt.Sprintf("Full path to YAML file containing the abstracted configuration. Exactly one of `%s`, `%s`, or `%s` must be set.", suiteConfigYMLKey, suiteConfigFileKey, suiteConfigPathKey),
 				},
-				suiteConfigPathKey: &schema.Schema{
+				suiteConfigPathKey: {
 					Type:          schema.TypeString,
 					Optional:      true,
 					ConflictsWith: []string{suiteConfigYMLKey, suiteConfigFileKey},
@@ -104,20 +106,22 @@ func New(version string) func() *schema.Provider {
 
 			// data sources schema
 			DataSourcesMap: map[string]*schema.Resource{
-				roleNamesResourceName:           resourceRoleNames(),
-				roleAttributesResourceName:      resourceRoleAttributes(),
-				samlGroupNamesResourceName:      resourceSAMLGroupNames(),
-				samlGroupAttributesResourceName: resourceSAMLGroupAttributes(),
-				userNamesResourceName:           resourceUserNames(),
-				userAttributesResourceName:      resourceUserAttributes(),
-				lookupAttributesResourceName:    resourceLookupAttributes(),
-				appIdsResourceName:              resourceAppIds(),
-				appAttributesResourceName:       resourceAppAttributes(),
+				roleNamesDataName:           dataRoleNames(),
+				roleAttributesdataName:      dataRoleAttributes(),
+				samlGroupNamesDataName:      dataSAMLGroupNames(),
+				samlGroupAttributesDataName: dataSAMLGroupAttributes(),
+				userNamesDataName:           dataUserNames(),
+				userAttributesdataName:      dataUserAttributes(),
+				lookupAttributesDataName:    dataLookupAttributes(),
+				appIdsDataName:              dataAppIds(),
+				appAttributesDataName:       dataAppAttributes(),
+				appPackageDataName:          dataAppPackage(),
 			},
 
 			// resources schema
 			ResourcesMap: map[string]*schema.Resource{
-				appPackageResourceName: resourceAppFile(),
+				appPackageResourceName:     resourceAppPackage(),
+				appAutoVersionResourceName: resourceAppAutoVersion(),
 			},
 		}
 

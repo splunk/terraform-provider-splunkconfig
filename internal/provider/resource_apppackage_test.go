@@ -27,7 +27,7 @@ func TestAccResourceAppPackage(t *testing.T) {
 		Steps: []resource.TestStep{
 			// initial creation
 			{
-				Config: testAccDataSourceAppFileConfig,
+				Config: testAccResourceAppFileConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "base_version", "1.0.0"),
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "effective_version", "1.0.0"),
@@ -45,7 +45,7 @@ func TestAccResourceAppPackage(t *testing.T) {
 
 			// perform updates that result in a bumped patch count
 			{
-				Config: testAccDataSourceAppFileConfigPatchIncrease,
+				Config: testAccResourceAppFileConfigPatchIncrease,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "base_version", "1.0.0"),
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "effective_version", "1.0.1"),
@@ -59,7 +59,7 @@ func TestAccResourceAppPackage(t *testing.T) {
 			// perform another update that result in a bumped patch count, to ensure the templated version matches the
 			// expected patch count (ie, patch counts aren't cumulative additions)
 			{
-				Config: testAccDataSourceAppFileConfigPatchIncreaseAgain,
+				Config: testAccResourceAppFileConfigPatchIncreaseAgain,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "base_version", "1.0.0"),
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "effective_version", "1.0.2"),
@@ -72,7 +72,7 @@ func TestAccResourceAppPackage(t *testing.T) {
 
 			// perform updates that result in a reset patch count
 			{
-				Config: testAccDataSourceAppFileConfigPatchReset,
+				Config: testAccResourceAppFileConfigPatchReset,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "base_version", "1.1.0"),
 					resource.TestCheckResourceAttr("splunkconfig_app_package.indexes", "effective_version", "1.1.0"),
@@ -85,14 +85,14 @@ func TestAccResourceAppPackage(t *testing.T) {
 
 			// perform updates that result in a lowered effective version, which is disallowed
 			{
-				Config:      testAccDataSourceAppFileConfigPatchResetInvalid,
+				Config:      testAccResourceAppFileConfigPatchResetInvalid,
 				ExpectError: regexp.MustCompile("not greater than old effective version"),
 			},
 		},
 	})
 }
 
-const testAccDataSourceAppFileConfig = `
+const testAccResourceAppFileConfig = `
 provider "splunkconfig" {
 	configuration = <<EOT
 apps:
@@ -114,7 +114,7 @@ resource "splunkconfig_app_package" "indexes" {
 }
 `
 
-const testAccDataSourceAppFileConfigPatchIncrease = `
+const testAccResourceAppFileConfigPatchIncrease = `
 provider "splunkconfig" {
 	configuration = <<EOT
 apps:
@@ -134,7 +134,7 @@ resource "splunkconfig_app_package" "indexes" {
 }
 `
 
-const testAccDataSourceAppFileConfigPatchIncreaseAgain = `
+const testAccResourceAppFileConfigPatchIncreaseAgain = `
 provider "splunkconfig" {
 	configuration = <<EOT
 apps:
@@ -154,7 +154,7 @@ resource "splunkconfig_app_package" "indexes" {
 }
 `
 
-const testAccDataSourceAppFileConfigPatchReset = `
+const testAccResourceAppFileConfigPatchReset = `
 provider "splunkconfig" {
 	configuration = <<EOT
 apps:
@@ -174,7 +174,7 @@ resource "splunkconfig_app_package" "indexes" {
 }
 `
 
-const testAccDataSourceAppFileConfigPatchResetInvalid = `
+const testAccResourceAppFileConfigPatchResetInvalid = `
 provider "splunkconfig" {
 	configuration = <<EOT
 apps:

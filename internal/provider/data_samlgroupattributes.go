@@ -24,17 +24,22 @@ import (
 )
 
 const (
-	samlGroupNamesSamlGroupNamesKey = "saml_group_names"
-	samlGroupNamesIDValue           = "splunkconfig_saml_group_names"
+	samlGroupNamesSamlGroupNameKey = "saml_group_name"
+	samlGroupNamesRolesKey         = "roles"
 )
 
-func resourceSAMLGroupNames() *schema.Resource {
+func dataSAMLGroupAttributes() *schema.Resource {
 	return &schema.Resource{
-		Description: "Return SAML Group Names from the Splunk Configuration",
-		ReadContext: resourceSAMLGroupNamesRead,
+		Description: "Get attributes for a specific SAML group",
+		ReadContext: resourceSAMLGroupAttributesRead,
 		Schema: map[string]*schema.Schema{
-			samlGroupNamesSamlGroupNamesKey: {
-				Description: "List of SAML Group Names in the Splunk Configuration",
+			samlGroupNamesSamlGroupNameKey: {
+				Description: "Name of the SAML group",
+				Type:        schema.TypeString,
+				Required:    true,
+			},
+			samlGroupNamesRolesKey: {
+				Description: "List of roles associated with the SAML group",
 				Type:        schema.TypeList,
 				Computed:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},
@@ -43,12 +48,22 @@ func resourceSAMLGroupNames() *schema.Resource {
 	}
 }
 
-func resourceSAMLGroupNamesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+func resourceSAMLGroupAttributesRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	suite := meta.(config.Suite)
 
-	d.SetId(samlGroupNamesIDValue)
-	if err := d.Set(samlGroupNamesSamlGroupNamesKey, suite.ExtrapolatedSAMLGroups().SAMLGroupNames()); err != nil {
-		return diag.FromErr(err)
+	samlGroupName := d.Get(samlGroupNamesSamlGroupNameKey).(string)
+
+	d.SetId(samlGroupName)
+
+	samlGroup, ok := suite.ExtrapolatedSAMLGroups().WithSAMLGroupName(samlGroupName)
+	if !ok {
+		return diag.Errorf("Unable to find SAML group with name %q", samlGroupName)
+	}
+
+	if len(samlGroup.Roles) > 0 {
+		if err := d.Set(samlGroupNamesRolesKey, samlGroup.Roles); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return diag.Diagnostics{}
