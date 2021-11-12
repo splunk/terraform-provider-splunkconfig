@@ -1,4 +1,4 @@
-## 1.6.0 (TBD)
+## 1.6.0 (November 12, 2021)
 
 FEATURES:
 
