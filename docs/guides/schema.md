@@ -122,6 +122,7 @@ names. As per the `authorize.conf` specification:
 - **homePath** (String) homePath of the index. Defaults to `$SPLUNK_DB/<index name>/db`.
 - **coldPath** (String) coldPath of the index. Defaults to `$SPLUNK_DB/<index name>/colddb`.
 - **thawedPath** (String) thawedPath of the index. Defaults to `$SPLUNK_DB/<index name>/thaweddb`.
+- **datatype** (String, optional) The datatype of the index. Permitted values are `event`, and `metric`.
 
 <a id="lookup"></a>
 ## Schema for `lookup`
