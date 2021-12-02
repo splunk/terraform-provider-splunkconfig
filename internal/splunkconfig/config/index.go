@@ -25,6 +25,7 @@ type Index struct {
 	HomePath           IndexPath  `yaml:"homePath"`
 	ColdPath           IndexPath  `yaml:"coldPath"`
 	ThawedPath         IndexPath  `yaml:"thawedPath"`
+	DataType           IndexDataType
 }
 
 // validate returns an error if the Index is invalid.
@@ -34,6 +35,10 @@ func (index Index) validate() error {
 	}
 
 	if err := index.SearchRolesAllowed.validate(); err != nil {
+		return err
+	}
+
+	if err := index.DataType.validate(); err != nil {
 		return err
 	}
 
@@ -87,6 +92,10 @@ func (index Index) stanzaValues() StanzaValues {
 
 	if index.FrozenTime.InSeconds() != 0 {
 		stanzaValues["frozenTimePeriodInSecs"] = fmt.Sprintf("%d", index.FrozenTime.InSeconds())
+	}
+
+	if index.DataType != INDEXDATATYPEUNDEF {
+		stanzaValues["datatype"] = string(index.DataType)
 	}
 
 	// defaultIndexPath will return a valid IndexPath, so we throw away the ok return value, expecting it will never be false

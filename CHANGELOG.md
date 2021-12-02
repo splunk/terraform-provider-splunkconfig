@@ -1,3 +1,9 @@
+## 1.6.1 (December 2, 2021)
+
+FEATURES:
+
+* **Schema Change**: Index has `datatype`.
+
 ## 1.6.0 (November 12, 2021)
 
 FEATURES:

@@ -115,6 +115,18 @@ func TestIndex_stanza(t *testing.T) {
 				},
 			},
 		},
+		{
+			Index{Name: "index_a", DataType: "event"},
+			Stanza{
+				Name: "index_a",
+				Values: StanzaValues{
+					"homePath":   "$SPLUNK_DB/index_a/db",
+					"coldPath":   "$SPLUNK_DB/index_a/colddb",
+					"datatype":   "event",
+					"thawedPath": "$SPLUNK_DB/index_a/thaweddb",
+				},
+			},
+		},
 	}
 
 	tests.test(t)
