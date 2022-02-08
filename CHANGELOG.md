@@ -1,3 +1,10 @@
+## 1.7.0 (February 8, 2022)
+
+FEATURES:
+
+* **New Data Source**: `splunkconfig_index_names`
+* **New Data Source**: `splunkconfig_index_attributes`
+
 ## 1.6.1 (December 2, 2021)
 
 FEATURES:
