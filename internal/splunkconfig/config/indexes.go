@@ -62,8 +62,8 @@ func (indexes Indexes) indexesSearchableByRoleName(roleName RoleName) Indexes {
 	return searchableIndexes
 }
 
-// indexNames returns IndexNames for Indexes.
-func (indexes Indexes) indexNames() IndexNames {
+// IndexNames returns IndexNames for Indexes.
+func (indexes Indexes) IndexNames() IndexNames {
 	uids := uidsOfUIDers(indexes)
 	sort.Strings(uids)
 
@@ -85,7 +85,7 @@ func (indexes Indexes) WithIndexName(indexName IndexName) (found Index, ok bool)
 
 // indexNamesSearchableByRoleName returns IndexNames that are searchable by the provided RoleName.
 func (indexes Indexes) indexNamesSearchableByRoleName(roleName RoleName) IndexNames {
-	return indexes.indexesSearchableByRoleName(roleName).indexNames()
+	return indexes.indexesSearchableByRoleName(roleName).IndexNames()
 }
 
 // indexNamesSearchableByRole returns IndexNames that are searchable by the provided Role.
@@ -105,7 +105,7 @@ func (indexes Indexes) stanzas() Stanzas {
 	stanzas := make(Stanzas, len(indexes))
 
 	// use indexes.indexNames() to force sorting
-	for i, indexName := range indexes.indexNames() {
+	for i, indexName := range indexes.IndexNames() {
 		found, _ := indexes.WithIndexName(indexName)
 		stanzas[i] = found.stanza()
 	}
