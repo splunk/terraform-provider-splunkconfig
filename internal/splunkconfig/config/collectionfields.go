@@ -19,7 +19,7 @@ type CollectionFields map[string]CollectionFieldType
 
 // validate returns an error if CollectionFields is invalid. It is invalid if
 // any member has invalid:
-//   * CollectionFieldType
+//   - CollectionFieldType
 func (collectionFields CollectionFields) validate() error {
 	for _, fieldType := range collectionFields {
 		if err := fieldType.validate(); err != nil {
