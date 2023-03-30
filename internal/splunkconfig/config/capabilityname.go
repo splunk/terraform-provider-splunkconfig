@@ -24,9 +24,9 @@ type CapabilityName string
 
 // validate returns an error if the CapabilityName is invalid. Splunk's documentation defines valid capability names:
 //
-// Only alphanumeric characters and "_" (underscore) are allowed in capability names.
+// Only alphanumeric characters, "_" (underscore), and "-" (dash) are allowed in capability names.
 func (capabilityName CapabilityName) validate() error {
-	validRegex := regexp.MustCompile("^[a-z0-9_-]+$")
+	validRegex := regexp.MustCompile("^[a-zA-Z0-9_-]+$")
 
 	if !validRegex.MatchString(string(capabilityName)) {
 		return fmt.Errorf("invalid CapabilityName %s, may only consist of alphanumeric characters, underscores, and dashes", capabilityName)
