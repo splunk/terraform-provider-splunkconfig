@@ -29,7 +29,7 @@ func (capabilityName CapabilityName) validate() error {
 	validRegex := regexp.MustCompile("^[a-z0-9_-]+$")
 
 	if !validRegex.MatchString(string(capabilityName)) {
-		return fmt.Errorf("invalid CapabilityName %s, may only consist of lowercase letters, numbers, underscores, and dashes", capabilityName)
+		return fmt.Errorf("invalid CapabilityName %s, may only consist of alphanumeric characters, underscores, and dashes", capabilityName)
 	}
 
 	return nil
