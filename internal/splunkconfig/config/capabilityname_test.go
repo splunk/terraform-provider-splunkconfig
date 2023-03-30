@@ -20,7 +20,7 @@ func TestCapability_validate(t *testing.T) {
 	tests := validatorTestCases{
 		// empty name is invalid
 		{CapabilityName(""), true},
-		// valid name contains lowercase, uppercase, number, underscore
+		// valid name contains lowercase, uppercase, number, underscore, dash
 		{CapabilityName("aA_1-"), false},
 	}
 
