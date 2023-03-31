@@ -33,4 +33,4 @@ jobs:
         uses: golangci/golangci-lint-action@v2
 
       - name: fmt
-        run: gofmt -l . && test -z $(gofmt -l .)
+        run: go fmt ./... && git diff && test -z "$(git status --porcelain)"

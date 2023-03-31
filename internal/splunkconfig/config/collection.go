@@ -26,8 +26,8 @@ type Collection struct {
 
 // validate returns an error if Collection is invalid. It is invalid if it
 // has invalid:
-//   * Name
-//   * Fields
+//   - Name
+//   - Fields
 func (collection Collection) validate() error {
 	if len(collection.Name) == 0 {
 		return fmt.Errorf("Collection name can not be empty")

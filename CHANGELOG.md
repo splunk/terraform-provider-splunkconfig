@@ -1,3 +1,9 @@
+## 1.7.1 (March 30, 2023)
+
+FEATURES:
+
+* **New Capability Validation**: Adding `-` as a valid character in capability names
+
 ## 1.7.0 (February 8, 2022)
 
 FEATURES:
