@@ -221,11 +221,7 @@ func TestApp_consistentTarball(t *testing.T) {
 }
 
 func appSha1(app App, t *testing.T) string {
-	tempdir, err := ioutil.TempDir("", "")
-	if err != nil {
-		t.Fatalf("unable to create tempdir: %s", err)
-	}
-	defer os.RemoveAll(tempdir)
+	tempdir := os.TempDir()
 
 	tgzFile, err := app.WriteTar(tempdir)
 	if err != nil {
