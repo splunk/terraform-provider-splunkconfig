@@ -1,13 +1,13 @@
 module terraform-provider-splunkconfig
- 
+
 go 1.19
- 
+
 require (
-	github.com/hashicorp/terraform-plugin-docs v0.14.1
+	github.com/hashicorp/terraform-plugin-docs v0.16.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.26.1
 	gopkg.in/yaml.v2 v2.4.0
 )
- 
+
 require (
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver/v3 v3.1.1 // indirect
