@@ -18,7 +18,6 @@ import (
 	"crypto/sha1"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"testing"
 )
