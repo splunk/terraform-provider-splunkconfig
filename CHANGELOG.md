@@ -1,3 +1,9 @@
+## 1.7.2 (April 3, 2023)
+
+FEATURES:
+
+* **Fixed release workflow to use newer version of Go**
+
 ## 1.7.1 (March 30, 2023)
 
 FEATURES:
