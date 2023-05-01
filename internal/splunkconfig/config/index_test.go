@@ -127,6 +127,21 @@ func TestIndex_stanza(t *testing.T) {
 				},
 			},
 		},
+		{
+			Index{Name: "index_a", EnableDDAA: true, StorageRetention: TimePeriod{Seconds: 400}, MaxStorageRetention: TimePeriod{Seconds: 800}, StorageProvider: "Glacier"},
+			Stanza{
+				Name: "index_a",
+				Values: StanzaValues{
+					"homePath":                               "$SPLUNK_DB/index_a/db",
+					"coldPath":                               "$SPLUNK_DB/index_a/colddb",
+					"thawedPath":                             "$SPLUNK_DB/index_a/thaweddb",
+					"archiver.enableDataArchive":             "true",
+					"archiver.coldStorageRetentionPeriod":    "400",
+					"archiver.maxDataArchiveRetentionPeriod": "800",
+					"arciver.coldStorageProvider":            "Glacier",
+				},
+			},
+		},
 	}
 
 	tests.test(t)
