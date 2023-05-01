@@ -30,6 +30,10 @@ func TestIndexArchiver_validate(t *testing.T) {
 			validator: Archiver("GCSArchive"),
 			wantError: false,
 		},
+		{
+			validator: Archiver("invalid archiver"),
+			wantError: true,
+		},
 	}
 
 	tests.test(t)
