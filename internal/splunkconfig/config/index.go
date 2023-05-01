@@ -109,7 +109,7 @@ func (index Index) stanzaValues() StanzaValues {
 
 	// Dynamic Data Active Archive settings
 	if index.StorageProvider != ARCHIVERUNDEF {
-		stanzaValues["arciver.coldStorageProvider"] = string(index.StorageProvider)
+		stanzaValues["archiver.coldStorageProvider"] = string(index.StorageProvider)
 	}
 	if index.StorageRetention.InSeconds() != 0 {
 		stanzaValues["archiver.coldStorageRetentionPeriod"] = fmt.Sprintf("%d", index.StorageRetention.InSeconds())
