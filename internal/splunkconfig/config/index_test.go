@@ -138,7 +138,7 @@ func TestIndex_stanza(t *testing.T) {
 					"archiver.enableDataArchive":             "true",
 					"archiver.coldStorageRetentionPeriod":    "3600",
 					"archiver.maxDataArchiveRetentionPeriod": "800",
-					"archiver.coldStorageProvider":            "Glacier",
+					"archiver.coldStorageProvider":           "Glacier",
 				},
 			},
 		},
