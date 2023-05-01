@@ -114,7 +114,7 @@ func (index Index) stanzaValues() StanzaValues {
 	if index.StorageRetention.InSeconds() != 0 {
 		stanzaValues["archiver.coldStorageRetentionPeriod"] = fmt.Sprintf("%d", index.StorageRetention.InSeconds())
 	}
-	if !index.EnableDDAA {
+	if index.EnableDDAA {
 		stanzaValues["archiver.enableDataArchive"] = fmt.Sprintf("%v", index.EnableDDAA)
 	}
 	if index.MaxStorageRetention.InSeconds() != 0 {
