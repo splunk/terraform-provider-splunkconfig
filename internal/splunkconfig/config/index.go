@@ -18,14 +18,18 @@ import "fmt"
 
 // Index represents a single Splunk index.
 type Index struct {
-	Name               IndexName
-	FrozenTime         TimePeriod `yaml:"frozenTimePeriod"`
-	SearchRolesAllowed RoleNames  `yaml:"srchRolesAllowed"`
-	LookupRows         LookupRows `yaml:"lookup_rows"`
-	HomePath           IndexPath  `yaml:"homePath"`
-	ColdPath           IndexPath  `yaml:"coldPath"`
-	ThawedPath         IndexPath  `yaml:"thawedPath"`
-	DataType           IndexDataType
+	Name                 IndexName
+	FrozenTime           TimePeriod     `yaml:"frozenTimePeriod"`
+	SearchRolesAllowed   RoleNames      `yaml:"srchRolesAllowed"`
+	LookupRows           LookupRows     `yaml:"lookup_rows"`
+	HomePath             IndexPath      `yaml:"homePath"`
+	ColdPath             IndexPath      `yaml:"coldPath"`
+	ThawedPath           IndexPath      `yaml:"thawedPath"`
+	DataType             IndexDataType
+	StorageProvider      Archiver       `yaml:"storageProvider"`
+	StorageRetention     Archiver       `yaml:"storageRetention"`
+	EnableDDAA           Archiver       `yaml:"enableDDAA"`
+	MaxStorageRetention  Archiver       `yaml:"maxStorageRetention"`
 }
 
 // validate returns an error if the Index is invalid.
@@ -103,6 +107,20 @@ func (index Index) stanzaValues() StanzaValues {
 	stanzaValues["coldPath"], _ = firstIndexPathString(index.HomePath, defaultIndexPath(index.Name, "colddb"))
 	stanzaValues["thawedPath"], _ = firstIndexPathString(index.HomePath, defaultIndexPath(index.Name, "thaweddb"))
 
+	// Dynamic Data Active Archive settings
+	if index.StorageProvider != ARCHIVERUNDEF {
+		stanzaValues["arciver.coldStorageProvider"] = string(index.StorageProvider)
+	}
+	if index.StorageRetention != 0 {
+		stanzaValues["archiver.coldStorageRetentionPeriod"] = fmt.Sprintf("%d", index.StorageRetention)
+	}
+	if index.EnableDDAA != 0 {
+		stanzaValues["archiver.enableDataArchive"] = fmt.Sprintf("%d", index.EnableDDAA)
+	}
+	if index.MaxStorageRetention.InSeconds() != 0 {
+		stanzaValues["archiver.maxDataArchiveRetentionPeriod"] = fmt.Sprintf("%d", index.MaxStorageRetention.InSeconds())
+	}
+	
 	return stanzaValues
 }
 
