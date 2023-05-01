@@ -20,13 +20,13 @@ import "fmt"
 type Archiver string
 
 const (
-	ARCHIVERUNDEF  Archiver = ""
-	ARCHIVERAWS    Archiver = "Glacier"
-	ARCHIVERGCP    Archiver = "GCSArchive"
+	ARCHIVERUNDEF Archiver = ""
+	ARCHIVERAWS   Archiver = "Glacier"
+	ARCHIVERGCP   Archiver = "GCSArchive"
 )
 
-// validate returns an error if Archiver is invalid. It is invalid if:
-// * it isn't one of the defined constants
+// validate returns an error if Archiver is invalid. It is invalid if
+// it isn't one of the defined constants
 func (archiver Archiver) validate() error {
 	switch archiver {
 	case ARCHIVERUNDEF, ARCHIVERAWS, ARCHIVERGCP:
