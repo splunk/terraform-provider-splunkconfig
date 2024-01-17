@@ -111,8 +111,9 @@ func (index Index) stanzaValues() StanzaValues {
 	if index.StorageProvider != ARCHIVERUNDEF {
 		stanzaValues["archiver.coldStorageProvider"] = string(index.StorageProvider)
 	}
-	if index.StorageRetention.InSeconds() != 0 {
-		stanzaValues["archiver.coldStorageRetentionPeriod"] = fmt.Sprintf("%d", index.StorageRetention.InSeconds())
+	//storage retention in days: https://docs.splunk.com/Documentation/Splunk/latest/Admin/indexesconf
+	if index.StorageRetention.InDays() != 0 {
+		stanzaValues["archiver.coldStorageRetentionPeriod"] = fmt.Sprintf("%d", index.StorageRetention.InDays())
 	}
 	if index.EnableDDAA {
 		stanzaValues["archiver.enableDataArchive"] = fmt.Sprintf("%v", index.EnableDDAA)
