@@ -18,18 +18,18 @@ import "fmt"
 
 // Index represents a single Splunk index.
 type Index struct {
-	Name                IndexName
-	FrozenTime          TimePeriod `yaml:"frozenTimePeriod"`
-	SearchRolesAllowed  RoleNames  `yaml:"srchRolesAllowed"`
-	LookupRows          LookupRows `yaml:"lookup_rows"`
-	HomePath            IndexPath  `yaml:"homePath"`
-	ColdPath            IndexPath  `yaml:"coldPath"`
-	ThawedPath          IndexPath  `yaml:"thawedPath"`
-	DataType            IndexDataType
-	StorageProvider     Archiver   `yaml:"storageProvider"`
-	StorageRetention    TimePeriod `yaml:"storageRetention"`
-	EnableDDAA          bool       `yaml:"enableDDAA"`
-	MaxStorageRetention TimePeriod `yaml:"maxStorageRetention"`
+	Name                          IndexName
+	FrozenTime                    TimePeriod `yaml:"frozenTimePeriod"`
+	SearchRolesAllowed            RoleNames  `yaml:"srchRolesAllowed"`
+	LookupRows                    LookupRows `yaml:"lookup_rows"`
+	HomePath                      IndexPath  `yaml:"homePath"`
+	ColdPath                      IndexPath  `yaml:"coldPath"`
+	ThawedPath                    IndexPath  `yaml:"thawedPath"`
+	DataType                      IndexDataType
+	ColdStorageProvider           Archiver   `yaml:"storageProvider"`
+	ColdStorageRetentionPeriod    TimePeriod `yaml:"storageRetention"`
+	EnableDataArchive             bool       `yaml:"enableDDAA"`
+	MaxDataArchiveRetentionPeriod TimePeriod `yaml:"maxStorageRetention"`
 }
 
 // validate returns an error if the Index is invalid.
@@ -108,18 +108,18 @@ func (index Index) stanzaValues() StanzaValues {
 	stanzaValues["thawedPath"], _ = firstIndexPathString(index.HomePath, defaultIndexPath(index.Name, "thaweddb"))
 
 	// Dynamic Data Active Archive settings
-	if index.StorageProvider != ARCHIVERUNDEF {
-		stanzaValues["archiver.coldStorageProvider"] = string(index.StorageProvider)
+	if index.ColdStorageProvider != ARCHIVERUNDEF {
+		stanzaValues["archiver.coldStorageProvider"] = string(index.ColdStorageProvider)
 	}
 	//storage retention in days: https://docs.splunk.com/Documentation/Splunk/latest/Admin/indexesconf
-	if index.StorageRetention.InDays() != 0 {
-		stanzaValues["archiver.coldStorageRetentionPeriod"] = fmt.Sprintf("%d", index.StorageRetention.InDays())
+	if index.ColdStorageRetentionPeriod.InDays() != 0 {
+		stanzaValues["archiver.coldStorageRetentionPeriod"] = fmt.Sprintf("%d", index.ColdStorageRetentionPeriod.InDays())
 	}
-	if index.EnableDDAA {
-		stanzaValues["archiver.enableDataArchive"] = fmt.Sprintf("%v", index.EnableDDAA)
+	if index.EnableDataArchive {
+		stanzaValues["archiver.enableDataArchive"] = fmt.Sprintf("%v", index.EnableDataArchive)
 	}
-	if index.MaxStorageRetention.InSeconds() != 0 {
-		stanzaValues["archiver.maxDataArchiveRetentionPeriod"] = fmt.Sprintf("%d", index.MaxStorageRetention.InSeconds())
+	if index.MaxDataArchiveRetentionPeriod.InSeconds() != 0 {
+		stanzaValues["archiver.maxDataArchiveRetentionPeriod"] = fmt.Sprintf("%d", index.MaxDataArchiveRetentionPeriod.InSeconds())
 	}
 
 	return stanzaValues

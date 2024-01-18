@@ -128,7 +128,7 @@ func TestIndex_stanza(t *testing.T) {
 			},
 		},
 		{
-			Index{Name: "index_a", EnableDDAA: true, StorageRetention: TimePeriod{Days: 5}, MaxStorageRetention: TimePeriod{Seconds: 800}, StorageProvider: "Glacier"},
+			Index{Name: "index_a", EnableDataArchive: true, ColdStorageRetentionPeriod: TimePeriod{Days: 5}, MaxDataArchiveRetentionPeriod: TimePeriod{Seconds: 800}, ColdStorageProvider: "Glacier"},
 			Stanza{
 				Name: "index_a",
 				Values: StanzaValues{
