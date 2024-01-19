@@ -17,17 +17,17 @@ package config
 import "fmt"
 
 // Archiver represents the value of an Index's "archiver.coldStorageProvider" fields.
-type Archiver string
+type IndexArchiver string
 
 const (
-	ARCHIVERUNDEF Archiver = ""
-	ARCHIVERAWS   Archiver = "Glacier"
-	ARCHIVERGCP   Archiver = "GCSArchive"
+	ARCHIVERUNDEF IndexArchiver = ""
+	ARCHIVERAWS   IndexArchiver = "Glacier"
+	ARCHIVERGCP   IndexArchiver = "GCSArchive"
 )
 
 // validate returns an error if Archiver is invalid. It is invalid if
 // it isn't one of the defined constants
-func (archiver Archiver) validate() error {
+func (archiver IndexArchiver) validate() error {
 	switch archiver {
 	case ARCHIVERUNDEF, ARCHIVERAWS, ARCHIVERGCP:
 		break

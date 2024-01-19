@@ -26,10 +26,10 @@ type Index struct {
 	ColdPath                      IndexPath  `yaml:"coldPath"`
 	ThawedPath                    IndexPath  `yaml:"thawedPath"`
 	DataType                      IndexDataType
-	ColdStorageProvider           Archiver   `yaml:"storageProvider"`
-	ColdStorageRetentionPeriod    TimePeriod `yaml:"storageRetention"`
-	EnableDataArchive             bool       `yaml:"enableDDAA"`
-	MaxDataArchiveRetentionPeriod TimePeriod `yaml:"maxStorageRetention"`
+	ColdStorageProvider           IndexArchiver `yaml:"storageProvider"`
+	ColdStorageRetentionPeriod    TimePeriod    `yaml:"storageRetention"`
+	EnableDataArchive             bool          `yaml:"enableDDAA"`
+	MaxDataArchiveRetentionPeriod TimePeriod    `yaml:"maxStorageRetention"`
 }
 
 // validate returns an error if the Index is invalid.
