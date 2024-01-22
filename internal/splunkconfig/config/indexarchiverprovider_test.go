@@ -19,19 +19,19 @@ import "testing"
 func TestIndexArchiver_validate(t *testing.T) {
 	tests := validatorTestCases{
 		{
-			validator: IndexArchiver(""),
+			validator: IndexArchiverProvider(""),
 			wantError: false,
 		},
 		{
-			validator: IndexArchiver("Glacier"),
+			validator: IndexArchiverProvider("Glacier"),
 			wantError: false,
 		},
 		{
-			validator: IndexArchiver("GCSArchive"),
+			validator: IndexArchiverProvider("GCSArchive"),
 			wantError: false,
 		},
 		{
-			validator: IndexArchiver("invalid archiver"),
+			validator: IndexArchiverProvider("invalid archiver"),
 			wantError: true,
 		},
 	}
