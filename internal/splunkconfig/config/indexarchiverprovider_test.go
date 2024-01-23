@@ -16,7 +16,7 @@ package config
 
 import "testing"
 
-func TestIndexArchiver_validate(t *testing.T) {
+func TestIndexArchiverProvider_validate(t *testing.T) {
 	tests := validatorTestCases{
 		{
 			validator: IndexArchiverProvider(""),
