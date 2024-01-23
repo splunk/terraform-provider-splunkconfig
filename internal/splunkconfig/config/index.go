@@ -18,14 +18,18 @@ import "fmt"
 
 // Index represents a single Splunk index.
 type Index struct {
-	Name               IndexName
-	FrozenTime         TimePeriod `yaml:"frozenTimePeriod"`
-	SearchRolesAllowed RoleNames  `yaml:"srchRolesAllowed"`
-	LookupRows         LookupRows `yaml:"lookup_rows"`
-	HomePath           IndexPath  `yaml:"homePath"`
-	ColdPath           IndexPath  `yaml:"coldPath"`
-	ThawedPath         IndexPath  `yaml:"thawedPath"`
-	DataType           IndexDataType
+	Name                          IndexName
+	FrozenTime                    TimePeriod `yaml:"frozenTimePeriod"`
+	SearchRolesAllowed            RoleNames  `yaml:"srchRolesAllowed"`
+	LookupRows                    LookupRows `yaml:"lookup_rows"`
+	HomePath                      IndexPath  `yaml:"homePath"`
+	ColdPath                      IndexPath  `yaml:"coldPath"`
+	ThawedPath                    IndexPath  `yaml:"thawedPath"`
+	DataType                      IndexDataType
+	ColdStorageProvider           IndexArchiverProvider `yaml:"coldStorageProvider"`
+	ColdStorageRetentionPeriod    TimePeriod            `yaml:"coldStorageRetentionPeriod"`
+	EnableDataArchive             bool                  `yaml:"enableDataArchive "`
+	MaxDataArchiveRetentionPeriod TimePeriod            `yaml:"maxDataArchiveRetentionPeriod"`
 }
 
 // validate returns an error if the Index is invalid.
@@ -102,6 +106,21 @@ func (index Index) stanzaValues() StanzaValues {
 	stanzaValues["homePath"], _ = firstIndexPathString(index.HomePath, defaultIndexPath(index.Name, "db"))
 	stanzaValues["coldPath"], _ = firstIndexPathString(index.HomePath, defaultIndexPath(index.Name, "colddb"))
 	stanzaValues["thawedPath"], _ = firstIndexPathString(index.HomePath, defaultIndexPath(index.Name, "thaweddb"))
+
+	// Dynamic Data Active Archive settings
+	if index.ColdStorageProvider != ARCHIVERUNDEF {
+		stanzaValues["archiver.coldStorageProvider"] = string(index.ColdStorageProvider)
+	}
+	//storage retention in days: https://docs.splunk.com/Documentation/Splunk/latest/Admin/indexesconf
+	if index.ColdStorageRetentionPeriod.InDays() != 0 {
+		stanzaValues["archiver.coldStorageRetentionPeriod"] = fmt.Sprintf("%d", index.ColdStorageRetentionPeriod.InDays())
+	}
+	if index.EnableDataArchive {
+		stanzaValues["archiver.enableDataArchive"] = fmt.Sprintf("%v", index.EnableDataArchive)
+	}
+	if index.MaxDataArchiveRetentionPeriod.InSeconds() != 0 {
+		stanzaValues["archiver.maxDataArchiveRetentionPeriod"] = fmt.Sprintf("%d", index.MaxDataArchiveRetentionPeriod.InSeconds())
+	}
 
 	return stanzaValues
 }
