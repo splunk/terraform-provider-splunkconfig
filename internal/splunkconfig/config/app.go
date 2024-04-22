@@ -16,6 +16,7 @@ package config
 
 import (
 	"archive/tar"
+	"compress/gzip"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -188,7 +189,10 @@ func (app App) WriteTar(path string) (tgzPath string, err error) {
 	}
 	defer tf.Close()
 
-	tw := tar.NewWriter(tf)
+	gz := gzip.NewWriter(tf)
+	defer gz.Close()
+
+	tw := tar.NewWriter(gz)
 	defer tw.Close()
 
 	for _, contenter := range app.FileContenters() {
