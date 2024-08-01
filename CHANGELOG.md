@@ -1,3 +1,15 @@
+## 1.7.4 (July 29, 2024)
+FEATURES:
+
+* **Fixed** Added gzip compression to `splunkconfig_app_package` to resolve app inspect check_package_compression
+
+
+## 1.7.3 (January 23, 2024)
+
+FEATURES: 
+
+* **Schema Change** Add Dynamic Data Active Archive settings to Index schema
+
 ## 1.7.2 (April 3, 2023)
 
 FEATURES:

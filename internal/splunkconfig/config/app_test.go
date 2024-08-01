@@ -18,6 +18,7 @@ import (
 	"crypto/sha1"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"testing"
 )
@@ -240,4 +241,31 @@ func appSha1(app App, t *testing.T) string {
 	}
 
 	return fmt.Sprintf("%x", hash.Sum(nil))
+}
+
+func appCompression(app App, t *testing.T) string {
+	tempdir := os.TempDir()
+
+	tgzFile, err := app.WriteTar(tempdir)
+	if err != nil {
+		t.Fatalf("unable to create tgzFile: %s", err)
+	}
+
+	data, err := os.ReadFile(tgzFile)
+	if err != nil {
+		t.Fatalf("unable read data: %s", err)
+	}
+	//defer data.Close()
+	checkType := http.DetectContentType(data)
+	return checkType
+}
+
+func TestApp_appCompression(t *testing.T) {
+	app := App{Name: "Test App", ID: "test_app"}
+
+	comp := appCompression(app, t)
+
+	if comp != "application/x-gzip" {
+		t.Errorf("got %+v, expected app is not gzip compressed", comp)
+	}
 }
