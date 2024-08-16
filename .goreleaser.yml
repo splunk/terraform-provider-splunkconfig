@@ -1,3 +1,5 @@
+version: 2
+
 builds:
   - &common_build_config
     env:
