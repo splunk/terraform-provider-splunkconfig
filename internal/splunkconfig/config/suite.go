@@ -17,7 +17,6 @@ package config
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -122,7 +121,7 @@ func NewSuiteFromYAML(yamlContent []byte) (suite Suite, err error) {
 // were encountered while attempting to unmarshal the content. This unexported method does *not* perform validation
 // of the resulting Suite.
 func newSuiteFromYAMLFile(path string) (suite Suite, err error) {
-	content, err := ioutil.ReadFile(path)
+	content, err := os.ReadFile(path)
 	if err != nil {
 		return
 	}

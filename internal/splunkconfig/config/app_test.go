@@ -18,7 +18,6 @@ import (
 	"crypto/sha1"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"testing"
 )
@@ -222,7 +221,7 @@ func TestApp_consistentTarball(t *testing.T) {
 }
 
 func appSha1(app App, t *testing.T) string {
-	tempdir, err := ioutil.TempDir("", "")
+	tempdir, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatalf("unable to create tempdir: %s", err)
 	}
